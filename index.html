@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Quran Word-by-Word Viewer</title>
+  <title>Quran WBW Viewer</title>
   <style>
     :root{
       --bg: #071226;
@@ -37,12 +37,13 @@
       align-items:center;
       gap:12px;
       margin-bottom:10px;
+      flex-wrap:wrap;
     }
     .brand{font-weight:700;font-size:1rem}
-    .controls{
+    .right-head{
       display:flex;
-      gap:8px;
       align-items:center;
+      gap:8px;
       flex-wrap:wrap;
       justify-content:flex-end;
     }
@@ -72,14 +73,37 @@
     }
     input[type="checkbox"]{width:16px;height:16px}
 
+    /* view mode button */
+    .view-mode-btn{
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,0.18);
+      background:rgba(255,255,255,0.04);
+      padding:6px 12px;
+      font-size:0.9rem;
+      display:flex;
+      align-items:center;
+      gap:6px;
+      cursor:pointer;
+    }
+    .view-mode-btn span.icon{
+      width:18px;height:18px;
+      border-radius:999px;
+      border:2px solid var(--accent);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:0.7rem;
+    }
+
     .sliders{
       display:flex;
       gap:10px;
       align-items:center;
       flex-wrap:wrap;
+      margin-bottom:8px;
     }
 
-    main{margin-top:8px}
+    main{margin-top:4px}
 
     .bismillah{
       padding:10px;
@@ -129,7 +153,6 @@
       flex:1;
     }
 
-    /* main Arabic line (তেলাওয়াত মোড) */
     .ayah-line{
       font-family:"Scheherazade New","Amiri",serif;
       font-size:var(--arabic-size);
@@ -149,14 +172,13 @@
       line-height:1.6;
     }
 
-    /* word-by-word grid (Arabic broken into words) */
     .words-grid{
       display:flex;
       flex-wrap:wrap;
       gap:8px 10px;
-      justify-content:flex-end; /* right side */
+      justify-content:flex-end;
       direction:rtl;
-      margin-bottom:6px;
+      margin-bottom:4px;
     }
     .word-block{
       min-width:76px;
@@ -191,37 +213,55 @@
       transform:translateY(-2px);
     }
 
-    /* selected word bar (same row অর্থ + button) */
-    .selected-row{
+    /* fixed bottom bar for selected word */
+    .selected-bar{
+      position:fixed;
+      left:0;
+      right:0;
+      bottom:0;
       display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:8px;
-      padding:6px 8px;
-      border-radius:8px;
-      background:rgba(255,255,255,0.02);
-      margin-bottom:4px;
+      justify-content:center;
+      pointer-events:none;
+      z-index:15;
     }
-    .selected-text{
+    .selected-inner{
+      pointer-events:auto;
+      max-width:940px;
+      width:calc(100% - 24px);
+      margin-bottom:8px;
+      background:#020d18;
+      border-radius:12px;
+      padding:8px 10px;
+      border:1px solid rgba(255,255,255,0.12);
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+    .sel-text{
       text-align:right;
       flex:1;
     }
-    .selected-text .sel-ar{
+    .sel-ar{
       font-family:"Scheherazade New","Amiri",serif;
       direction:rtl;
       text-align:right;
       font-size:1.2rem;
       line-height:1.4;
     }
-    .selected-text .sel-bn{
+    .sel-bn{
       font-size:0.95rem;
       color:var(--muted);
       margin-top:2px;
     }
-    .btn-grammar{
+    .sel-btns{
+      display:flex;
+      gap:6px;
+      align-items:center;
+    }
+    .btn-small{
       border-radius:8px;
-      border:1px solid rgba(255,255,255,0.12);
-      background:rgba(255,255,255,0.03);
+      border:1px solid rgba(255,255,255,0.18);
+      background:rgba(255,255,255,0.04);
       padding:6px 10px;
       font-size:0.85rem;
       color:var(--muted);
@@ -229,57 +269,67 @@
       white-space:nowrap;
     }
 
-    /* grammar panel */
-    .grammar-panel{
+    /* grammar modal – center fixed */
+    .modal-backdrop{
       position:fixed;
-      left:0;
-      right:0;
-      bottom:12px;
+      inset:0;
+      background:rgba(0,0,0,0.65);
       display:flex;
       justify-content:center;
-      pointer-events:none;
-      z-index:20;
+      align-items:center;
+      z-index:30;
     }
-    .grammar-inner{
-      pointer-events:auto;
-      max-width:940px;
-      width:calc(100% - 24px);
+    .modal{
+      max-width:900px;
+      width:calc(100% - 28px);
+      max-height:80vh;
       background:#021426;
-      border-radius:12px;
-      padding:10px;
-      border:1px solid rgba(0,0,0,0.5);
-      box-shadow:0 8px 40px rgba(0,0,0,0.6);
+      border-radius:14px;
+      padding:12px;
+      border:1px solid rgba(255,255,255,0.18);
+      display:flex;
+      flex-direction:column;
+      gap:10px;
     }
-    .g-top{
+    .modal-top{
       display:flex;
       justify-content:space-between;
       align-items:flex-start;
-      gap:10px;
-      margin-bottom:8px;
+      gap:12px;
     }
-    .g-word{
+    .modal-word{
       font-family:"Scheherazade New","Amiri",serif;
-      font-size:1.3rem;
+      font-size:1.5rem;
       direction:rtl;
       text-align:right;
-      line-height:1.5;
+      line-height:1.6;
     }
-    .g-meaning{
+    .modal-meaning{
       font-size:1rem;
       color:var(--muted);
       text-align:right;
       margin-top:3px;
     }
-    .g-notes{
+    .modal-close{
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,0.25);
+      background:rgba(255,255,255,0.04);
+      padding:6px 10px;
+      font-size:0.85rem;
+      color:var(--muted);
+      cursor:pointer;
+      white-space:nowrap;
+    }
+    .modal-notes{
       font-size:var(--notes-size);
       color:#e6f0fb;
       background:#021726;
       padding:8px;
       border-radius:8px;
-      border:1px solid rgba(255,255,255,0.03);
-      max-height:220px;
+      border:1px solid rgba(255,255,255,0.05);
+      max-height:60vh;
       overflow:auto;
-      line-height:1.6;
+      line-height:1.7;
       word-wrap:break-word;
       overflow-wrap:break-word;
       text-align:right;
@@ -289,54 +339,42 @@
     .hidden{display:none}
 
     @media(max-width:640px){
-      header{
-        flex-direction:column;
-        align-items:flex-start;
-      }
-      .controls{
-        width:100%;
-        justify-content:space-between;
-      }
-      .word-block{
-        min-width:60px;
-      }
-      .bismillah .ar{
-        font-size:1.1rem;
-      }
+      header{flex-direction:column;align-items:flex-start}
+      .right-head{justify-content:space-between;width:100%}
+      .word-block{min-width:60px}
+      .bismillah .ar{font-size:1.1rem}
     }
   </style>
 </head>
 <body>
   <div class="wrap">
     <header>
-      <div class="brand">
-        Quran Word-by-Word — Preview
-      </div>
-
-      <div class="controls">
+      <div class="brand">Quran Word-by-Word — Preview</div>
+      <div class="right-head">
+        <button id="viewModeBtn" class="view-mode-btn">
+          <span class="icon">⯈</span>
+          <span id="viewModeText">তেলাওয়াত মোড</span>
+        </button>
         <select id="suraSelect" class="select-sura"></select>
         <div class="settings">
           <label><input type="checkbox" id="cbTranslation" /> বাংলা অনুবাদ</label>
-          <label><input type="checkbox" id="cbWordByWord" /> শব্দে-শব্দে</label>
-          <label><input type="checkbox" id="cbGrammar" /> Grammar panel</label>
+          <label><input type="checkbox" id="cbGrammar" /> Grammar on click</label>
         </div>
       </div>
     </header>
 
-    <div style="display:flex;gap:10px;align-items:center;margin-bottom:10px;flex-wrap:wrap">
-      <div class="sliders" style="gap:14px">
-        <div>
-          <label style="font-size:0.85rem;color:var(--muted)">আরবি ফন্ট: <span id="arabicLabel">2.0rem</span></label><br>
-          <input id="arabicSlider" type="range" min="1.2" max="3.0" step="0.1" value="2.0" />
-        </div>
-        <div>
-          <label style="font-size:0.85rem;color:var(--muted)">বাংলা ফন্ট: <span id="banglaLabel">1.0rem</span></label><br>
-          <input id="banglaSlider" type="range" min="0.8" max="1.8" step="0.05" value="1.0" />
-        </div>
-        <div>
-          <label style="font-size:0.85rem;color:var(--muted)">নোট ফন্ট: <span id="notesLabel">1.02rem</span></label><br>
-          <input id="notesSlider" type="range" min="0.8" max="1.6" step="0.02" value="1.02" />
-        </div>
+    <div class="sliders">
+      <div>
+        <label style="font-size:0.85rem;color:var(--muted)">আরবি ফন্ট: <span id="arabicLabel">2.0rem</span></label><br>
+        <input id="arabicSlider" type="range" min="1.2" max="3.0" step="0.1" value="2.0" />
+      </div>
+      <div>
+        <label style="font-size:0.85rem;color:var(--muted)">বাংলা ফন্ট: <span id="banglaLabel">1.0rem</span></label><br>
+        <input id="banglaSlider" type="range" min="0.8" max="1.8" step="0.05" value="1.0" />
+      </div>
+      <div>
+        <label style="font-size:0.85rem;color:var(--muted)">নোট ফন্ট: <span id="notesLabel">1.02rem</span></label><br>
+        <input id="notesSlider" type="range" min="0.8" max="1.6" step="0.02" value="1.02" />
       </div>
     </div>
 
@@ -350,19 +388,33 @@
     </main>
   </div>
 
-  <!-- grammar panel -->
-  <div id="grammarPanel" class="grammar-panel hidden">
-    <div class="grammar-inner" role="dialog" aria-modal="false">
-      <div class="g-top">
-        <div>
-          <div id="gWord" class="g-word">—</div>
-          <div id="gMeaning" class="g-meaning">—</div>
-        </div>
-        <div style="display:flex;gap:8px;align-items:center">
-          <button id="closeG" style="padding:6px 8px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:var(--muted);cursor:pointer">Close</button>
-        </div>
+  <!-- fixed bottom selected word bar -->
+  <div id="selectedBar" class="selected-bar hidden">
+    <div class="selected-inner">
+      <div class="sel-text">
+        <div id="selAr" class="sel-ar">—</div>
+        <div id="selBn" class="sel-bn">—</div>
       </div>
-      <div id="gNotes" class="g-notes">নির্বাচিত শব্দের ব্যাকরণগত পরিচিতি এখানে দেখাবে।</div>
+      <div class="sel-btns">
+        <button id="btnGrammar" class="btn-small">Grammar</button>
+        <button id="btnClearSel" class="btn-small">Clear</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- grammar modal -->
+  <div id="modalBackdrop" class="modal-backdrop hidden">
+    <div class="modal" role="dialog" aria-modal="true">
+      <div class="modal-top">
+        <div>
+          <div id="mWord" class="modal-word">—</div>
+          <div id="mMeaning" class="modal-meaning">—</div>
+        </div>
+        <button id="modalClose" class="modal-close">Close ✕</button>
+      </div>
+      <div id="mNotes" class="modal-notes">
+        নোট এখানে দেখাবে।
+      </div>
     </div>
   </div>
 
@@ -371,8 +423,10 @@
 
     const suraSelect = document.getElementById('suraSelect');
     const cbTranslation = document.getElementById('cbTranslation');
-    const cbWordByWord = document.getElementById('cbWordByWord');
     const cbGrammar = document.getElementById('cbGrammar');
+
+    const viewModeBtn = document.getElementById('viewModeBtn');
+    const viewModeText = document.getElementById('viewModeText');
 
     const arabicSlider = document.getElementById('arabicSlider');
     const banglaSlider = document.getElementById('banglaSlider');
@@ -385,17 +439,24 @@
     const bismillahBn = document.getElementById('bismillahBn');
     const ayahContainer = document.getElementById('ayahContainer');
 
-    const grammarPanel = document.getElementById('grammarPanel');
-    const gWord = document.getElementById('gWord');
-    const gMeaning = document.getElementById('gMeaning');
-    const gNotes = document.getElementById('gNotes');
-    const closeG = document.getElementById('closeG');
+    const selectedBar = document.getElementById('selectedBar');
+    const selAr = document.getElementById('selAr');
+    const selBn = document.getElementById('selBn');
+    const btnGrammar = document.getElementById('btnGrammar');
+    const btnClearSel = document.getElementById('btnClearSel');
+
+    const modalBackdrop = document.getElementById('modalBackdrop');
+    const modalClose = document.getElementById('modalClose');
+    const mWord = document.getElementById('mWord');
+    const mMeaning = document.getElementById('mMeaning');
+    const mNotes = document.getElementById('mNotes');
 
     let currentSurah = 104;
     let currentData = null;
+    let modeWBW = false; // false = telawat, true = word-by-word
+    let currentSelectedWord = null;
 
     function buildSuraList(){
-      // future: surah_list.json; for now simple 1–114 placeholder
       for(let i=1;i<=TOTAL_SURA;i++){
         const opt = document.createElement('option');
         opt.value = i;
@@ -405,6 +466,24 @@
       suraSelect.value = currentSurah;
     }
     buildSuraList();
+
+    function updateViewModeUI(){
+      if(modeWBW){
+        viewModeText.textContent = 'শব্দে-শব্দে মোড';
+      }else{
+        viewModeText.textContent = 'তেলাওয়াত মোড';
+      }
+      const icon = viewModeBtn.querySelector('.icon');
+      icon.textContent = modeWBW ? '▢' : '⯈';
+    }
+
+    viewModeBtn.addEventListener('click', ()=>{
+      modeWBW = !modeWBW;
+      saveViewState();
+      clearSelection();
+      renderCurrent();
+      updateViewModeUI();
+    });
 
     function applyFontSizes(){
       const a = parseFloat(arabicSlider.value);
@@ -418,9 +497,9 @@
       notesLabel.textContent = n.toFixed(2)+'rem';
       localStorage.setItem('quran_font', JSON.stringify({a,b,n}));
     }
-    arabicSlider.addEventListener('input', applyFontSizes);
-    banglaSlider.addEventListener('input', applyFontSizes);
-    notesSlider.addEventListener('input', applyFontSizes);
+    [arabicSlider,banglaSlider,notesSlider].forEach(sl=>{
+      sl.addEventListener('input', applyFontSizes);
+    });
 
     (function loadFonts(){
       try{
@@ -435,32 +514,36 @@
       applyFontSizes();
     })();
 
-    (function loadToggles(){
+    function loadViewState(){
       try{
-        const raw = localStorage.getItem('quran_view');
+        const raw = localStorage.getItem('quran_view2');
         if(raw){
           const o = JSON.parse(raw);
           cbTranslation.checked = !!o.trans;
-          cbWordByWord.checked = !!o.wbw;
           cbGrammar.checked = !!o.grammar;
-        } else {
+          modeWBW = !!o.wbw;
+        }else{
           cbTranslation.checked = false;
-          cbWordByWord.checked = false;
-          cbGrammar.checked = false;
+          cbGrammar.checked = true;
+          modeWBW = false;
         }
       }catch(e){}
-    })();
+      updateViewModeUI();
+    }
+    loadViewState();
 
-    function saveToggles(){
-      localStorage.setItem('quran_view', JSON.stringify({
+    function saveViewState(){
+      localStorage.setItem('quran_view2', JSON.stringify({
         trans: cbTranslation.checked,
-        wbw: cbWordByWord.checked,
-        grammar: cbGrammar.checked
+        grammar: cbGrammar.checked,
+        wbw: modeWBW
       }));
     }
-    [cbTranslation, cbWordByWord, cbGrammar].forEach(cb=>{
+
+    [cbTranslation,cbGrammar].forEach(cb=>{
       cb.addEventListener('change', ()=>{
-        saveToggles();
+        saveViewState();
+        clearSelection();
         renderCurrent();
       });
     });
@@ -468,6 +551,7 @@
     suraSelect.addEventListener('change', ()=>{
       const val = parseInt(suraSelect.value,10) || 1;
       currentSurah = val;
+      clearSelection();
       loadSurah(val);
     });
 
@@ -486,7 +570,7 @@
         if(data.hasBismillah && data.bismillah){
           bismillahAr.textContent = data.bismillah.arabic || '';
           bismillahBn.textContent = data.bismillah.bangla || '';
-        } else {
+        }else{
           bismillahAr.textContent = '';
           bismillahBn.textContent = '';
         }
@@ -503,10 +587,11 @@
     function renderCurrent(){
       if(!currentData) return;
       ayahContainer.innerHTML = '';
-      grammarPanel.classList.add('hidden');
+      selectedBar.classList.add('hidden');
+      modalBackdrop.classList.add('hidden');
+      currentSelectedWord = null;
 
-      const showTranslation = cbTranslation.checked;
-      const wbw = cbWordByWord.checked;
+      const showTrans = cbTranslation.checked;
 
       currentData.ayahs.forEach(ayah=>{
         const card = document.createElement('div');
@@ -514,65 +599,25 @@
 
         const head = document.createElement('div');
         head.className = 'ayah-head';
-
         const no = document.createElement('div');
         no.className = 'ayah-no';
         no.textContent = ayah.ayahNumber;
-
         const mode = document.createElement('div');
         mode.className = 'ayah-mode';
-        if(!wbw && !showTranslation){
-          mode.textContent = 'শুধু আরবি (তেলাওয়াত মোড)';
-        }else{
-          const parts = [];
-          parts.push(wbw ? 'শব্দে-শব্দে' : 'পূর্ণ আরবি');
-          if(showTranslation) parts.push('বাংলা অনুবাদ');
-          mode.textContent = parts.join(' + ');
-        }
+        mode.textContent = modeWBW
+          ? (showTrans ? 'শব্দে-শব্দে + বাংলা' : 'শব্দে-শব্দে (শুধু আরবি)')
+          : (showTrans ? 'তেলাওয়াত + বাংলা' : 'শুধু তেলাওয়াত (আরবি)');
 
         head.appendChild(no);
         head.appendChild(mode);
         card.appendChild(head);
 
-        // selected word row (দেখাবে যখন কিছু select করি)
-        const selRow = document.createElement('div');
-        selRow.className = 'selected-row hidden';
-
-        const selText = document.createElement('div');
-        selText.className = 'selected-text';
-        const selAr = document.createElement('div');
-        selAr.className = 'sel-ar';
-        const selBn = document.createElement('div');
-        selBn.className = 'sel-bn';
-
-        selText.appendChild(selAr);
-        selText.appendChild(selBn);
-
-        const btnGram = document.createElement('button');
-        btnGram.className = 'btn-grammar';
-        btnGram.textContent = 'Grammar notes';
-        btnGram.addEventListener('click', ()=>{
-          if(!currentSelectedWord) return;
-          if(cbGrammar.checked){
-            showGrammar(currentSelectedWord);
-          }
-        });
-
-        selRow.appendChild(selText);
-        selRow.appendChild(btnGram);
-        card.appendChild(selRow);
-
-        // আরবি প্রদর্শন:
-        if(!wbw){
-          // পূর্ণ Arabic line
+        if(!modeWBW){
           const line = document.createElement('div');
           line.className = 'ayah-line';
           line.textContent = ayah.arabic || '';
           card.appendChild(line);
-
-          // তেলাওয়াত মোডে কোনো শব্দে ক্লিক নেই (পুরো line)
         }else{
-          // word-by-word grid
           const grid = document.createElement('div');
           grid.className = 'words-grid';
 
@@ -591,7 +636,7 @@
             const bn = document.createElement('div');
             bn.className = 'word-bn';
             bn.textContent = w.meaningBn || '';
-            if(!showTranslation) bn.style.display = 'none';
+            if(!showTrans) bn.style.display='none';
 
             blk.appendChild(ar);
             blk.appendChild(bn);
@@ -599,18 +644,8 @@
             blk.addEventListener('click', ()=>{
               document.querySelectorAll('.word-block').forEach(el=>el.classList.remove('active'));
               blk.classList.add('active');
-
-              // selected bar এ data বসাও
-              selAr.textContent = w.text || '';
-              selBn.textContent = w.meaningBn || '';
-              if(!showTranslation && !w.meaningBn){
-                selBn.textContent = '';
-              }
-              selRow.classList.remove('hidden');
-
               currentSelectedWord = w;
-
-              // grammar panel auto-open নয়, শুধু button চাপলে
+              updateSelectedBar();
             });
 
             grid.appendChild(blk);
@@ -622,44 +657,68 @@
         const trans = document.createElement('div');
         trans.className = 'translation';
         trans.textContent = ayah.bangla || '';
-        if(!showTranslation) trans.style.display='none';
+        if(!showTrans) trans.style.display='none';
         card.appendChild(trans);
 
         ayahContainer.appendChild(card);
       });
     }
 
-    let currentSelectedWord = null;
-
     function parseFallbackWords(line){
       if(!line) return [];
-      const parts = line.split(/\s+/).filter(Boolean);
-      return parts.map(p=>({text:p, meaningBn:''}));
+      return line.split(/\s+/).filter(Boolean).map(p=>({text:p,meaningBn:'',notes:''}));
     }
 
-    function showGrammar(wordObj){
-      if(!wordObj) return;
-      gWord.textContent = wordObj.text || '';
-      gMeaning.textContent = wordObj.meaningBn || '';
-      gNotes.textContent = wordObj.notes || wordObj.meaningBn || '';
-      grammarPanel.classList.remove('hidden');
-      closeG.focus();
+    function updateSelectedBar(){
+      if(!currentSelectedWord){
+        selectedBar.classList.add('hidden');
+        return;
+      }
+      selAr.textContent = currentSelectedWord.text || '';
+      selBn.textContent = currentSelectedWord.meaningBn || '';
+      selectedBar.classList.remove('hidden');
     }
 
-    closeG.addEventListener('click', ()=>{
-      grammarPanel.classList.add('hidden');
+    function clearSelection(){
+      currentSelectedWord = null;
+      selectedBar.classList.add('hidden');
       document.querySelectorAll('.word-block').forEach(el=>el.classList.remove('active'));
+    }
+
+    btnClearSel.addEventListener('click', clearSelection);
+
+    btnGrammar.addEventListener('click', ()=>{
+      if(!currentSelectedWord) return;
+      if(!cbGrammar.checked) return;
+      openGrammarModal(currentSelectedWord);
+    });
+
+    function openGrammarModal(word){
+      mWord.textContent = word.text || '';
+      mMeaning.textContent = word.meaningBn || '';
+      mNotes.textContent = word.notes || word.meaningBn || 'কোনো নোট নেই।';
+      modalBackdrop.classList.remove('hidden');
+    }
+
+    function closeModal(){
+      modalBackdrop.classList.add('hidden');
+    }
+
+    modalClose.addEventListener('click', closeModal);
+
+    modalBackdrop.addEventListener('click', (e)=>{
+      if(e.target === modalBackdrop){
+        closeModal();
+      }
     });
 
     document.addEventListener('keydown', e=>{
       if(e.key === 'Escape'){
-        grammarPanel.classList.add('hidden');
-        document.querySelectorAll('.word-block').forEach(el=>el.classList.remove('active'));
+        closeModal();
       }
     });
 
     (function init(){
-      suraSelect.value = currentSurah;
       loadSurah(currentSurah);
     })();
   </script>
