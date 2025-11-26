@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Quran Word-by-Word — Visual Aesthetic</title>
+    <title>Quran Word-by-Word — Surah 104 Preview</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;700&display=swap" rel="stylesheet">
     
     <style>
@@ -18,9 +18,9 @@
             --notes-size: 1.02rem;
             
             /* Specific colors from the image (slightly darker theme) */
-            --dark-card: #151e2b; /* Used for the word blocks */
-            --text-light: #e6f0fb; /* Primary text */
-            --text-subtle: #9faab8; /* Subtle meaning/notes */
+            --dark-card: #151e2b;
+            --text-light: #e6f0fb;
+            --text-subtle: #9faab8; 
         }
         
         * {box-sizing:border-box}
@@ -32,7 +32,7 @@
         }
         body{
             font-family:"Noto Sans Bengali",system-ui,sans-serif;
-            background:var(--bg); /* Keep simple dark background */
+            background:var(--bg);
             color:var(--text-light);
             padding:12px;
         }
@@ -41,7 +41,7 @@
             margin:0 auto;
         }
         
-        /* --- HEADER AND CONTROLS (Kept Clean) --- */
+        /* --- HEADER AND CONTROLS --- */
         
         header{
             display:flex;
@@ -98,7 +98,7 @@
             min-width: 150px;
         }
 
-        /* --- AYAH CARDS & BISMILLAH (Minimalistic) --- */
+        /* --- AYAH CARDS & BISMILLAH --- */
 
         .bismillah{
             padding:15px;
@@ -108,7 +108,7 @@
             text-align:center;
             margin-bottom:15px;
         }
-        .bismillah .ar, .ayah-line{
+        .bismillah .ar{
             font-family:"Scheherazade New","Amiri",serif;
             font-size:1.4rem;
             direction:rtl;
@@ -117,14 +117,14 @@
         }
         .ayah{
             background:var(--bg); 
-            padding:18px 0; /* Remove horizontal padding here */
+            padding:18px 0;
             border-radius:12px;
             margin-bottom:15px;
             border:1px solid rgba(120,150,190,0.04);
             position: relative;
         }
         .ayah-head{
-            padding: 0 18px; /* Apply padding only to heading */
+            padding: 0 18px;
             margin-bottom:12px;
         }
         .ayah-no{
@@ -137,28 +137,36 @@
         .translation{
             /* Full translation at the bottom */
             font-size:var(--bangla-size);
-            color:var(--text-light); /* Prominent translation */
+            color:var(--text-light); 
             margin-top:12px;
             text-align:right;
             line-height:1.7;
-            border-top:1px solid var(--highlight); /* Stronger separator */
-            padding:12px 18px 0 18px; /* Apply padding */
+            border-top:1px solid var(--highlight);
+            padding:12px 18px 0 18px;
+        }
+        .ayah-line{
+            /* Full Arabic line for non-WbW mode */
+            font-family:"Scheherazade New","Amiri",serif;
+            font-size:var(--arabic-size);
+            direction:rtl;
+            text-align:right;
+            line-height:1.8;
+            margin-bottom:12px;
+            padding: 0 18px;
         }
 
-        /* --- WORD-BY-WORD GRID (Matching Reference Image) --- */
+        /* --- WORD-BY-WORD GRID (Reference Image Match) --- */
         
         .words-grid{
             display:flex;
             flex-wrap:wrap;
-            /* Use padding for surrounding space */
             padding: 10px 18px; 
-            gap: 12px 16px; /* Increased horizontal gap for separation */
+            gap: 12px 16px;
             justify-content:flex-end;
             direction:rtl;
             margin-bottom:6px;
         }
         .word-block{
-            /* Minimal container style, focus on inner text alignment */
             padding:0;
             margin:0;
             background:transparent;
@@ -168,19 +176,17 @@
             flex-direction:column;
             direction:rtl;
             text-align:center;
-            
-            /* Custom border for separator below the word */
             position: relative; 
-            /* Flex-grow to allow even distribution */
             flex-grow: 1; 
-            min-width: 60px; /* Minimum width for small words */
+            min-width: 60px;
             max-width: 180px; 
+            transition: opacity 0.15s ease;
         }
 
         .word-block:after {
             content: "";
             position: absolute;
-            bottom: -5px; /* Position separator */
+            bottom: -5px; 
             left: 5%;
             right: 5%;
             height: 1px;
@@ -190,38 +196,32 @@
         }
         
         .word-block.active:after {
-            background: var(--accent); /* Highlight separator on active */
+            background: var(--accent);
+            opacity: 1;
         }
         
-        /* The main Arabic word, large and prominent */
         .word-ar{
             font-family:"Scheherazade New","Amiri",serif;
-            font-size:1.6rem; /* Large Arabic size */
+            font-size:1.6rem;
             text-align:center;
             line-height:1.2;
-            word-wrap:break-word;
-            padding-bottom: 8px; /* Space above the border */
+            padding-bottom: 8px;
+            color: var(--text-light); /* Ensure high contrast */
         }
 
-        /* The single-word Bangla meaning, subtle */
         .word-bn{
             font-size:0.9rem;
             color:var(--text-subtle);
             text-align:center;
             margin-top:4px;
             line-height:1.4;
-            word-wrap:break-word;
-            order: 2; /* Ensure meaning is displayed below Arabic word */
+            order: 2;
         }
         
-        /* Active state for the whole block (just the separator) */
-        .word-block.active{
-            background:transparent;
-            box-shadow:none;
-            transform:none;
-        }
-
-        /* --- GRAMMAR PANEL (Bottom Sheet - Kept for Functionality) --- */
+        /* Hide the intermediate selected row */
+        .selected-row{ display:none; } 
+        
+        /* --- GRAMMAR PANEL (Sliding Bottom Sheet) --- */
         
         .grammar-panel{
             position:fixed;
@@ -234,10 +234,10 @@
             z-index:20;
             padding:12px;
             transition:transform 0.3s ease-out;
-            transform:translateY(100%);
+            transform:translateY(100%); /* Start hidden */
         }
         .grammar-panel:not(.hidden){
-            transform: translateY(0);
+            transform: translateY(0); /* Slide up */
         }
         .grammar-inner{
             pointer-events:auto;
@@ -249,6 +249,13 @@
             border-top:2px solid var(--accent);
             box-shadow:0 -8px 40px rgba(0,0,0,0.8);
             max-height: 80vh; 
+        }
+        .g-top{
+            display:flex;
+            justify-content:space-between;
+            align-items:flex-start;
+            gap:15px;
+            margin-bottom:12px;
         }
         .g-word{
             font-family:"Scheherazade New","Amiri",serif;
@@ -283,9 +290,8 @@
         
         @media(max-width:640px){
             body{padding:8px}
-            .ayah{padding:12px 0;} /* Reduced padding */
-            .ayah-head{padding:0 12px;}
-            .translation{padding:12px 12px 0 12px;}
+            .ayah{padding:12px 0;}
+            .ayah-head, .ayah-line, .translation{padding:0 12px;}
             .words-grid{padding:10px 12px; gap: 8px 12px;}
 
             .word-block{
@@ -313,14 +319,14 @@
     <div class="wrap">
         <header>
             <div class="brand">
-                Quran Word-by-Word — Visual Preview
+                Quran Word-by-Word — Preview
             </div>
 
             <div class="controls">
                 <select id="suraSelect" class="select-sura"></select>
                 <div class="settings">
                     <label><input type="checkbox" id="cbTranslation" /> বাংলা অনুবাদ</label>
-                    <label><input type="checkbox" id="cbWordByWord" /> শব্দে-শব্দে</label>
+                    <label><input type="checkbox" id="cbWordByWord" checked /> শব্দে-শব্দে</label>
                 </div>
             </div>
         </header>
@@ -400,8 +406,8 @@
                 const opt = document.createElement('option');
                 opt.value = i;
                 let suraName = `সূরা ${i}`;
-                if (i === 104) suraName = `সূরা ${i} - আল-হুমাযাহ (DEMO)`;
-                if (i === 18) suraName = `সূরা ${i} - আল-কাহ্ফ`;
+                // Hardcode 104 for testing context
+                if (i === 104) suraName = `সূরা ${i} - আল-হুমাযাহ (TEST)`;
                 
                 opt.textContent = suraName;
                 suraSelect.appendChild(opt);
@@ -444,9 +450,10 @@
                 const raw = localStorage.getItem('quran_view');
                 if(raw){
                     const o = JSON.parse(raw);
-                    cbTranslation.checked = !!o.trans;
-                    cbWordByWord.checked = !!o.wbw;
+                    cbTranslation.checked = (o.trans === undefined ? true : !!o.trans);
+                    cbWordByWord.checked = (o.wbw === undefined ? true : !!o.wbw);
                 } else {
+                    // Set default view to match the requested WbW aesthetic
                     cbTranslation.checked = true;
                     cbWordByWord.checked = true;
                 }
@@ -479,6 +486,7 @@
         }
 
         function loadSurah(num){
+            // This is the fetch request targeting your JSON file
             const path = `surah_${num}.json`;
             ayahContainer.innerHTML = '';
             bismillahAr.textContent = '';
@@ -486,61 +494,30 @@
             currentData = null;
             hideGrammarPanel(); 
 
-            // --- DEMO DATA FOR SURAH 104 (Ayah 1-3) ---
-            if (num === 104) {
-                const placeholderData = {
-                    suraNumber: 104,
-                    hasBismillah: true,
-                    bismillah: {
-                        arabic: "بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ",
-                        bangla: "পরম করুণাময় অশেষ দয়াবান আল্লাহর নামে (শুরু করছি)"
-                    },
-                    ayahs: [{
-                        ayahNumber: 1,
-                        arabic: "وَيْلٌ لِّكُلِّ هُمَزَةٍ لُّمَزَةٍ.",
-                        bangla: "ধ্বংস প্রত্যেকের জন্য যারা মিথ্যা কলঙ্ক রটনা করে এবং দোষ অন্বেষণ করে",
-                        words: [
-                            { text: "وَيْلٌ", meaningBn: "ধ্বংস", notes: "মূল ক্রিয়ার ক্রিয়া-বিশেষ্য (ধ্বংস, আফসোস, অমঙ্গল, দুর্ভাগ্য)।" },
-                            { text: "لِّكُلِّ", meaningBn: "প্রত্যেকের জন্য", notes: "كُلِّ (সমস্ত, সমগ্র, সকল) মূল ক্রিয়ার একটি বিশেষ্য। পূর্বে সম্বন্ধসূচক অব্যয় (জন্য) যুক্ত থাকায় لِكُلِّ (প্রত্যেকের জন্য) হয়েছে।" },
-                            { text: "هُمَزَةٍ", meaningBn: "পশ্চাতে গীবতকারী", notes: "هَمَزَ (নিন্দা করা, গীবত করা) মূল ক্রিয়ার একটি বিশেষ্য (গীবতকারী, ছিদ্রান্বেষী)।" },
-                            { text: "لُّمَزَةٍ", meaningBn: "দোষ অন্বেষণকারী", notes: "لَمَزَ (চোখ পিট পিট করে ইশারা করা, নিন্দা করা) মূল ক্রিয়ার একটি বিশেষ্য।" }
-                        ]
-                    }, {
-                        ayahNumber: 2,
-                        arabic: "الَّذِي جَمَعَ مَالًا وَعَدَّدَهُ.",
-                        bangla: "যে সম্পদ জমা করে এবং বার বার গণনা করে।", // Simplified Ayah Translation for demo
-                        words: [
-                            { text: "الَّذِي", meaningBn: "যে", notes: "সংযোজক সর্বনাম (যে, যিনি)।" },
-                            { text: "جَمَعَ", meaningBn: "জমা করেছে", notes: "جَمَعَ (সংগ্রহ করা, একত্রে জড়ো করা) মূল ক্রিয়াটি অতীতকাল, প্রথম পুরুষ, একবচন, পুংলিঙ্গ রূপেই আছে。" },
-                            { text: "مَالًا", meaningBn: "সম্পদ", notes: "مَالَ (ধনী হওয়া, সম্পদশালী হওয়া) মূল ক্রিয়ার একটি বিশেষ্য। শব্দটি বাক্যে কর্ম হিসেবে ব্যবহৃত হওয়ায় তানবীনযুক্ত হয়েছে。" },
-                            { text: "وَعَدَّدَهُ", meaningBn: "এবং তা বারবার গণনা করে রেখেছে", notes: "عَدَّدَ (বারবার গণনা করা) মূল ক্রিয়ার ২নং ফরম। কর্ম হিসেবে সংযুক্ত-সর্বনাম هُ (তাকে, উহাকে) শেষে যুক্ত হয়েছে। পূর্বে রয়েছে সংযোজক অব্যয় وَ (এবং)।" }
-                        ]
-                    }, {
-                        ayahNumber: 3,
-                        arabic: "يَحْسَبُ أَنَّ مَالَهُ أَخْلَدَهُ.",
-                        bangla: "সে মনে করে যে তার মাল (অর্থ) তাকে চিরস্থায়ী করবে।",
-                        words: [
-                            { text: "يَحْسَبُ", meaningBn: "সে মনে করে", notes: "حَسِبَ (মনে করা, আন্দাজ করা) মূল ক্রিয়ার বর্তমানকাল, প্রথম পুরুষ, পুংলিঙ্গ, একবচন রূপ।" },
-                            { text: "أَنَّ", meaningBn: "যে", notes: "সংযোজক অব্যয়।" },
-                            { text: "مَالَهُ", meaningBn: "তার মাল", notes: "مَالٌ (ধন, সম্পদ) শব্দটি সংযুক্ত সর্বনাম هُ (তার)-এর মুদাফ হওয়ায় তানবীন উঠে গেছে।" },
-                            { text: "أَخْلَدَهُ", meaningBn: "চিরস্থায়ী করবে তাকে", notes: "أَخْلَدَ (চিরস্থায়ী করা) মূল ক্রিয়ার ৪নং ফরম। কর্ম হিসেবে সংযুক্ত সর্বনাম هُ (তাকে) শেষে যুক্ত হয়েছে।" }
-                        ]
-                    }]
-                };
-
-                currentData = placeholderData;
+            fetch(path).then(r=>{
+                if(!r.ok) {
+                    throw new Error('File not found or HTTP error: ' + r.status);
+                }
+                return r.json();
+            }).then(data=>{
+                currentData = data;
+                
+                // Populate Bismillah section
                 if(currentData.hasBismillah && currentData.bismillah){
                     bismillahAr.textContent = currentData.bismillah.arabic || '';
                     bismillahBn.textContent = currentData.bismillah.bangla || '';
                 }
-                renderCurrent();
-            } else {
+
+                renderCurrent(); 
+                
+            }).catch(err=>{
+                console.error('Load Surah Error:', err);
                 ayahContainer.innerHTML =
                     `<div style="padding:14px;background:rgba(86,181,255,0.1);border-radius:10px;border:1px solid var(--accent);color:#c1d9f8;">
-                        <p><strong>সূরা ${num}:</strong> এই ডেমো ফাইলে ডাটা প্রস্তুত করা হয়নি।</p> 
-                        <p>অনুগ্রহ করে surah_${num}.json ফাইলটি প্রস্তুত করুন। বর্তমানে শুধু সূরা ১০৪-এর প্লেসহোল্ডার ডাটা রয়েছে।</p>
+                        <p><strong>সূরা ${num}:</strong> ডাটা লোড করা যায়নি।</p> 
+                        <p>সমস্যা: <code>${path}</code> ফাইলটি অনুপস্থিত বা JSON বিন্যাসে ত্রুটি রয়েছে।</p>
                     </div>`;
-            }
+            });
         }
 
         function renderCurrent(){
@@ -573,10 +550,11 @@
                     card.appendChild(line);
 
                 }else{
-                    // Word-by-word grid (matching the reference image)
+                    // Word-by-word grid (Reference Image Match)
                     const grid = document.createElement('div');
                     grid.className = 'words-grid';
 
+                    // Use words array from JSON, fallback if missing
                     const words = Array.isArray(ayah.words) && ayah.words.length
                         ? ayah.words
                         : parseFallbackWords(ayah.arabic); 
@@ -585,6 +563,7 @@
                         const blk = document.createElement('div');
                         blk.className = 'word-block';
                         
+                        // Store data attributes
                         blk.dataset.ar = w.text || '';
                         blk.dataset.bn = w.meaningBn || '';
                         blk.dataset.notes = w.notes || '';
@@ -593,14 +572,12 @@
                         ar.className = 'word-ar';
                         ar.textContent = w.text || '';
                         
-                        // Default to 'অর্থ' if meaning is empty and WbW is checked
                         const meaningText = w.meaningBn || 'অর্থ'; 
                         
                         const bn = document.createElement('div');
                         bn.className = 'word-bn';
                         bn.textContent = meaningText; 
                         
-                        // Hide WbW meaning if translation is globally unchecked (though usually needed for WbW mode)
                         if(!showTranslation) bn.style.display = 'none'; 
 
                         blk.appendChild(ar);
@@ -609,10 +586,8 @@
                         blk.addEventListener('click', (e)=>{
                             e.stopPropagation(); 
                             
-                            // Remove active state from all blocks
                             document.querySelectorAll('.word-block').forEach(el=>el.classList.remove('active'));
                             
-                            // If the same word is clicked, hide the panel. Otherwise, show new data.
                             const isSameWord = currentSelectedWord && currentSelectedWord.text === w.text && !grammarPanel.classList.contains('hidden');
                             
                             if (isSameWord) {
@@ -631,22 +606,22 @@
                 }
 
                 // Ayah Translation (Bayaan Foundation style at the bottom)
-                const trans = document.createElement('div');
-                trans.className = 'translation';
-                
-                const source = document.createElement('div');
-                source.style.fontSize = '0.8rem';
-                source.style.color = 'var(--text-subtle)';
-                source.style.marginBottom = '5px';
-                source.textContent = 'Bangla - Bayaan Foundation';
-                
-                const text = document.createElement('div');
-                text.textContent = ayah.bangla || '';
-                
-                trans.appendChild(source);
-                trans.appendChild(text);
-
                 if(showTranslation) {
+                    const trans = document.createElement('div');
+                    trans.className = 'translation';
+                    
+                    const source = document.createElement('div');
+                    source.style.fontSize = '0.8rem';
+                    source.style.color = 'var(--text-subtle)';
+                    source.style.marginBottom = '5px';
+                    source.textContent = 'Bangla - Bayaan Foundation';
+                    
+                    const text = document.createElement('div');
+                    text.textContent = ayah.bangla || '';
+                    
+                    trans.appendChild(source);
+                    trans.appendChild(text);
+
                     card.appendChild(trans);
                 }
             });
