@@ -15,57 +15,247 @@
       --notes-size: 1.02rem;
     }
     *{box-sizing:border-box}
-    body{
+    html,body{
       margin:0;
+      padding:0;
+      width:100%;
+      overflow-x:hidden;
+    }
+    body{
       font-family: "Noto Sans Bengali", system-ui, sans-serif;
       background: linear-gradient(180deg,#081226,#02101a);
       color:#e6f0fb;
       padding:12px;
     }
-    .wrap{max-width:940px;margin:0 auto}
-    header{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:10px}
+    .wrap{
+      max-width:940px;
+      margin:0 auto;
+    }
+    header{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      margin-bottom:10px;
+    }
     .brand{font-weight:700}
-    .controls{display:flex;gap:8px;align-items:center}
-    .select-sura{padding:6px 8px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.02);color:inherit}
-    .settings{display:flex;gap:8px;align-items:center;background:rgba(255,255,255,0.02);padding:8px;border-radius:10px;border:1px solid rgba(255,255,255,0.03)}
-
-    .settings label{font-size:0.9rem;display:flex;align-items:center;gap:6px}
+    .controls{display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+    .select-sura{
+      padding:6px 8px;
+      border-radius:8px;
+      border:1px solid rgba(255,255,255,0.06);
+      background:rgba(255,255,255,0.02);
+      color:inherit;
+      max-width:180px;
+    }
+    .settings{
+      display:flex;
+      gap:8px;
+      align-items:center;
+      background:rgba(255,255,255,0.02);
+      padding:8px;
+      border-radius:10px;
+      border:1px solid rgba(255,255,255,0.03);
+      flex-wrap:wrap;
+    }
+    .settings label{
+      font-size:0.9rem;
+      display:flex;
+      align-items:center;
+      gap:6px;
+    }
     input[type="checkbox"]{width:16px;height:16px}
-    .sliders{display:flex;gap:10px;align-items:center}
+
+    .sliders{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
 
     main{margin-top:8px}
-    .bismillah{padding:10px;border-radius:10px;background:linear-gradient(180deg,#071726,#041224);border:1px solid rgba(120,150,190,0.06);text-align:center;margin-bottom:10px}
-    .bismillah .ar{font-family:"Scheherazade New","Amiri",serif;font-size:1.25rem;direction:rtl;text-align:center}
-    .bismillah .bn{color:var(--muted)}
 
-    .ayah{background:linear-gradient(180deg,#071226,#041018);padding:12px;border-radius:12px;margin-bottom:10px;border:1px solid rgba(120,150,190,0.04)}
-    .ayah-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
-    .ayah-no{background:rgba(255,255,255,0.02);padding:6px 8px;border-radius:999px;font-weight:700}
-    .ayah-line{font-family:"Scheherazade New","Amiri",serif;font-size:var(--arabic-size);direction:rtl;text-align:right;line-height:1.6;margin-bottom:8px}
-    .translation{font-size:var(--bangla-size);color:var(--muted);margin-bottom:8px}
+    .bismillah{
+      padding:10px;
+      border-radius:10px;
+      background:linear-gradient(180deg,#071726,#041224);
+      border:1px solid rgba(120,150,190,0.06);
+      text-align:center;
+      margin-bottom:10px;
+    }
+    .bismillah .ar{
+      font-family:"Scheherazade New","Amiri",serif;
+      font-size:1.25rem;
+      direction:rtl;
+      text-align:center;
+      line-height:1.7;
+    }
+    .bismillah .bn{
+      color:var(--muted);
+      margin-top:4px;
+    }
 
-    /* words grid: each word block shows arabic on top and bangla below */
-    .words-grid{display:flex;flex-wrap:wrap;gap:8px 10px;justify-content:flex-end}
-    .word-block{min-width:76px;max-width:180px;padding:8px;border-radius:10px;background:rgba(255,255,255,0.01);border:1px solid rgba(255,255,255,0.03);cursor:pointer;display:flex;flex-direction:column;direction:rtl}
-    .word-ar{font-family:"Scheherazade New","Amiri",serif;font-size:1.25rem;text-align:right}
-    .word-bn{font-size:0.95rem;color:var(--muted);text-align:right;margin-top:6px}
+    .ayah{
+      background:linear-gradient(180deg,#071226,#041018);
+      padding:12px;
+      border-radius:12px;
+      margin-bottom:10px;
+      border:1px solid rgba(120,150,190,0.04);
+    }
+    .ayah-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:8px;
+      gap:8px;
+    }
+    .ayah-no{
+      background:rgba(255,255,255,0.02);
+      padding:6px 8px;
+      border-radius:999px;
+      font-weight:700;
+      font-size:0.95rem;
+    }
+    .ayah-mode{
+      color:var(--muted);
+      font-size:0.9rem;
+      text-align:right;
+      flex:1;
+    }
+    .ayah-line{
+      font-family:"Scheherazade New","Amiri",serif;
+      font-size:var(--arabic-size);
+      direction:rtl;
+      text-align:right;
+      line-height:1.6;
+      margin-bottom:8px;
+      word-wrap:break-word;
+      overflow-wrap:break-word;
+    }
+    .translation{
+      font-size:var(--bangla-size);
+      color:var(--muted);
+      margin-bottom:8px;
+      text-align:right;
+      line-height:1.6;
+    }
 
-    .word-block.active{border-color:var(--accent);box-shadow:0 6px 20px rgba(86,181,255,0.06);transform:translateY(-2px)}
+    /* words grid - full RTL alignment */
+    .words-grid{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px 10px;
+      justify-content:flex-end;  /* right aligned row */
+      direction:rtl;
+    }
+    .word-block{
+      min-width:76px;
+      max-width:180px;
+      padding:8px;
+      border-radius:10px;
+      background:rgba(255,255,255,0.01);
+      border:1px solid rgba(255,255,255,0.03);
+      cursor:pointer;
+      display:flex;
+      flex-direction:column;
+      direction:rtl;
+    }
+    .word-ar{
+      font-family:"Scheherazade New","Amiri",serif;
+      font-size:1.25rem;
+      text-align:right;
+      line-height:1.4;
+      word-wrap:break-word;
+    }
+    .word-bn{
+      font-size:0.95rem;
+      color:var(--muted);
+      text-align:right;
+      margin-top:6px;
+      line-height:1.4;
+      word-wrap:break-word;
+    }
 
-    /* grammar panel: solid background for readability */
-    .grammar-panel{position:fixed;left:0;right:0;bottom:12px;display:flex;justify-content:center;pointer-events:none}
-    .grammar-inner{pointer-events:auto;max-width:940px;width:calc(100% - 24px);background:#021426;border-radius:12px;padding:10px;border:1px solid rgba(0,0,0,0.5);box-shadow:0 8px 40px rgba(0,0,0,0.6)}
-    .g-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:8px}
-    .g-word{font-family:"Scheherazade New","Amiri",serif;font-size:1.3rem;direction:rtl;text-align:right}
-    .g-meaning{font-size:1rem;color:var(--muted);text-align:right}
-    .g-notes{font-size:var(--notes-size);color:#e6f0fb;background:#021726;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.03);max-height:220px;overflow:auto;line-height:1.6}
+    .word-block.active{
+      border-color:var(--accent);
+      box-shadow:0 6px 20px rgba(86,181,255,0.06);
+      transform:translateY(-2px);
+    }
+
+    /* grammar panel */
+    .grammar-panel{
+      position:fixed;
+      left:0;
+      right:0;
+      bottom:12px;
+      display:flex;
+      justify-content:center;
+      pointer-events:none;
+      z-index:20;
+    }
+    .grammar-inner{
+      pointer-events:auto;
+      max-width:940px;
+      width:calc(100% - 24px);
+      background:#021426;
+      border-radius:12px;
+      padding:10px;
+      border:1px solid rgba(0,0,0,0.5);
+      box-shadow:0 8px 40px rgba(0,0,0,0.6);
+    }
+    .g-top{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:10px;
+      margin-bottom:8px;
+    }
+    .g-word{
+      font-family:"Scheherazade New","Amiri",serif;
+      font-size:1.3rem;
+      direction:rtl;
+      text-align:right;
+      line-height:1.5;
+    }
+    .g-meaning{
+      font-size:1rem;
+      color:var(--muted);
+      text-align:right;
+      margin-top:3px;
+    }
+    .g-notes{
+      font-size:var(--notes-size);
+      color:#e6f0fb;
+      background:#021726;
+      padding:8px;
+      border-radius:8px;
+      border:1px solid rgba(255,255,255,0.03);
+      max-height:220px;
+      overflow:auto;
+      line-height:1.6;
+      word-wrap:break-word;
+      overflow-wrap:break-word;
+      text-align:right;
+      direction:rtl;
+    }
 
     .hidden{display:none}
 
-    /* small screens */
     @media(max-width:640px){
-      .word-block{min-width:60px}
-      .bismillah .ar{font-size:1.1rem}
+      header{
+        flex-direction:column;
+        align-items:flex-start;
+      }
+      .controls{
+        width:100%;
+        justify-content:space-between;
+      }
+      .word-block{
+        min-width:60px;
+      }
+      .bismillah .ar{
+        font-size:1.1rem;
+      }
     }
   </style>
 </head>
@@ -130,10 +320,8 @@
   </div>
 
   <script>
-    // ---------- config ----------
     const TOTAL_SURA = 114;
 
-    // DOM
     const suraSelect = document.getElementById('suraSelect');
     const cbTranslation = document.getElementById('cbTranslation');
     const cbWordByWord = document.getElementById('cbWordByWord');
@@ -158,13 +346,9 @@
 
     let currentSurah = 104;
     let currentData = null;
-    let currentActiveWordEl = null;
 
-    // populate sura dropdown (use numbers + placeholder names)
     function buildSuraList(){
-      // attempt to fetch optional sura_list.json for titles (if present)
       fetch('surah_list.json').then(r=>r.json()).then(list=>{
-        // expect array of {number:1,nameAr:'',nameBn:''}
         for(let i=1;i<=TOTAL_SURA;i++){
           const li = list.find(x=>x.number===i);
           const opt = document.createElement('option');
@@ -173,8 +357,7 @@
           suraSelect.appendChild(opt);
         }
         suraSelect.value = currentSurah;
-      }).catch(err=>{
-        // fallback: just numbers
+      }).catch(_=>{
         for(let i=1;i<=TOTAL_SURA;i++){
           const opt = document.createElement('option');
           opt.value = i;
@@ -184,10 +367,8 @@
         suraSelect.value = currentSurah;
       });
     }
-
     buildSuraList();
 
-    // font sliders
     function applyFontSizes(){
       const a = parseFloat(arabicSlider.value);
       const b = parseFloat(banglaSlider.value);
@@ -195,9 +376,9 @@
       document.documentElement.style.setProperty('--arabic-size', a+'rem');
       document.documentElement.style.setProperty('--bangla-size', b+'rem');
       document.documentElement.style.setProperty('--notes-size', n+'rem');
-      arabicLabel.textContent = a.toFixed(2) + 'rem';
-      banglaLabel.textContent = b.toFixed(2) + 'rem';
-      notesLabel.textContent = n.toFixed(2) + 'rem';
+      arabicLabel.textContent = a.toFixed(2)+'rem';
+      banglaLabel.textContent = b.toFixed(2)+'rem';
+      notesLabel.textContent = n.toFixed(2)+'rem';
       localStorage.setItem('quran_font', JSON.stringify({a,b,n}));
     }
 
@@ -205,7 +386,6 @@
     banglaSlider.addEventListener('input', applyFontSizes);
     notesSlider.addEventListener('input', applyFontSizes);
 
-    // load saved fonts
     (function loadFonts(){
       try{
         const raw = localStorage.getItem('quran_font');
@@ -219,7 +399,6 @@
       applyFontSizes();
     })();
 
-    // load saved toggles
     (function loadToggles(){
       try{
         const raw = localStorage.getItem('quran_view');
@@ -229,7 +408,6 @@
           cbWordByWord.checked = !!o.wbw;
           cbGrammar.checked = !!o.grammar;
         } else {
-          // default: only arabic (translation off, wordByWord off, grammar off)
           cbTranslation.checked = false;
           cbWordByWord.checked = false;
           cbGrammar.checked = false;
@@ -238,11 +416,18 @@
     })();
 
     function saveToggles(){
-      localStorage.setItem('quran_view', JSON.stringify({trans:cbTranslation.checked, wbw:cbWordByWord.checked, grammar:cbGrammar.checked}));
+      localStorage.setItem('quran_view', JSON.stringify({
+        trans: cbTranslation.checked,
+        wbw: cbWordByWord.checked,
+        grammar: cbGrammar.checked
+      }));
     }
 
-    [cbTranslation, cbWordByWord, cbGrammar].forEach(cb => {
-      cb.addEventListener('change', ()=>{ saveToggles(); renderCurrent(); });
+    [cbTranslation, cbWordByWord, cbGrammar].forEach(cb=>{
+      cb.addEventListener('change', ()=>{
+        saveToggles();
+        renderCurrent();
+      });
     });
 
     suraSelect.addEventListener('change', ()=>{
@@ -251,10 +436,8 @@
       loadSurah(val);
     });
 
-    // fetch surah JSON: expectation file name surah_<num>.json
     function loadSurah(num){
       const path = `surah_${num}.json`;
-      // clear
       ayahContainer.innerHTML = '';
       bismillahAr.textContent = '';
       bismillahBn.textContent = '';
@@ -264,7 +447,6 @@
         return r.json();
       }).then(data=>{
         currentData = data;
-        // fill bismillah if present
         if(data.hasBismillah && data.bismillah){
           bismillahAr.textContent = data.bismillah.arabic || '';
           bismillahBn.textContent = data.bismillah.bangla || '';
@@ -272,81 +454,110 @@
           bismillahAr.textContent = '';
           bismillahBn.textContent = '';
         }
-        // render
         renderCurrent();
       }).catch(err=>{
         console.error('surah load error',err);
-        ayahContainer.innerHTML = `<div style="padding:14px;background:#081722;border-radius:10px;border:1px solid #21323f;color:#f8d7da">সুরা ডাটা লোড করা যায়নি: ${path}. ফাইলটি same folder এ আছে কিনা চেক করুন।</div>`;
+        ayahContainer.innerHTML =
+          `<div style="padding:14px;background:#081722;border-radius:10px;border:1px solid #21323f;color:#f8d7da">
+            সুরা ডাটা লোড করা যায়নি: ${path}. ফাইলটি same folder এ আছে কিনা চেক করুন।
+          </div>`;
       });
     }
 
-    // render function builds the DOM based on currentData & toggles
     function renderCurrent(){
       if(!currentData) return;
       ayahContainer.innerHTML = '';
       const showTranslation = cbTranslation.checked;
       const showWordByWord = cbWordByWord.checked;
-      const grammarEnabled = cbGrammar.checked;
 
       currentData.ayahs.forEach(ayah=>{
         const container = document.createElement('div');
         container.className = 'ayah';
 
-        // head
-        const head = document.createElement('div'); head.className='ayah-head';
-        const no = document.createElement('div'); no.className='ayah-no'; no.textContent = ayah.ayahNumber;
-        const modes = document.createElement('div'); modes.style.color='var(--muted)'; modes.style.fontSize='0.9rem';
+        const head = document.createElement('div');
+        head.className = 'ayah-head';
+        const no = document.createElement('div');
+        no.className = 'ayah-no';
+        no.textContent = ayah.ayahNumber;
+        const modes = document.createElement('div');
+        modes.className = 'ayah-mode';
         let modeTxt = 'শুধু আরবি';
-        if(showTranslation || showWordByWord) {
-          const parts = [];
+        if(showTranslation || showWordByWord){
+          const parts=[];
           if(showTranslation) parts.push('অনুবাদ');
           if(showWordByWord) parts.push('শব্দে-শব্দে');
           modeTxt = 'আরবি + ' + parts.join(' + ');
         }
         modes.textContent = modeTxt;
-        head.appendChild(no); head.appendChild(modes);
+        head.appendChild(no);
+        head.appendChild(modes);
         container.appendChild(head);
 
-        // full arabic line (always visible)
-        const arabicLine = document.createElement('div'); arabicLine.className='ayah-line'; arabicLine.textContent = ayah.arabic || '';
+        const arabicLine = document.createElement('div');
+        arabicLine.className = 'ayah-line';
+        arabicLine.textContent = ayah.arabic || '';
         container.appendChild(arabicLine);
 
-        // translation line
-        const trans = document.createElement('div'); trans.className='translation'; trans.textContent = ayah.bangla || '';
+        // তেলাওয়াত মোডে কোনো শব্দে ট্যাপ করলে word-by-word অন করব
+        arabicLine.addEventListener('click', ()=>{
+          // যদি word-by-word অফ থাকে, অন করে দিই
+          if(!cbWordByWord.checked){
+            cbWordByWord.checked = true;
+            saveToggles();
+            renderCurrent();
+          }
+        });
+
+        const trans = document.createElement('div');
+        trans.className = 'translation';
+        trans.textContent = ayah.bangla || '';
         if(!showTranslation) trans.style.display='none';
         container.appendChild(trans);
 
-        // word-by-word grid
-        const grid = document.createElement('div'); grid.className='words-grid';
+        const grid = document.createElement('div');
+        grid.className = 'words-grid';
         grid.style.display = showWordByWord ? 'flex' : 'none';
 
-        // mapping: if words array exists, use it; else try to split arabic by spaces (fallback)
-        const words = Array.isArray(ayah.words) && ayah.words.length ? ayah.words : parseFallbackWords(ayah.arabic);
+        const words = Array.isArray(ayah.words) && ayah.words.length
+          ? ayah.words
+          : parseFallbackWords(ayah.arabic);
 
-        words.forEach((w, idx) => {
-          const block = document.createElement('div'); block.className='word-block';
-          // Arabic word
-          const ar = document.createElement('div'); ar.className='word-ar'; ar.textContent = w.text || '';
-          // Bangla meaning under it (may hide if translation not enabled)
-          const bn = document.createElement('div'); bn.className='word-bn'; bn.textContent = w.meaningBn || '';
-          if(!showTranslation) bn.style.display = 'none';
+        words.forEach(w=>{
+          const block = document.createElement('div');
+          block.className = 'word-block';
+
+          const ar = document.createElement('div');
+          ar.className = 'word-ar';
+          ar.textContent = w.text || '';
+
+          const bn = document.createElement('div');
+          bn.className = 'word-bn';
+          bn.textContent = w.meaningBn || '';
+          if(!showTranslation) bn.style.display='none';
 
           block.appendChild(ar);
           block.appendChild(bn);
 
-          // click => show grammar notes (if enabled)
           block.addEventListener('click', ()=>{
-            // if grammar not enabled: toggle show/hide of bn only (makes it convenient)
+            // word-by-word auto-on if off (আরবি থেকে সরাসরি এইটার উপরও কাজ করবে)
+            if(!cbWordByWord.checked){
+              cbWordByWord.checked = true;
+              saveToggles();
+              renderCurrent();
+              return;
+            }
+
             document.querySelectorAll('.word-block').forEach(el=>el.classList.remove('active'));
             block.classList.add('active');
+
             if(cbGrammar.checked && (w.notes || w.meaningBn)){
               showGrammar(w);
             } else {
-              // if grammar disabled, still show bn inline (toggle)
+              // grammar বন্ধ থাকলে, শুধু অর্থ show/hide
               if(bn.style.display === 'none'){
                 bn.style.display = 'block';
               } else {
-                if(!cbTranslation.checked) bn.style.display = 'none'; // respect global translation toggle
+                if(!cbTranslation.checked) bn.style.display = 'none';
               }
             }
           });
@@ -358,27 +569,23 @@
         ayahContainer.appendChild(container);
       });
 
-      // hide grammar panel if no toggle
       if(!cbGrammar.checked){
         grammarPanel.classList.add('hidden');
       }
     }
 
-    // fallback parse: naive split by spaces — used only if words array missing
-    function parseFallbackWords(arabicLine){
-      if(!arabicLine) return [];
-      const parts = arabicLine.split(/\s+/).filter(Boolean);
-      return parts.map(p=>({text:p, meaningBn:''}));
+    function parseFallbackWords(line){
+      if(!line) return [];
+      const parts = line.split(/\s+/).filter(Boolean);
+      return parts.map(p=>({text:p,meaningBn:''}));
     }
 
-    // show grammar details in bottom panel
     function showGrammar(wordObj){
       if(!wordObj) return;
       gWord.textContent = wordObj.text || '';
       gMeaning.textContent = wordObj.meaningBn || '';
-      gNotes.textContent = wordObj.notes || (wordObj.meaningBn || '');
+      gNotes.textContent = wordObj.notes || wordObj.meaningBn || '';
       grammarPanel.classList.remove('hidden');
-      // ensure close control focuses
       closeG.focus();
     }
 
@@ -387,21 +594,17 @@
       document.querySelectorAll('.word-block').forEach(el=>el.classList.remove('active'));
     });
 
-    // init: load selected surah
-    (function init(){
-      // set select default
-      suraSelect.value = currentSurah;
-      loadSurah(currentSurah);
-    })();
-
-    // allow pressing Esc to close grammar
-    document.addEventListener('keydown', (e)=>{
-      if(e.key === 'Escape') {
+    document.addEventListener('keydown', e=>{
+      if(e.key === 'Escape'){
         grammarPanel.classList.add('hidden');
         document.querySelectorAll('.word-block').forEach(el=>el.classList.remove('active'));
       }
     });
 
+    (function init(){
+      suraSelect.value = currentSurah;
+      loadSurah(currentSurah);
+    })();
   </script>
 </body>
 </html>
