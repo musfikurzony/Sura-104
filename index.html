@@ -4,191 +4,104 @@
   <meta charset="UTF-8" />
   <title>সূরা আল-হুমাযাহ – ব্যাকরণসহ</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-  <!-- Google Fonts -->
-  <link
-    href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;600&family=Noto+Sans+Bengali:wght@400;600&display=swap"
-    rel="stylesheet"
-  />
-
   <style>
-    :root {
-      --bg: #050816;
-      --bg-soft: #0b1020;
-      --accent: #22c55e;
-      --accent-soft: rgba(34, 197, 94, 0.2);
-      --text-main: #e5e7eb;
-      --text-dim: #9ca3af;
-      --border-soft: #1f2933;
-    }
-
     * {
       box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
 
     body {
-      margin: 0;
-      min-height: 100vh;
-      background: radial-gradient(circle at top, #111827 0, #020617 45%, #000 100%);
-      color: var(--text-main);
-      font-family: "Noto Sans Bengali", system-ui, -apple-system, BlinkMacSystemFont,
-        "Segoe UI", sans-serif;
-      display: flex;
-      justify-content: center;
-      padding: 12px;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #0f172a;
+      color: #e5e7eb;
+      line-height: 1.6;
+      padding: 16px;
     }
 
     .app {
-      width: 100%;
-      max-width: 520px;
-      background: linear-gradient(145deg, rgba(15, 23, 42, 0.96), rgba(15, 23, 42, 0.9));
-      border-radius: 18px;
-      border: 1px solid rgba(148, 163, 184, 0.35);
-      box-shadow:
-        0 18px 60px rgba(0, 0, 0, 0.95),
-        0 0 0 1px rgba(15, 23, 42, 0.85);
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
+      max-width: 900px;
+      margin: 0 auto;
     }
 
-    header {
-      padding: 10px 14px 8px;
-      border-bottom: 1px solid var(--border-soft);
+    h1 {
+      font-size: 1.6rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .subtitle {
+      font-size: 0.95rem;
+      color: #9ca3af;
+      margin-bottom: 1rem;
+    }
+
+    .top-bar {
       display: flex;
-      align-items: center;
+      flex-wrap: wrap;
       justify-content: space-between;
       gap: 8px;
-    }
-
-    .title-block {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-
-    .title-main {
-      font-size: 15px;
-      font-weight: 600;
-      display: flex;
+      margin-bottom: 12px;
       align-items: center;
-      gap: 6px;
     }
 
-    .badge {
-      font-size: 11px;
-      padding: 1px 6px;
-      border-radius: 999px;
-      background: rgba(34, 197, 94, 0.1);
-      color: var(--accent);
-      border: 1px solid rgba(34, 197, 94, 0.3);
-    }
-
-    .title-sub {
-      font-size: 11px;
-      color: var(--text-dim);
-    }
-
-    .settings-toggle {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      font-size: 11px;
-      padding: 4px 8px;
-      border-radius: 999px;
-      background: rgba(15, 23, 42, 0.9);
-      border: 1px solid rgba(148, 163, 184, 0.5);
-      color: #e5e7eb;
-      cursor: pointer;
-    }
-
-    .settings-toggle span.icon {
-      font-size: 12px;
-    }
-
-    .settings-panel {
-      padding: 8px 14px 6px;
-      border-bottom: 1px solid var(--border-soft);
-      display: none;
-      gap: 10px;
-      flex-wrap: wrap;
-      background: radial-gradient(circle at top left, rgba(34, 197, 94, 0.15), transparent 55%);
-    }
-
-    .settings-panel.show {
-      display: flex;
-    }
-
-    .toggle-chip {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 11px;
-      padding: 4px 9px;
-      border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.6);
-      background: rgba(15, 23, 42, 0.85);
-      cursor: pointer;
-      user-select: none;
-    }
-
-    .toggle-chip input {
-      accent-color: var(--accent);
-    }
-
-    .toggle-chip span.label {
-      color: var(--text-main);
-    }
-
-    .content {
-      flex: 1;
-      overflow-y: auto;
-      padding: 8px 12px 80px;
-      scrollbar-width: thin;
-      scrollbar-color: rgba(100, 116, 139, 0.7) transparent;
-    }
-
-    .content::-webkit-scrollbar {
-      width: 6px;
-    }
-
-    .content::-webkit-scrollbar-track {
-      background: transparent;
-    }
-
-    .content::-webkit-scrollbar-thumb {
-      background: rgba(100, 116, 139, 0.7);
-      border-radius: 999px;
-    }
-
-    .bismillah {
-      text-align: center;
-      margin: 4px 0 10px;
-      padding-bottom: 6px;
-      border-bottom: 1px dashed rgba(148, 163, 184, 0.4);
+    .bismillah-block {
+      background: #020617;
+      border-radius: 12px;
+      padding: 10px 14px;
+      border: 1px solid #1f2937;
     }
 
     .bismillah-ar {
-      font-family: "Noto Sans Arabic", system-ui;
-      font-size: 22px;
-      direction: rtl;
-      unicode-bidi: bidi-override;
+      font-size: 1.4rem;
       margin-bottom: 4px;
+      text-align: center;
+      direction: rtl;
     }
 
     .bismillah-bn {
-      font-size: 11px;
-      color: var(--text-dim);
+      font-size: 0.9rem;
+      text-align: center;
+      color: #d1d5db;
+    }
+
+    .settings-panel {
+      background: #020617;
+      border-radius: 12px;
+      padding: 10px 14px;
+      border: 1px solid #1f2937;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 16px;
+      align-items: center;
+      font-size: 0.85rem;
+    }
+
+    .settings-panel label {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .settings-panel input[type="checkbox"] {
+      accent-color: #22c55e;
+      width: 15px;
+      height: 15px;
+    }
+
+    .ayah-list {
+      margin-top: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
     }
 
     .ayah-card {
-      background: radial-gradient(circle at top, #020617 0, #020617 55%, #020617 100%);
+      background: #020617;
       border-radius: 14px;
-      padding: 9px 10px;
-      margin-bottom: 8px;
-      border: 1px solid rgba(55, 65, 81, 0.8);
-      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.9);
-      position: relative;
+      padding: 12px 14px;
+      border: 1px solid #1f2937;
     }
 
     .ayah-header {
@@ -198,400 +111,254 @@
       margin-bottom: 6px;
     }
 
-    .ayah-number-circle {
-      width: 22px;
-      height: 22px;
-      border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.7);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 11px;
-      color: var(--text-main);
+    .ayah-number {
+      font-size: 0.8rem;
+      color: #9ca3af;
     }
 
-    .ayah-mode-tag {
-      font-size: 10px;
-      padding: 2px 7px;
-      border-radius: 999px;
-      background: rgba(31, 41, 55, 0.9);
-      border: 1px solid rgba(75, 85, 99, 0.9);
-      color: var(--text-dim);
-    }
-
-    .ayah-line-ar {
-      font-family: "Noto Sans Arabic", system-ui;
+    .ayah-arabic-line {
+      font-size: 1.5rem;
+      margin-bottom: 6px;
       direction: rtl;
-      unicode-bidi: bidi-override;
       text-align: right;
-      font-size: 22px;
-      line-height: 1.6;
-      margin-bottom: 6px;
-      cursor: default;
+      letter-spacing: 0.02em;
     }
 
-    .ayah-translation {
-      font-size: 12px;
-      line-height: 1.55;
-      color: var(--text-main);
-      margin-bottom: 6px;
-    }
-
-    .ayah-translation.hidden {
-      display: none;
-    }
-
-    .word-grid {
-      margin-top: 4px;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: flex-end;
-      gap: 4px 6px;
-    }
-
-    .word-grid.hidden {
-      display: none;
-    }
-
-    .word-pill {
-      min-width: 70px;
-      padding: 4px 6px 5px;
-      border-radius: 10px;
-      background: rgba(15, 23, 42, 0.95);
-      border: 1px solid rgba(55, 65, 81, 0.9);
-      cursor: pointer;
-      transition: background 0.12s, border-color 0.12s, transform 0.06s;
-      text-align: center;
-    }
-
-    .word-pill:hover {
-      background: rgba(15, 23, 42, 1);
-      border-color: rgba(148, 163, 184, 0.9);
-    }
-
-    .word-pill.active {
-      background: var(--accent-soft);
-      border-color: var(--accent);
-      box-shadow: 0 0 0 1px rgba(34, 197, 94, 0.4);
-      transform: translateY(-0.5px);
-    }
-
-    .word-pill-ar {
-      font-family: "Noto Sans Arabic", system-ui;
-      direction: rtl;
-      unicode-bidi: bidi-override;
-      font-size: 18px;
-      margin-bottom: 1px;
-    }
-
-    .word-pill-bn {
-      font-size: 11px;
-      color: var(--text-dim);
-      line-height: 1.2;
-    }
-
-    .grammar-panel {
-      position: fixed;
-      left: 50%;
-      transform: translateX(-50%);
-      bottom: 10px;
-      width: 100%;
-      max-width: 520px;
-      padding: 0 10px;
-      pointer-events: none;
-    }
-
-    .grammar-inner {
-      pointer-events: auto;
-      background: radial-gradient(circle at top left, rgba(34, 197, 94, 0.25), rgba(15, 23, 42, 0.98));
-      border-radius: 14px;
-      border: 1px solid rgba(55, 65, 81, 0.9);
-      box-shadow:
-        0 -8px 30px rgba(0, 0, 0, 0.9),
-        0 0 0 1px rgba(15, 23, 42, 0.95);
-      padding: 7px 9px 8px;
-      display: flex;
-      gap: 6px;
-      align-items: flex-start;
-    }
-
-    .grammar-word {
-      font-family: "Noto Sans Arabic", system-ui;
-      direction: rtl;
-      unicode-bidi: bidi-override;
-      font-size: 19px;
-      padding: 4px 8px;
-      border-radius: 10px;
-      background: rgba(15, 23, 42, 0.95);
-      border: 1px solid rgba(148, 163, 184, 0.7);
-      margin-bottom: 2px;
-    }
-
-    .grammar-texts {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-
-    .grammar-meaning {
-      font-size: 12px;
-      margin-bottom: 2px;
-    }
-
-    .grammar-notes {
-      font-size: 12px; /* আগের ০.৯ / ১.০ থেকে একটু বড় */
-      color: var(--text-dim);
-      line-height: 1.5;
-      max-height: 80px;
-      overflow-y: auto;
-      scrollbar-width: thin;
-      scrollbar-color: rgba(148, 163, 184, 0.7) transparent;
-    }
-
-    .grammar-notes::-webkit-scrollbar {
-      width: 6px;
-    }
-
-    .grammar-notes::-webkit-scrollbar-thumb {
-      background: rgba(148, 163, 184, 0.8);
-      border-radius: 999px;
-    }
-
-    .grammar-close {
-      font-size: 16px;
-      cursor: pointer;
-      padding: 3px;
-      border-radius: 999px;
-      color: var(--text-dim);
-    }
-
-    .grammar-close:hover {
-      background: rgba(15, 23, 42, 0.9);
+    .ayah-bangla-line {
+      font-size: 0.98rem;
+      margin-bottom: 8px;
       color: #e5e7eb;
     }
 
-    .grammar-panel.hidden {
-      display: none;
+    .word-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 6px;
     }
 
-    @media (max-width: 400px) {
-      .ayah-line-ar {
-        font-size: 20px;
+    .word-pill {
+      border-radius: 10px;
+      padding: 6px 8px;
+      border: 1px solid #374151;
+      background: #020617;
+      cursor: pointer;
+      min-width: 80px;
+    }
+
+    .word-arabic {
+      font-size: 1.2rem;
+      direction: rtl;
+      text-align: right;
+    }
+
+    .word-meaning {
+      font-size: 0.8rem;
+      color: #d1d5db;
+      margin-top: 2px;
+    }
+
+    .word-active {
+      border-color: #22c55e;
+      box-shadow: 0 0 0 1px rgba(34, 197, 94, 0.4);
+    }
+
+    .details-panel {
+      margin-top: 14px;
+      background: #020617;
+      border-radius: 12px;
+      padding: 10px 12px;
+      border: 1px solid #1f2937;
+    }
+
+    .details-title {
+      font-size: 0.9rem;
+      margin-bottom: 4px;
+      color: #9ca3af;
+    }
+
+    .details-arabic {
+      font-size: 1.3rem;
+      margin-bottom: 4px;
+      direction: rtl;
+      text-align: right;
+    }
+
+    .details-meaning {
+      font-size: 0.95rem;
+      margin-bottom: 6px;
+      color: #e5e7eb;
+    }
+
+    .details-notes {
+      font-size: 1.0rem; /* বড় করলাম */
+      line-height: 1.7;
+      color: #e5e7eb;
+      background: #020617; /* Solid background */
+      border-radius: 10px;
+      padding: 8px 10px;
+      border: 1px solid #334155;
+      margin-top: 4px;
+    }
+
+    @media (max-width: 600px) {
+      body {
+        padding: 10px;
       }
-      .word-pill-ar {
-        font-size: 16px;
+      .ayah-arabic-line {
+        font-size: 1.3rem;
       }
-      .grammar-word {
-        font-size: 17px;
-      }
-      .grammar-notes {
-        font-size: 11px;
+      .word-arabic {
+        font-size: 1.1rem;
       }
     }
   </style>
 </head>
 <body>
   <div class="app">
-    <header>
-      <div class="title-block">
-        <div class="title-main">
-          সূরা আল-হুমাযাহ
-          <span class="badge">১০৪</span>
-        </div>
-        <div class="title-sub">ব্যাকরণসহ অধ্যয়ন মোড</div>
+    <header class="top-bar">
+      <div>
+        <h1>সূরা আল-হুমাযাহ – ব্যাকরণসহ</h1>
+        <div class="subtitle">তেলাওয়াত মোড + অনুবাদ + শব্দে শব্দে + ব্যাকরণ নোট</div>
       </div>
-      <button id="openSettings" class="settings-toggle" type="button">
-        <span class="icon">⚙️</span>
-        <span>ভিউ সেটিংস</span>
-      </button>
     </header>
 
-    <div id="settingsPanel" class="settings-panel">
-      <label class="toggle-chip">
-        <input type="checkbox" id="toggleTranslation" />
-        <span class="label">বাংলা অনুবাদ</span>
+    <section class="bismillah-block">
+      <div id="bismillahAr" class="bismillah-ar"></div>
+      <div id="bismillahBn" class="bismillah-bn"></div>
+    </section>
+
+    <section class="settings-panel">
+      <strong style="font-size:0.9rem;">দেখানোর অপশন:</strong>
+      <label>
+        <input type="checkbox" id="toggleTranslation" checked />
+        বাংলা অনুবাদ
       </label>
-      <label class="toggle-chip">
+      <label>
         <input type="checkbox" id="toggleWordByWord" />
-        <span class="label">শব্দে-শব্দে</span>
+        শব্দে শব্দে অর্থ
       </label>
-      <label class="toggle-chip">
-        <input type="checkbox" id="toggleGrammar" />
-        <span class="label">ব্যাকরণ নোট</span>
+      <label>
+        <input type="checkbox" id="toggleNotes" />
+        Grammar notes
       </label>
-    </div>
+    </section>
 
-    <div class="content" id="content">
-      <div class="bismillah">
-        <div class="bismillah-ar" id="bismillahAr"></div>
-        <div class="bismillah-bn" id="bismillahBn"></div>
-      </div>
-      <div id="ayahContainer"></div>
-    </div>
-  </div>
+    <main class="ayah-list" id="ayahContainer"></main>
 
-  <div id="grammarPanel" class="grammar-panel hidden">
-    <div class="grammar-inner">
-      <div>
-        <div class="grammar-word" id="gWord">وَيْلٌ</div>
-        <div class="grammar-meaning" id="gMeaning">ধ্বংস / আফসোস</div>
-      </div>
-      <div class="grammar-texts">
-        <div class="grammar-notes" id="gNotes">
-          এখানে নির্বাচিত শব্দের ব্যাকরণগত পরিচিতি দেখা যাবে।
-        </div>
-      </div>
-      <div class="grammar-close" id="gClose">✕</div>
-    </div>
+    <section class="details-panel" id="detailsPanel" style="display:none;">
+      <div class="details-title">নির্বাচিত শব্দ:</div>
+      <div id="detailsAr" class="details-arabic"></div>
+      <div id="detailsMeaning" class="details-meaning"></div>
+      <div id="detailsNotes" class="details-notes"></div>
+    </section>
   </div>
 
   <script>
-    const toggleBtn = document.getElementById('openSettings');
-    const settingsPanel = document.getElementById('settingsPanel');
-    const toggleTranslation = document.getElementById('toggleTranslation');
-    const toggleWordByWord = document.getElementById('toggleWordByWord');
-    const toggleGrammar = document.getElementById('toggleGrammar');
-
     const ayahContainer = document.getElementById('ayahContainer');
     const bismillahAr = document.getElementById('bismillahAr');
     const bismillahBn = document.getElementById('bismillahBn');
 
-    const grammarPanel = document.getElementById('grammarPanel');
-    const gWord = document.getElementById('gWord');
-    const gMeaning = document.getElementById('gMeaning');
-    const gNotes = document.getElementById('gNotes');
-    const gClose = document.getElementById('gClose');
+    const toggleTranslation = document.getElementById('toggleTranslation');
+    const toggleWordByWord = document.getElementById('toggleWordByWord');
+    const toggleNotes = document.getElementById('toggleNotes');
 
-    let grammarEnabled = false;
-    let wordByWordEnabled = false;
-    let translationEnabled = false;
+    const detailsPanel = document.getElementById('detailsPanel');
+    const detailsAr = document.getElementById('detailsAr');
+    const detailsMeaning = document.getElementById('detailsMeaning');
+    const detailsNotes = document.getElementById('detailsNotes');
 
-    toggleBtn.addEventListener('click', () => {
-      settingsPanel.classList.toggle('show');
-    });
-
-    toggleTranslation.addEventListener('change', () => {
-      translationEnabled = toggleTranslation.checked;
-      updateViewToggles();
-    });
-
-    toggleWordByWord.addEventListener('change', () => {
-      wordByWordEnabled = toggleWordByWord.checked;
-      updateViewToggles();
-    });
-
-    toggleGrammar.addEventListener('change', () => {
-      grammarEnabled = toggleGrammar.checked;
-      if (!grammarEnabled) {
-        grammarPanel.classList.add('hidden');
-        clearActiveWord();
-      }
-    });
-
-    gClose.addEventListener('click', () => {
-      grammarPanel.classList.add('hidden');
-      clearActiveWord();
-    });
+    let currentData = null;
 
     function updateViewToggles() {
+      const showTranslation = toggleTranslation.checked;
+      const showWordByWord = toggleWordByWord.checked;
+
       document.querySelectorAll('.ayah-card').forEach(card => {
-        const transEl = card.querySelector('.ayah-translation');
-        const gridEl = card.querySelector('.word-grid');
+        const bnLine = card.querySelector('.ayah-bangla-line');
+        const wordGrid = card.querySelector('.word-grid');
 
-        if (transEl) {
-          transEl.classList.toggle('hidden', !translationEnabled);
-        }
-        if (gridEl) {
-          gridEl.classList.toggle('hidden', !wordByWordEnabled);
+        if (bnLine) {
+          bnLine.style.display = showTranslation ? 'block' : 'none';
         }
 
-        const tag = card.querySelector('.ayah-mode-tag');
-        if (tag) {
-          const modes = [];
-          if (translationEnabled) modes.push('অনুবাদ');
-          if (wordByWordEnabled) modes.push('শব্দে-শব্দে');
-          if (modes.length === 0) {
-            tag.textContent = 'শুধু আরবি';
-          } else {
-            tag.textContent = 'আরবি + ' + modes.join(' + ');
-          }
+        if (wordGrid) {
+          wordGrid.style.display = showWordByWord ? 'flex' : 'none';
         }
       });
 
-      if (!wordByWordEnabled || !grammarEnabled) {
-        grammarPanel.classList.add('hidden');
-        clearActiveWord();
+      // Grammar notes only visible when any word clicked + toggleNotes true
+      if (!toggleNotes.checked) {
+        detailsPanel.style.display = 'none';
       }
     }
 
-    function clearActiveWord() {
-      document.querySelectorAll('.word-pill.active').forEach(el => {
-        el.classList.remove('active');
-      });
-    }
+    toggleTranslation.addEventListener('change', updateViewToggles);
+    toggleWordByWord.addEventListener('change', updateViewToggles);
 
-    function setGrammarDetails(word, meaning, notes) {
-      gWord.textContent = word || '';
-      gMeaning.textContent = meaning || '';
-      gNotes.textContent = notes || '';
-      grammarPanel.classList.remove('hidden');
+    toggleNotes.addEventListener('change', () => {
+      if (!toggleNotes.checked) {
+        detailsPanel.style.display = 'none';
+      }
+    });
+
+    function setDetails(arabic, meaning, notes) {
+      if (!toggleNotes.checked) {
+        return;
+      }
+      detailsPanel.style.display = 'block';
+      detailsAr.textContent = arabic || '';
+      detailsMeaning.textContent = meaning || '';
+      detailsNotes.textContent = notes || '';
     }
 
     function createAyahCard(ayah) {
-      const card = document.createElement('div');
+      const card = document.createElement('article');
       card.className = 'ayah-card';
 
       const header = document.createElement('div');
       header.className = 'ayah-header';
 
-      const numCircle = document.createElement('div');
-      numCircle.className = 'ayah-number-circle';
-      numCircle.textContent = ayah.number;
+      const ayahNum = document.createElement('div');
+      ayahNum.className = 'ayah-number';
+      ayahNum.textContent = `আয়াত ${ayah.ayahNumber}`;
+      header.appendChild(ayahNum);
 
-      const modeTag = document.createElement('div');
-      modeTag.className = 'ayah-mode-tag';
-      modeTag.textContent = 'শুধু আরবি';
-
-      header.appendChild(numCircle);
-      header.appendChild(modeTag);
       card.appendChild(header);
 
-      const lineEl = document.createElement('div');
-      lineEl.className = 'ayah-line-ar';
-      lineEl.textContent = ayah.arabicFull;
-      card.appendChild(lineEl);
+      const arLine = document.createElement('div');
+      arLine.className = 'ayah-arabic-line';
+      arLine.textContent = ayah.arabic;
+      card.appendChild(arLine);
 
-      const transEl = document.createElement('div');
-      transEl.className = 'ayah-translation hidden';
-      transEl.textContent = ayah.translation;
-      card.appendChild(transEl);
+      const bnLine = document.createElement('div');
+      bnLine.className = 'ayah-bangla-line';
+      bnLine.textContent = ayah.bangla || '';
+      card.appendChild(bnLine);
 
       const grid = document.createElement('div');
-      grid.className = 'word-grid hidden';
+      grid.className = 'word-grid';
 
-      if (ayah.words && ayah.words.length) {
+      if (Array.isArray(ayah.words)) {
         ayah.words.forEach(word => {
-          const pill = document.createElement('div');
+          const pill = document.createElement('button');
+          pill.type = 'button';
           pill.className = 'word-pill';
 
-          const ar = document.createElement('div');
-          ar.className = 'word-pill-ar';
-          ar.textContent = word.text;
+          const wAr = document.createElement('div');
+          wAr.className = 'word-arabic';
+          wAr.textContent = word.text;
+          pill.appendChild(wAr);
 
-          const bn = document.createElement('div');
-          bn.className = 'word-pill-bn';
-          bn.textContent = word.meaningBn || '';
-
-          pill.appendChild(ar);
-          pill.appendChild(bn);
+          const wMean = document.createElement('div');
+          wMean.className = 'word-meaning';
+          wMean.textContent = word.meaningBn || '';
+          pill.appendChild(wMean);
 
           pill.addEventListener('click', () => {
-            if (!grammarEnabled) return;
-
-            clearActiveWord();
-            pill.classList.add('active');
-            setGrammarDetails(word.text, word.meaningBn, word.notes || '');
+            document.querySelectorAll('.word-pill').forEach(p => p.classList.remove('word-active'));
+            pill.classList.add('word-active');
+            setDetails(word.text, word.meaningBn, word.notes || '');
           });
 
           grid.appendChild(pill);
@@ -605,6 +372,8 @@
     fetch('surah_104.json')
       .then(r => r.json())
       .then(data => {
+        currentData = data;
+
         if (data.hasBismillah && data.bismillah) {
           bismillahAr.textContent = data.bismillah.arabic;
           bismillahBn.textContent = data.bismillah.bangla;
