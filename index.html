@@ -10,6 +10,8 @@
       --card: #071827;
       --muted: #9fb1c9;
       --accent: #56b5ff;
+      --accent-soft: rgba(86,181,255,0.18);
+      --accent-text: #e9f6ff;
       --arabic-size: 2.0rem;
       --bangla-size: 1.0rem;
       --notes-size: 1.02rem;
@@ -73,26 +75,34 @@
     }
     input[type="checkbox"]{width:16px;height:16px}
 
-    /* view mode button */
+    /* view mode button – more contrast */
     .view-mode-btn{
       border-radius:999px;
-      border:1px solid rgba(255,255,255,0.18);
-      background:rgba(255,255,255,0.04);
-      padding:6px 12px;
+      border:1px solid var(--accent-soft);
+      background:rgba(9,41,70,0.9);
+      padding:7px 14px;
       font-size:0.9rem;
       display:flex;
       align-items:center;
-      gap:6px;
+      gap:8px;
       cursor:pointer;
+      color:var(--accent-text);
+      box-shadow:0 4px 14px rgba(0,0,0,0.4);
     }
     .view-mode-btn span.icon{
-      width:18px;height:18px;
+      width:20px;height:20px;
       border-radius:999px;
       border:2px solid var(--accent);
       display:flex;
       align-items:center;
       justify-content:center;
-      font-size:0.7rem;
+      font-size:0.75rem;
+      font-weight:700;
+      background:rgba(11,68,110,0.9);
+    }
+    #viewModeText{
+      font-weight:600;
+      letter-spacing:0.02em;
     }
 
     .sliders{
@@ -167,7 +177,8 @@
     .translation{
       font-size:var(--bangla-size);
       color:var(--muted);
-      margin-bottom:8px;
+      margin-top:4px;
+      margin-bottom:4px;
       text-align:right;
       line-height:1.6;
     }
@@ -209,11 +220,11 @@
     }
     .word-block.active{
       border-color:var(--accent);
-      box-shadow:0 6px 20px rgba(86,181,255,0.06);
+      box-shadow:0 6px 20px rgba(86,181,255,0.18);
       transform:translateY(-2px);
     }
 
-    /* fixed bottom bar for selected word */
+    /* BIG fixed bottom bar for selected word */
     .selected-bar{
       position:fixed;
       left:0;
@@ -228,14 +239,15 @@
       pointer-events:auto;
       max-width:940px;
       width:calc(100% - 24px);
-      margin-bottom:8px;
+      margin-bottom:10px;
       background:#020d18;
-      border-radius:12px;
-      padding:8px 10px;
-      border:1px solid rgba(255,255,255,0.12);
+      border-radius:14px;
+      padding:10px 12px;
+      border:1px solid rgba(255,255,255,0.18);
       display:flex;
-      align-items:center;
-      gap:10px;
+      align-items:flex-start;
+      gap:12px;
+      box-shadow:0 -8px 24px rgba(0,0,0,0.65);
     }
     .sel-text{
       text-align:right;
@@ -245,28 +257,37 @@
       font-family:"Scheherazade New","Amiri",serif;
       direction:rtl;
       text-align:right;
-      font-size:1.2rem;
-      line-height:1.4;
+      font-size:1.4rem;
+      line-height:1.5;
+      word-wrap:break-word;
     }
     .sel-bn{
-      font-size:0.95rem;
+      font-size:1rem;
       color:var(--muted);
-      margin-top:2px;
+      margin-top:4px;
+      line-height:1.5;
+      word-wrap:break-word;
     }
     .sel-btns{
       display:flex;
+      flex-direction:column;
       gap:6px;
-      align-items:center;
+      align-items:flex-end;
+      min-width:90px;
     }
     .btn-small{
-      border-radius:8px;
-      border:1px solid rgba(255,255,255,0.18);
-      background:rgba(255,255,255,0.04);
-      padding:6px 10px;
-      font-size:0.85rem;
-      color:var(--muted);
+      border-radius:10px;
+      border:1px solid rgba(255,255,255,0.22);
+      background:rgba(255,255,255,0.06);
+      padding:7px 12px;
+      font-size:0.9rem;
+      color:var(--accent-text);
       cursor:pointer;
       white-space:nowrap;
+    }
+    .btn-small.secondary{
+      background:rgba(10,25,40,0.9);
+      color:var(--muted);
     }
 
     /* grammar modal – center fixed */
@@ -290,6 +311,7 @@
       display:flex;
       flex-direction:column;
       gap:10px;
+      box-shadow:0 18px 50px rgba(0,0,0,0.7);
     }
     .modal-top{
       display:flex;
@@ -299,7 +321,7 @@
     }
     .modal-word{
       font-family:"Scheherazade New","Amiri",serif;
-      font-size:1.5rem;
+      font-size:1.6rem;
       direction:rtl;
       text-align:right;
       line-height:1.6;
@@ -314,9 +336,9 @@
       border-radius:999px;
       border:1px solid rgba(255,255,255,0.25);
       background:rgba(255,255,255,0.04);
-      padding:6px 10px;
-      font-size:0.85rem;
-      color:var(--muted);
+      padding:7px 12px;
+      font-size:0.9rem;
+      color:var(--accent-text);
       cursor:pointer;
       white-space:nowrap;
     }
@@ -343,6 +365,15 @@
       .right-head{justify-content:space-between;width:100%}
       .word-block{min-width:60px}
       .bismillah .ar{font-size:1.1rem}
+      .selected-inner{
+        flex-direction:column;
+        align-items:flex-end;
+      }
+      .sel-btns{
+        flex-direction:row;
+        justify-content:flex-end;
+        width:100%;
+      }
     }
   </style>
 </head>
@@ -388,7 +419,7 @@
     </main>
   </div>
 
-  <!-- fixed bottom selected word bar -->
+  <!-- BIG fixed bottom selected word bar -->
   <div id="selectedBar" class="selected-bar hidden">
     <div class="selected-inner">
       <div class="sel-text">
@@ -397,7 +428,7 @@
       </div>
       <div class="sel-btns">
         <button id="btnGrammar" class="btn-small">Grammar</button>
-        <button id="btnClearSel" class="btn-small">Clear</button>
+        <button id="btnClearSel" class="btn-small secondary">Clear</button>
       </div>
     </div>
   </div>
