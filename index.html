@@ -27,21 +27,51 @@
       font-family:"Noto Sans Bengali",system-ui,sans-serif;
       background:linear-gradient(180deg,#081226,#02101a);
       color:#e6f0fb;
-      padding:12px;
+    }
+
+    .top-shell{
+      position:sticky;
+      top:0;
+      z-index:30;
+      background:linear-gradient(180deg,rgba(3,11,25,0.96),rgba(3,11,25,0.9));
+      backdrop-filter:blur(10px);
+      border-bottom:1px solid rgba(255,255,255,0.04);
     }
     .wrap{
       max-width:940px;
       margin:0 auto;
+      padding:10px 12px 16px;
     }
+
     header{
       display:flex;
       justify-content:space-between;
       align-items:center;
-      gap:12px;
-      margin-bottom:10px;
+      gap:10px;
       flex-wrap:wrap;
     }
-    .brand{font-weight:700;font-size:1rem}
+    .brand-block{
+      display:flex;
+      flex-direction:column;
+      gap:3px;
+      min-width:0;
+    }
+    .brand{
+      font-weight:700;
+      font-size:0.95rem;
+    }
+    .sura-name{
+      font-size:0.86rem;
+      color:var(--muted);
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .sura-name span.ar{
+      font-family:"Scheherazade New","Amiri",serif;
+      margin-right:4px;
+    }
+
     .right-head{
       display:flex;
       align-items:center;
@@ -49,54 +79,39 @@
       flex-wrap:wrap;
       justify-content:flex-end;
     }
+
     .select-sura{
       padding:6px 8px;
       border-radius:8px;
       border:1px solid rgba(255,255,255,0.06);
       background:rgba(255,255,255,0.02);
       color:inherit;
-      max-width:180px;
+      max-width:170px;
+      font-size:0.88rem;
     }
-    .settings{
-      display:flex;
-      gap:8px;
-      align-items:center;
-      background:rgba(255,255,255,0.02);
-      padding:8px;
-      border-radius:10px;
-      border:1px solid rgba(255,255,255,0.03);
-      flex-wrap:wrap;
-    }
-    .settings label{
-      font-size:0.9rem;
-      display:flex;
-      align-items:center;
-      gap:6px;
-    }
-    input[type="checkbox"]{width:16px;height:16px}
 
-    /* view mode button – more contrast */
     .view-mode-btn{
       border-radius:999px;
       border:1px solid var(--accent-soft);
-      background:rgba(9,41,70,0.9);
-      padding:7px 14px;
-      font-size:0.9rem;
+      background:rgba(9,41,70,0.96);
+      padding:6px 12px;
+      font-size:0.86rem;
       display:flex;
       align-items:center;
-      gap:8px;
+      gap:6px;
       cursor:pointer;
       color:var(--accent-text);
       box-shadow:0 4px 14px rgba(0,0,0,0.4);
+      white-space:nowrap;
     }
     .view-mode-btn span.icon{
-      width:20px;height:20px;
+      width:18px;height:18px;
       border-radius:999px;
       border:2px solid var(--accent);
       display:flex;
       align-items:center;
       justify-content:center;
-      font-size:0.75rem;
+      font-size:0.7rem;
       font-weight:700;
       background:rgba(11,68,110,0.9);
     }
@@ -105,15 +120,25 @@
       letter-spacing:0.02em;
     }
 
-    .sliders{
+    .settings-toggle{
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,0.1);
+      background:rgba(255,255,255,0.03);
+      width:30px;
+      height:30px;
       display:flex;
-      gap:10px;
       align-items:center;
-      flex-wrap:wrap;
-      margin-bottom:8px;
+      justify-content:center;
+      cursor:pointer;
+      font-size:1rem;
+      color:var(--muted);
     }
 
-    main{margin-top:4px}
+    main{
+      padding:10px 12px 18px;
+      max-width:940px;
+      margin:0 auto;
+    }
 
     .bismillah{
       padding:10px;
@@ -122,6 +147,7 @@
       border:1px solid rgba(120,150,190,0.06);
       text-align:center;
       margin-bottom:10px;
+      margin-top:4px;
     }
     .bismillah .ar{
       font-family:"Scheherazade New","Amiri",serif;
@@ -144,23 +170,15 @@
     }
     .ayah-head{
       display:flex;
-      justify-content:space-between;
-      align-items:center;
+      justify-content:flex-end;
       margin-bottom:8px;
-      gap:8px;
     }
     .ayah-no{
       background:rgba(255,255,255,0.02);
       padding:6px 8px;
       border-radius:999px;
       font-weight:700;
-      font-size:0.95rem;
-    }
-    .ayah-mode{
-      color:var(--muted);
       font-size:0.9rem;
-      text-align:right;
-      flex:1;
     }
 
     .ayah-line{
@@ -224,7 +242,7 @@
       transform:translateY(-2px);
     }
 
-    /* BIG fixed bottom bar for selected word */
+    /* big fixed bottom selected word bar – left aligned text */
     .selected-bar{
       position:fixed;
       left:0;
@@ -250,8 +268,9 @@
       box-shadow:0 -8px 24px rgba(0,0,0,0.65);
     }
     .sel-text{
-      text-align:right;
       flex:1;
+      text-align:left;          /* LEFT ALIGN HERE */
+      direction:ltr;
     }
     .sel-ar{
       font-family:"Scheherazade New","Amiri",serif;
@@ -267,6 +286,7 @@
       margin-top:4px;
       line-height:1.5;
       word-wrap:break-word;
+      text-align:left;          /* Bangla meaning left aligned */
     }
     .sel-btns{
       display:flex;
@@ -290,7 +310,7 @@
       color:var(--muted);
     }
 
-    /* grammar modal – center fixed */
+    /* grammar modal */
     .modal-backdrop{
       position:fixed;
       inset:0;
@@ -298,7 +318,7 @@
       display:flex;
       justify-content:center;
       align-items:center;
-      z-index:30;
+      z-index:40;
     }
     .modal{
       max-width:900px;
@@ -329,7 +349,7 @@
     .modal-meaning{
       font-size:1rem;
       color:var(--muted);
-      text-align:right;
+      text-align:left;
       margin-top:3px;
     }
     .modal-close{
@@ -354,20 +374,86 @@
       line-height:1.7;
       word-wrap:break-word;
       overflow-wrap:break-word;
-      text-align:right;
-      direction:rtl;
+      text-align:left;
+      direction:ltr;
+    }
+
+    /* settings drawer */
+    .settings-drawer-backdrop{
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,0.55);
+      display:flex;
+      justify-content:center;
+      align-items:flex-end;
+      z-index:35;
+    }
+    .settings-drawer{
+      width:100%;
+      max-width:940px;
+      background:#020d18;
+      border-radius:16px 16px 0 0;
+      border:1px solid rgba(255,255,255,0.16);
+      padding:10px 14px 14px;
+      box-shadow:0 -10px 35px rgba(0,0,0,0.75);
+    }
+    .settings-row-top{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:6px;
+    }
+    .settings-title{
+      font-size:0.9rem;
+      font-weight:600;
+    }
+    .settings-row{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:6px;
+    }
+    .slider-block{
+      min-width:140px;
+      flex:1;
+      font-size:0.85rem;
+      color:var(--muted);
+    }
+    .slider-block label{
+      display:block;
+      margin-bottom:2px;
+    }
+    .slider-block span.val{
+      font-weight:600;
+      color:#e6f0fb;
+    }
+    .settings-switches{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:6px;
+      font-size:0.86rem;
+      color:var(--muted);
+    }
+    .settings-switches label{
+      display:flex;
+      align-items:center;
+      gap:5px;
+    }
+    input[type="range"]{
+      width:100%;
     }
 
     .hidden{display:none}
 
     @media(max-width:640px){
       header{flex-direction:column;align-items:flex-start}
-      .right-head{justify-content:space-between;width:100%}
+      .right-head{justify-content:flex-start;width:100%}
       .word-block{min-width:60px}
       .bismillah .ar{font-size:1.1rem}
       .selected-inner{
         flex-direction:column;
-        align-items:flex-end;
+        align-items:flex-start;
       }
       .sel-btns{
         flex-direction:row;
@@ -378,46 +464,36 @@
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <header>
-      <div class="brand">Quran Word-by-Word — Preview</div>
-      <div class="right-head">
-        <button id="viewModeBtn" class="view-mode-btn">
-          <span class="icon">⯈</span>
-          <span id="viewModeText">তেলাওয়াত মোড</span>
-        </button>
-        <select id="suraSelect" class="select-sura"></select>
-        <div class="settings">
-          <label><input type="checkbox" id="cbTranslation" /> বাংলা অনুবাদ</label>
-          <label><input type="checkbox" id="cbGrammar" /> Grammar on click</label>
+  <div class="top-shell">
+    <div class="wrap">
+      <header>
+        <div class="brand-block">
+          <div class="brand">Quran Word-by-Word — Preview</div>
+          <div class="sura-name">
+            <span class="ar" id="suraNameAr">سورة الهمزة</span> ·
+            <span id="suraNameBn">সূরা আল-হুমাযাহ</span>
+          </div>
         </div>
-      </div>
-    </header>
-
-    <div class="sliders">
-      <div>
-        <label style="font-size:0.85rem;color:var(--muted)">আরবি ফন্ট: <span id="arabicLabel">2.0rem</span></label><br>
-        <input id="arabicSlider" type="range" min="1.2" max="3.0" step="0.1" value="2.0" />
-      </div>
-      <div>
-        <label style="font-size:0.85rem;color:var(--muted)">বাংলা ফন্ট: <span id="banglaLabel">1.0rem</span></label><br>
-        <input id="banglaSlider" type="range" min="0.8" max="1.8" step="0.05" value="1.0" />
-      </div>
-      <div>
-        <label style="font-size:0.85rem;color:var(--muted)">নোট ফন্ট: <span id="notesLabel">1.02rem</span></label><br>
-        <input id="notesSlider" type="range" min="0.8" max="1.6" step="0.02" value="1.02" />
-      </div>
+        <div class="right-head">
+          <button id="viewModeBtn" class="view-mode-btn">
+            <span class="icon">⯈</span>
+            <span id="viewModeText">তেলাওয়াত মোড</span>
+          </button>
+          <select id="suraSelect" class="select-sura"></select>
+          <button id="settingsToggle" class="settings-toggle" title="Settings">⚙</button>
+        </div>
+      </header>
     </div>
-
-    <main id="content">
-      <section class="bismillah" id="bismillah">
-        <div class="ar" id="bismillahAr"></div>
-        <div class="bn" id="bismillahBn"></div>
-      </section>
-
-      <div id="ayahContainer"></div>
-    </main>
   </div>
+
+  <main>
+    <section class="bismillah" id="bismillah">
+      <div class="ar" id="bismillahAr"></div>
+      <div class="bn" id="bismillahBn"></div>
+    </section>
+
+    <div id="ayahContainer"></div>
+  </main>
 
   <!-- BIG fixed bottom selected word bar -->
   <div id="selectedBar" class="selected-bar hidden">
@@ -449,6 +525,36 @@
     </div>
   </div>
 
+  <!-- settings drawer -->
+  <div id="settingsBackdrop" class="settings-drawer-backdrop hidden">
+    <div class="settings-drawer">
+      <div class="settings-row-top">
+        <div class="settings-title">Display Settings</div>
+        <button id="settingsClose" class="btn-small secondary">Close</button>
+      </div>
+
+      <div class="settings-row">
+        <div class="slider-block">
+          <label>আরবি ফন্ট: <span id="arabicLabel" class="val">2.00rem</span></label>
+          <input id="arabicSlider" type="range" min="1.2" max="3.0" step="0.1" value="2.0" />
+        </div>
+        <div class="slider-block">
+          <label>বাংলা ফন্ট: <span id="banglaLabel" class="val">1.00rem</span></label>
+          <input id="banglaSlider" type="range" min="0.8" max="1.8" step="0.05" value="1.0" />
+        </div>
+        <div class="slider-block">
+          <label>নোট ফন্ট: <span id="notesLabel" class="val">1.02rem</span></label>
+          <input id="notesSlider" type="range" min="0.8" max="1.6" step="0.02" value="1.02" />
+        </div>
+      </div>
+
+      <div class="settings-switches">
+        <label><input type="checkbox" id="cbTranslation" /> বাংলা অনুবাদ দেখাবে</label>
+        <label><input type="checkbox" id="cbGrammar" /> Grammar button সক্রিয়</label>
+      </div>
+    </div>
+  </div>
+
   <script>
     const TOTAL_SURA = 114;
 
@@ -458,6 +564,9 @@
 
     const viewModeBtn = document.getElementById('viewModeBtn');
     const viewModeText = document.getElementById('viewModeText');
+    const settingsToggle = document.getElementById('settingsToggle');
+    const settingsBackdrop = document.getElementById('settingsBackdrop');
+    const settingsClose = document.getElementById('settingsClose');
 
     const arabicSlider = document.getElementById('arabicSlider');
     const banglaSlider = document.getElementById('banglaSlider');
@@ -481,6 +590,9 @@
     const mWord = document.getElementById('mWord');
     const mMeaning = document.getElementById('mMeaning');
     const mNotes = document.getElementById('mNotes');
+
+    const suraNameAr = document.getElementById('suraNameAr');
+    const suraNameBn = document.getElementById('suraNameBn');
 
     let currentSurah = 104;
     let currentData = null;
@@ -514,6 +626,25 @@
       clearSelection();
       renderCurrent();
       updateViewModeUI();
+    });
+
+    function toggleSettings(open){
+      if(open){
+        settingsBackdrop.classList.remove('hidden');
+      }else{
+        settingsBackdrop.classList.add('hidden');
+      }
+    }
+
+    settingsToggle.addEventListener('click', ()=>{
+      const isHidden = settingsBackdrop.classList.contains('hidden');
+      toggleSettings(isHidden);
+    });
+    settingsClose.addEventListener('click', ()=>toggleSettings(false));
+    settingsBackdrop.addEventListener('click', (e)=>{
+      if(e.target === settingsBackdrop){
+        toggleSettings(false);
+      }
     });
 
     function applyFontSizes(){
@@ -598,6 +729,9 @@
         return r.json();
       }).then(data=>{
         currentData = data;
+        if(data.surahNameAr) suraNameAr.textContent = data.surahNameAr;
+        if(data.surahNameBn) suraNameBn.textContent = data.surahNameBn;
+
         if(data.hasBismillah && data.bismillah){
           bismillahAr.textContent = data.bismillah.arabic || '';
           bismillahBn.textContent = data.bismillah.bangla || '';
@@ -633,14 +767,7 @@
         const no = document.createElement('div');
         no.className = 'ayah-no';
         no.textContent = ayah.ayahNumber;
-        const mode = document.createElement('div');
-        mode.className = 'ayah-mode';
-        mode.textContent = modeWBW
-          ? (showTrans ? 'শব্দে-শব্দে + বাংলা' : 'শব্দে-শব্দে (শুধু আরবি)')
-          : (showTrans ? 'তেলাওয়াত + বাংলা' : 'শুধু তেলাওয়াত (আরবি)');
-
         head.appendChild(no);
-        head.appendChild(mode);
         card.appendChild(head);
 
         if(!modeWBW){
@@ -746,6 +873,7 @@
     document.addEventListener('keydown', e=>{
       if(e.key === 'Escape'){
         closeModal();
+        toggleSettings(false);
       }
     });
 
