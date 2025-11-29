@@ -311,6 +311,7 @@
     @media (max-width: 640px) {
       .mode-tabs {
         width: 100%;
+        justify-content: space_between;
         justify-content: space-between;
       }
 
@@ -865,6 +866,185 @@
     .info-block strong {
       color: #e5e7eb;
     }
+
+    /* ========== NEW: Floating Settings Button + Panel ========== */
+
+    .floating-settings-toggle {
+      position: fixed;
+      right: 1.1rem;
+      bottom: 4.2rem;
+      z-index: 55;
+      width: 44px;
+      height: 44px;
+      border-radius: 999px;
+      border: 1px solid rgba(34, 197, 94, 0.8);
+      background: radial-gradient(circle at top, rgba(34, 197, 94, 0.25), rgba(5, 46, 22, 0.95));
+      box-shadow:
+        0 10px 30px rgba(15, 23, 42, 0.95),
+        0 0 0 1px rgba(15, 23, 42, 0.9);
+      font-size: 1.3rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ecfdf5;
+    }
+
+    .floating-settings-toggle:hover {
+      transform: translateY(-1px);
+      box-shadow:
+        0 16px 40px rgba(15, 23, 42, 1),
+        0 0 0 1px rgba(34, 197, 94, 0.9);
+    }
+
+    .floating-settings-panel {
+      position: fixed;
+      right: 1.1rem;
+      bottom: 9rem;
+      width: min(320px, 90vw);
+      max-height: 70vh;
+      border-radius: 1rem;
+      background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.98), rgba(15, 23, 42, 1));
+      border: 1px solid rgba(34, 197, 94, 0.7);
+      box-shadow:
+        0 20px 45px rgba(0, 0, 0, 0.9),
+        0 0 0 1px rgba(15, 23, 42, 0.9);
+      padding: 0.6rem 0.7rem 0.7rem;
+      z-index: 56;
+      display: none;
+      flex-direction: column;
+      gap: 0.4rem;
+      font-size: 0.78rem;
+      overflow: hidden;
+    }
+
+    .floating-settings-panel.open {
+      display: flex;
+    }
+
+    .floating-settings-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.4rem;
+      margin-bottom: 0.2rem;
+    }
+
+    .floating-settings-title {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .floating-settings-title span.icon {
+      font-size: 1rem;
+    }
+
+    .floating-settings-close {
+      border-radius: 999px;
+      border: 1px solid rgba(75, 85, 99, 0.95);
+      background: radial-gradient(circle at top, rgba(15, 23, 42, 0.96), rgba(15, 23, 42, 1));
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+      color: #9ca3af;
+    }
+
+    .floating-settings-close:hover {
+      border-color: rgba(248, 113, 113, 0.9);
+      color: #fecaca;
+    }
+
+    .floating-settings-body {
+      margin-top: 0.2rem;
+      padding-top: 0.2rem;
+      border-top: 1px dashed rgba(31, 41, 55, 0.9);
+      overflow: auto;
+    }
+
+    .floating-settings-group-title {
+      font-size: 0.76rem;
+      color: #a5b4fc;
+      margin: 0.2rem 0 0.1rem;
+    }
+
+    .floating-settings-row {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.35rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .floating-settings-field {
+      border-radius: 0.55rem;
+      padding: 0.3rem 0.4rem;
+      background: rgba(15, 23, 42, 0.98);
+      border: 1px solid rgba(31, 41, 55, 0.95);
+    }
+
+    .floating-settings-field label {
+      display: block;
+      font-size: 0.73rem;
+      color: var(--text-muted);
+      margin-bottom: 0.15rem;
+    }
+
+    .floating-settings-input {
+      width: 100%;
+      font-size: 0.78rem;
+      padding: 0.18rem 0.3rem;
+      border-radius: 0.35rem;
+      border: 1px solid rgba(55, 65, 81, 0.95);
+      background: rgba(15, 23, 42, 1);
+      color: var(--text-main);
+    }
+
+    .floating-settings-input:focus {
+      outline: none;
+      border-color: rgba(34, 197, 94, 0.85);
+    }
+
+    .floating-writer-list {
+      margin-top: 0.15rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+
+    .floating-writer-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.35rem;
+      font-size: 0.76rem;
+    }
+
+    .floating-writer-item span {
+      color: #e5e7eb;
+    }
+
+    .floating-writer-item input[type="checkbox"] {
+      width: 14px;
+      height: 14px;
+      accent-color: #22c55e;
+    }
+
+    @media (max-width: 640px) {
+      .floating-settings-toggle {
+        right: 0.8rem;
+        bottom: 4.5rem;
+      }
+
+      .floating-settings-panel {
+        right: 0.6rem;
+        bottom: 9rem;
+        width: min(95vw, 360px);
+      }
+    }
   </style>
 
   <script src="suras.js"></script>
@@ -989,7 +1169,7 @@
             <strong>শুধু অনুবাদ</strong> মোডে চাইলে একাধিক লেখক (তাফসীরে ওসমানী, তাওযীহুল কুরআন)
             একসাথে সিলেক্ট করে তুলনা করতে পারবেন।<br />
             সব সেটিংস (ফন্ট সাইজ, line height ইত্যাদি) ডান পাশের <strong>ফন্ট & ভিউ</strong> প্যানেল থেকে
-            নিয়ন্ত্রণ করা যাবে।
+            নিয়ন্ত্রণ করা যাবে, আর দ্রুত পরিবর্তনের জন্য নিচে ভাসমান ⚙️ বাটন থেকেও করা যাবে।
           </div>
         </div>
       </div>
@@ -1169,6 +1349,122 @@
     </div>
   </div>
 
+  <!-- NEW: Floating Settings Button + Panel -->
+  <button id="floatingSettingsToggle" class="floating-settings-toggle" type="button" aria-label="Quick font & view settings">
+    ⚙️
+  </button>
+
+  <div id="floatingSettingsPanel" class="floating-settings-panel" tabindex="-1">
+    <div class="floating-settings-header">
+      <div class="floating-settings-title">
+        <span class="icon">⚙️</span>
+        <span>Quick ফন্ট & ভিউ</span>
+      </div>
+      <button id="floatingSettingsClose" class="floating-settings-close" type="button">✕</button>
+    </div>
+    <div class="floating-settings-body">
+      <div class="floating-settings-group-title">আরবি & বাংলা ফন্ট</div>
+      <div class="floating-settings-row">
+        <div class="floating-settings-field">
+          <label for="floatArabicFontSizeInput">আরবি ফন্ট</label>
+          <input
+            id="floatArabicFontSizeInput"
+            class="floating-settings-input"
+            type="number"
+            min="16"
+            max="40"
+          />
+        </div>
+        <div class="floating-settings-field">
+          <label for="floatBanglaFontSizeInput">বাংলা ফন্ট</label>
+          <input
+            id="floatBanglaFontSizeInput"
+            class="floating-settings-input"
+            type="number"
+            min="12"
+            max="26"
+          />
+        </div>
+      </div>
+
+      <div class="floating-settings-row">
+        <div class="floating-settings-field">
+          <label for="floatArabicLineHeightInput">আরবি line</label>
+          <input
+            id="floatArabicLineHeightInput"
+            class="floating-settings-input"
+            type="number"
+            min="1.4"
+            max="3"
+            step="0.1"
+          />
+        </div>
+        <div class="floating-settings-field">
+          <label for="floatBanglaLineHeightInput">বাংলা line</label>
+          <input
+            id="floatBanglaLineHeightInput"
+            class="floating-settings-input"
+            type="number"
+            min="1.2"
+            max="2.4"
+            step="0.1"
+          />
+        </div>
+      </div>
+
+      <div class="floating-settings-group-title">শব্দে–শব্দে & popup</div>
+      <div class="floating-settings-row">
+        <div class="floating-settings-field">
+          <label for="floatWordArabicFontSizeInput">শব্দে–শব্দে আরবি</label>
+          <input
+            id="floatWordArabicFontSizeInput"
+            class="floating-settings-input"
+            type="number"
+            min="18"
+            max="40"
+          />
+        </div>
+        <div class="floating-settings-field">
+          <label for="floatWordMeaningFontSizeInput">বাংলা শব্দার্থ</label>
+          <input
+            id="floatWordMeaningFontSizeInput"
+            class="floating-settings-input"
+            type="number"
+            min="12"
+            max="26"
+          />
+        </div>
+      </div>
+
+      <div class="floating-settings-row">
+        <div class="floating-settings-field">
+          <label for="floatWordNotesFontSizeInput">ব্যাকরণ নোটস</label>
+          <input
+            id="floatWordNotesFontSizeInput"
+            class="floating-settings-input"
+            type="number"
+            min="12"
+            max="26"
+          />
+        </div>
+      </div>
+
+      <div class="floating-settings-group-title">অনুবাদ লেখক</div>
+      <div class="floating-settings-field">
+        <div class="floating-writer-list">
+          <label class="floating-writer-item">
+            <span>তাফসীরে ওসমানী</span>
+            <input type="checkbox" id="floatWriterOsmani" />
+          </label>
+          <label class="floating-writer-item">
+            <span>তাওযীহুল কুরআন</span>
+            <input type="checkbox" id="floatWriterTawjih" />
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Core Script -->
   <script>
     // ===== Global State =====
@@ -1203,6 +1499,21 @@
     const bottomWordBtn = document.getElementById("bottomWordBtn");
     const bottomTransBtn = document.getElementById("bottomTransBtn");
     const bottomSettingsBtn = document.getElementById("bottomSettingsBtn");
+
+    // Floating settings
+    const floatingSettingsToggle = document.getElementById("floatingSettingsToggle");
+    const floatingSettingsPanel = document.getElementById("floatingSettingsPanel");
+    const floatingSettingsClose = document.getElementById("floatingSettingsClose");
+
+    const floatArabicFontSizeInput = document.getElementById("floatArabicFontSizeInput");
+    const floatBanglaFontSizeInput = document.getElementById("floatBanglaFontSizeInput");
+    const floatArabicLineHeightInput = document.getElementById("floatArabicLineHeightInput");
+    const floatBanglaLineHeightInput = document.getElementById("floatBanglaLineHeightInput");
+    const floatWordArabicFontSizeInput = document.getElementById("floatWordArabicFontSizeInput");
+    const floatWordMeaningFontSizeInput = document.getElementById("floatWordMeaningFontSizeInput");
+    const floatWordNotesFontSizeInput = document.getElementById("floatWordNotesFontSizeInput");
+    const floatWriterOsmani = document.getElementById("floatWriterOsmani");
+    const floatWriterTawjih = document.getElementById("floatWriterTawjih");
 
     // Word Modal
     const wordModalBackdrop = document.getElementById("wordModalBackdrop");
@@ -1281,6 +1592,9 @@
         wordModalNotes.style.fontSize = wordNotesSize + "px";
         wordModalNotes.style.lineHeight = "1.6";
       }
+
+      // sync values back to floating panel inputs
+      syncSidebarToFloating();
     }
 
     function getSelectedWriters() {
@@ -1288,6 +1602,63 @@
       if (writerOsmani.checked) writers.push("osmani");
       if (writerTawjih.checked) writers.push("tawjih");
       return writers;
+    }
+
+    // ===== Floating settings sync helpers =====
+
+    function syncSidebarToFloating() {
+      // Font sizes & line heights
+      floatArabicFontSizeInput.value = arabicFontSizeInput.value;
+      floatBanglaFontSizeInput.value = banglaFontSizeInput.value;
+      floatArabicLineHeightInput.value = arabicLineHeightInput.value;
+      floatBanglaLineHeightInput.value = banglaLineHeightInput.value;
+      floatWordArabicFontSizeInput.value = wordArabicFontSizeInput.value;
+      floatWordMeaningFontSizeInput.value = wordMeaningFontSizeInput.value;
+      floatWordNotesFontSizeInput.value = wordNotesFontSizeInput.value;
+
+      // Writers
+      floatWriterOsmani.checked = writerOsmani.checked;
+      floatWriterTawjih.checked = writerTawjih.checked;
+    }
+
+    function syncFloatingToSidebar() {
+      if (floatArabicFontSizeInput.value !== "") {
+        arabicFontSizeInput.value = floatArabicFontSizeInput.value;
+      }
+      if (floatBanglaFontSizeInput.value !== "") {
+        banglaFontSizeInput.value = floatBanglaFontSizeInput.value;
+      }
+      if (floatArabicLineHeightInput.value !== "") {
+        arabicLineHeightInput.value = floatArabicLineHeightInput.value;
+      }
+      if (floatBanglaLineHeightInput.value !== "") {
+        banglaLineHeightInput.value = floatBanglaLineHeightInput.value;
+      }
+      if (floatWordArabicFontSizeInput.value !== "") {
+        wordArabicFontSizeInput.value = floatWordArabicFontSizeInput.value;
+      }
+      if (floatWordMeaningFontSizeInput.value !== "") {
+        wordMeaningFontSizeInput.value = floatWordMeaningFontSizeInput.value;
+      }
+      if (floatWordNotesFontSizeInput.value !== "") {
+        wordNotesFontSizeInput.value = floatWordNotesFontSizeInput.value;
+      }
+
+      writerOsmani.checked = floatWriterOsmani.checked;
+      writerTawjih.checked = floatWriterTawjih.checked;
+
+      applyFontSettings();
+      renderCurrentSurah();
+    }
+
+    function openFloatingSettings() {
+      syncSidebarToFloating();
+      floatingSettingsPanel.classList.add("open");
+      floatingSettingsPanel.focus();
+    }
+
+    function closeFloatingSettings() {
+      floatingSettingsPanel.classList.remove("open");
     }
 
     // ===== Surah List & Selector =====
@@ -1570,8 +1941,14 @@
     modeTransBtn.addEventListener("click", () => setMode("translation"));
     modeArabicBtn.addEventListener("click", () => setMode("arabic"));
 
-    writerOsmani.addEventListener("change", renderCurrentSurah);
-    writerTawjih.addEventListener("change", renderCurrentSurah);
+    writerOsmani.addEventListener("change", () => {
+      floatWriterOsmani.checked = writerOsmani.checked;
+      renderCurrentSurah();
+    });
+    writerTawjih.addEventListener("change", () => {
+      floatWriterTawjih.checked = writerTawjih.checked;
+      renderCurrentSurah();
+    });
 
     arabicFontSizeInput.addEventListener("input", applyFontSettings);
     banglaFontSizeInput.addEventListener("input", applyFontSettings);
@@ -1593,9 +1970,49 @@
     bottomTransBtn.addEventListener("click", () => setMode("translation"));
     bottomSettingsBtn.addEventListener("click", toggleSettingsHighlight);
 
+    // Floating settings events
+    floatingSettingsToggle.addEventListener("click", () => {
+      if (floatingSettingsPanel.classList.contains("open")) {
+        closeFloatingSettings();
+      } else {
+        openFloatingSettings();
+      }
+    });
+
+    floatingSettingsClose.addEventListener("click", closeFloatingSettings);
+
+    floatingSettingsPanel.addEventListener("click", (e) => {
+      // prevent closing when clicking inside
+      e.stopPropagation();
+    });
+
+    document.addEventListener("click", (e) => {
+      // close floating when clicking outside (not on toggle)
+      if (
+        floatingSettingsPanel.classList.contains("open") &&
+        !floatingSettingsPanel.contains(e.target) &&
+        e.target !== floatingSettingsToggle
+      ) {
+        closeFloatingSettings();
+      }
+    });
+
+    // Floating inputs -> sync to sidebar & apply
+    floatArabicFontSizeInput.addEventListener("input", syncFloatingToSidebar);
+    floatBanglaFontSizeInput.addEventListener("input", syncFloatingToSidebar);
+    floatArabicLineHeightInput.addEventListener("input", syncFloatingToSidebar);
+    floatBanglaLineHeightInput.addEventListener("input", syncFloatingToSidebar);
+    floatWordArabicFontSizeInput.addEventListener("input", syncFloatingToSidebar);
+    floatWordMeaningFontSizeInput.addEventListener("input", syncFloatingToSidebar);
+    floatWordNotesFontSizeInput.addEventListener("input", syncFloatingToSidebar);
+    floatWriterOsmani.addEventListener("change", syncFloatingToSidebar);
+    floatWriterTawjih.addEventListener("change", syncFloatingToSidebar);
+
     // ===== Init =====
     document.addEventListener("DOMContentLoaded", () => {
       initSurahSelector();
+      // initial sync for floating panel default values
+      syncSidebarToFloating();
     });
   </script>
 </body>
