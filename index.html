@@ -1,1760 +1,1253 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Qur'an Ayaat Toolkit</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Qur'an Reader – Ayaat Tools</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+  <!-- Basic CSS – modern, card-based, responsive -->
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-
     :root {
-      --bg-main: radial-gradient(circle at top left, #e0f2fe, #eef2ff, #fefce8);
-      --card-bg: rgba(255,255,255,0.9);
-      --glass-bg: rgba(15,23,42,0.68);
-      --primary: #1f2937;
-      --accent: #0ea5e9;
-      --accent-soft: rgba(14,165,233,0.12);
-      --accent-strong: #0284c7;
-      --danger-soft: #fee2e2;
-      --danger: #b91c1c;
-      --radius-xl: 18px;
-      --radius-lg: 14px;
-      --radius-pill: 999px;
-      --shadow-soft: 0 18px 45px rgba(15,23,42,0.15);
+      --bg-main: #f3f4f6;
+      --bg-card: #ffffff;
+      --bg-soft: #e5e7eb;
+      --primary: #10b981;
+      --primary-soft: #d1fae5;
+      --text-main: #111827;
+      --text-muted: #6b7280;
+      --border-soft: #e5e7eb;
+      --shadow-soft: 0 10px 25px rgba(0, 0, 0, 0.07);
+      --radius-lg: 16px;
+      --radius-xl: 22px;
+      --transition-fast: 0.2s ease-in-out;
+    }
+
+    [data-theme="dark"] {
+      --bg-main: #020617;
+      --bg-card: #0b1120;
+      --bg-soft: #111827;
+      --primary: #22c55e;
+      --primary-soft: #052e16;
+      --text-main: #e5e7eb;
+      --text-muted: #9ca3af;
+      --border-soft: #1f2937;
+      --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.7);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
 
     body {
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      min-height: 100vh;
       background: var(--bg-main);
-      color: #0f172a;
+      color: var(--text-main);
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
     }
 
     .app-shell {
-      max-width: 1280px;
-      margin: 12px auto;
-      padding: 8px;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      min-height: 100vh;
     }
 
-    /* Top app header */
-    .app-header {
+    /* Top bar */
+    .topbar {
       display: flex;
+      align-items: center;
       justify-content: space-between;
-      align-items: center;
-      gap: 10px;
-      padding: 10px 14px;
-      border-radius: var(--radius-xl);
-      background: rgba(255,255,255,0.85);
-      box-shadow: 0 8px 25px rgba(15,23,42,0.08);
-      backdrop-filter: blur(10px);
+      padding: 0.7rem 1rem;
+      background: var(--bg-card);
+      box-shadow: var(--shadow-soft);
+      position: sticky;
+      top: 0;
+      z-index: 20;
     }
-    .app-title-block {
+
+    .app-title {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 0.5rem;
+      font-weight: 700;
+      font-size: 1rem;
     }
-    .app-logo {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      background: conic-gradient(from 180deg, #0ea5e9, #22c55e, #f97316, #0ea5e9);
+
+    .app-title span.logo-circle {
+      width: 26px;
+      height: 26px;
+      border-radius: 999px;
+      background: var(--primary-soft);
       display: flex;
       align-items: center;
       justify-content: center;
-      color: white;
-      font-size: 18px;
-      box-shadow: 0 10px 25px rgba(14,165,233,0.4);
-    }
-    .app-title-text {
-      display: flex;
-      flex-direction: column;
-      gap: 1px;
-    }
-    .app-title-main {
-      font-weight: 700;
-      font-size: 18px;
-      letter-spacing: 0.02em;
-      color: #0f172a;
-    }
-    .app-title-sub {
-      font-size: 12px;
-      color: #6b7280;
+      font-size: 0.8rem;
+      color: var(--primary);
+      font-weight: 800;
     }
 
-    .app-header-right {
+    .topbar-right {
       display: flex;
       align-items: center;
-      gap: 8px;
-      font-size: 12px;
-      color: #64748b;
+      gap: 0.4rem;
     }
-    .pill-tag {
-      border-radius: var(--radius-pill);
-      padding: 4px 8px;
-      background: rgba(15,23,42,0.03);
+
+    .btn, .chip {
+      border-radius: 999px;
+      border: 1px solid var(--border-soft);
+      background: var(--bg-card);
+      padding: 0.3rem 0.7rem;
+      font-size: 0.75rem;
       display: inline-flex;
       align-items: center;
-      gap: 4px;
-    }
-    .pill-tag span.emoji {
-      font-size: 14px;
-    }
-
-    /* Layout: sidebar + main */
-    .app-body {
-      display: grid;
-      grid-template-columns: 290px minmax(0,1fr);
-      gap: 12px;
-      min-height: 0;
+      gap: 0.35rem;
+      cursor: pointer;
+      transition: transform var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast);
     }
 
-    /* Sidebar (glass) */
-    .sidebar {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      background: var(--glass-bg);
-      border-radius: 20px;
-      padding: 10px;
-      color: #e5e7eb;
+    .btn:hover {
+      transform: translateY(-1px);
       box-shadow: var(--shadow-soft);
-      backdrop-filter: blur(14px);
-      border: 1px solid rgba(148,163,184,0.35);
     }
 
-    .sidebar-section {
-      background: radial-gradient(circle at top left, rgba(15,23,42,0.4), rgba(15,23,42,0.85));
-      border-radius: 14px;
-      padding: 10px;
+    .btn-primary {
+      background: var(--primary);
+      color: #ecfdf5;
+      border-color: transparent;
+    }
+
+    .btn-icon {
+      padding: 0.35rem 0.45rem;
+      border-radius: 999px;
+      min-width: 28px;
+      justify-content: center;
+    }
+
+    .btn-ghost {
+      background: transparent;
+    }
+
+    .btn-small {
+      padding: 0.25rem 0.55rem;
+      font-size: 0.7rem;
+    }
+
+    .chip {
+      background: var(--bg-soft);
+      color: var(--text-muted);
+      border: none;
+    }
+
+    .chip.active {
+      background: var(--primary-soft);
+      color: var(--primary);
+    }
+
+    /* Layout */
+    .main-layout {
+      flex: 1;
+      display: flex;
+      gap: 0.75rem;
+      padding: 0.75rem;
+      max-width: 1400px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    /* Sidebar: Sura list */
+    .sidebar {
+      width: 280px;
+      max-width: 100%;
+      background: var(--bg-card);
+      border-radius: var(--radius-xl);
+      padding: 0.75rem;
+      box-shadow: var(--shadow-soft);
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 0.5rem;
+      height: calc(100vh - 70px - 1.5rem);
+      position: sticky;
+      top: 70px;
     }
+
     .sidebar-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-    }
-    .sidebar-header-title {
-      font-size: 13px;
-      font-weight: 600;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .sidebar-header-title span.emoji {
-      font-size: 15px;
-    }
-    .sidebar-header button {
-      border-radius: 999px;
-      border: 1px solid rgba(148,163,184,0.9);
-      background: rgba(15,23,42,0.4);
-      color: #e5e7eb;
-      font-size: 11px;
-      padding: 3px 8px;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-    }
-    .sidebar-header button:hover {
-      background: rgba(148,163,184,0.18);
+      margin-bottom: 0.3rem;
     }
 
-    .sidebar-search {
-      position: relative;
+    .sidebar-title {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-muted);
     }
-    .sidebar-search input {
+
+    .search-input {
       width: 100%;
       border-radius: 999px;
-      border: 1px solid rgba(148,163,184,0.7);
-      padding: 6px 26px 6px 24px;
-      font-size: 12px;
+      border: 1px solid var(--border-soft);
+      padding: 0.35rem 0.85rem;
+      font-size: 0.75rem;
+      background: var(--bg-main);
+      color: var(--text-main);
       outline: none;
-      background: rgba(15,23,42,0.7);
-      color: #e5e7eb;
+      transition: border-color var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast);
     }
-    .sidebar-search-icon {
-      position: absolute;
-      left: 8px;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 12px;
-      opacity: 0.7;
+
+    .search-input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 1px var(--primary-soft);
+      background: var(--bg-card);
     }
 
     .sura-list {
-      max-height: 185px;
+      margin-top: 0.3rem;
       overflow-y: auto;
-      padding-right: 4px;
-      margin-top: 4px;
-      scrollbar-width: thin;
-      scrollbar-color: rgba(148,163,184,0.9) transparent;
-    }
-    .sura-list::-webkit-scrollbar {
-      width: 6px;
-    }
-    .sura-list::-webkit-scrollbar-thumb {
-      background: rgba(148,163,184,0.9);
-      border-radius: 999px;
+      padding-right: 0.3rem;
     }
 
     .sura-item {
-      border-radius: 10px;
-      padding: 6px 8px;
+      border-radius: 999px;
+      padding: 0.4rem 0.6rem;
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.2rem;
       cursor: pointer;
-      transition: background 0.15s, transform 0.1s;
+      transition: background var(--transition-fast), transform var(--transition-fast);
+      font-size: 0.75rem;
     }
+
     .sura-item:hover {
-      background: rgba(15,23,42,0.75);
+      background: var(--bg-soft);
       transform: translateY(-1px);
     }
+
     .sura-item.active {
-      background: linear-gradient(90deg, rgba(56,189,248,0.35), rgba(59,130,246,0.4));
-    }
-
-    .sura-item-left {
-      display: flex;
-      flex-direction: column;
-      gap: 1px;
-      font-size: 12px;
-    }
-    .sura-item-title {
-      font-weight: 500;
-    }
-    .sura-item-meta {
-      font-size: 11px;
-      opacity: 0.8;
-    }
-    .sura-item-right {
-      font-family: "Scheherazade", "Amiri", "Traditional Arabic", system-ui;
-      font-size: 18px;
-    }
-
-    /* Last read box */
-    .last-read-box {
-      font-size: 12px;
-      line-height: 1.5;
-      background: radial-gradient(circle at top left, rgba(16,185,129,0.2), rgba(15,23,42,0.9));
-      border-radius: 12px;
-      padding: 8px 9px;
-      border: 1px solid rgba(16,185,129,0.4);
-    }
-    .last-read-box strong {
-      font-weight: 600;
-      color: #bbf7d0;
-    }
-    .last-read-preview {
-      margin-top: 4px;
-      color: #d1fae5;
-      opacity: 0.9;
-    }
-    .last-read-actions {
-      margin-top: 6px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 6px;
-    }
-    .btn-last-read-go {
-      border-radius: 999px;
-      border: none;
-      padding: 4px 9px;
-      font-size: 11px;
-      cursor: pointer;
-      background: #ecfeff;
-      color: #065f46;
+      background: var(--primary-soft);
+      color: var(--primary);
       font-weight: 600;
     }
-    .btn-last-read-clear {
-      border-radius: 999px;
-      border: 1px solid rgba(148,163,184,0.7);
-      padding: 3px 8px;
-      font-size: 11px;
-      cursor: pointer;
-      background: transparent;
-      color: #e5e7eb;
-    }
 
-    /* Sidebar mini pins/favs */
-    .sidebar-mini-list {
-      max-height: 160px;
-      overflow-y: auto;
-      padding-right: 4px;
-      scrollbar-width: thin;
-    }
-    .sidebar-mini-item {
-      border-radius: 10px;
-      padding: 5px 8px;
-      background: rgba(15,23,42,0.8);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      font-size: 11px;
-      margin-bottom: 4px;
-    }
-    .sidebar-mini-main {
+    .sura-meta {
       display: flex;
       flex-direction: column;
-      gap: 1px;
-      max-width: 165px;
     }
-    .sidebar-mini-main strong {
+
+    .sura-name-en {
       font-weight: 600;
     }
-    .sidebar-mini-main small {
-      opacity: 0.8;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    .sidebar-mini-actions button {
-      border-radius: 999px;
-      border: none;
-      padding: 3px 7px;
-      font-size: 11px;
-      cursor: pointer;
-      background: rgba(148,163,184,0.2);
-      color: #e5e7eb;
-    }
 
-    /* Main area */
-    .main {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      min-width: 0;
-    }
-
-    /* Sura bar */
-    .sura-bar-card {
-      background: var(--card-bg);
-      border-radius: 20px;
-      padding: 10px 12px;
-      box-shadow: var(--shadow-soft);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
-      border: 1px solid rgba(209,213,219,0.5);
-    }
-    .sura-bar-left {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-    .sura-bar-label {
-      font-size: 11px;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: #9ca3af;
-    }
-    .sura-bar-name {
-      font-size: 17px;
-      font-weight: 700;
-      display: inline-flex;
-      align-items: baseline;
-      gap: 6px;
-    }
-    .sura-bar-name span.ar {
-      font-family: "Scheherazade", "Amiri", system-ui;
-      font-size: 18px;
-    }
-    .sura-bar-sub {
-      font-size: 11px;
-      color: #6b7280;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      margin-top: 2px;
-    }
-    .pill-mini {
-      border-radius: 999px;
-      background: rgba(14,165,233,0.08);
-      padding: 2px 7px;
-      font-size: 11px;
-      color: #0369a1;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-    }
-
-    .sura-bar-right {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      justify-content: flex-end;
-      align-items: center;
-    }
-
-    .btn {
-      border-radius: 999px;
-      border: none;
-      padding: 6px 10px;
-      font-size: 11px;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      white-space: nowrap;
-    }
-    .btn-primary {
-      background: linear-gradient(135deg, #1d4ed8, #0ea5e9);
-      color: white;
-      box-shadow: 0 8px 18px rgba(37,99,235,0.45);
-    }
-    .btn-ghost {
-      background: rgba(15,23,42,0.03);
-      color: #0f172a;
-      border: 1px solid rgba(209,213,219,0.9);
-    }
-
-    /* View controls group */
-    .view-controls {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 4px 6px;
-      border-radius: 999px;
-      background: rgba(15,23,42,0.03);
-    }
-    .toggle-group {
-      display: inline-flex;
-      border-radius: 999px;
-      border: 1px solid rgba(209,213,219,0.9);
-      overflow: hidden;
-      background: white;
-    }
-    .toggle-group button {
-      border: none;
-      padding: 4px 8px;
-      font-size: 10px;
-      cursor: pointer;
-      background: transparent;
-      color: #6b7280;
-      min-width: 70px;
-    }
-    .toggle-group button.active {
-      background: #0f172a;
-      color: #f9fafb;
-    }
-    .font-slider {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      font-size: 11px;
-      color: #6b7280;
-    }
-    .font-slider input {
-      width: 90px;
-    }
-
-    /* Aya list card */
-    .aya-card {
-      background: var(--card-bg);
-      border-radius: 22px;
-      padding: 10px;
-      box-shadow: var(--shadow-soft);
-      border: 1px solid rgba(209,213,219,0.7);
-      display: flex;
-      flex-direction: column;
-      min-height: 0;
-      position: relative;
-    }
-    .aya-card-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 6px;
-      padding: 0 4px 4px;
-      border-bottom: 1px solid rgba(209,213,219,0.7);
-      margin-bottom: 4px;
-    }
-    .aya-card-title {
-      font-size: 12px;
-      color: #64748b;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .aya-card-title span.icon {
-      width: 22px;
-      height: 22px;
-      border-radius: 999px;
-      background: rgba(14,165,233,0.08);
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 13px;
-    }
-    .aya-card-count {
-      font-size: 11px;
-      color: #6b7280;
-    }
-
-    .aya-list {
-      flex: 1;
-      margin-top: 4px;
-      border-radius: 14px;
-      overflow: hidden;
-      border: 1px solid rgba(226,232,240,0.9);
-      background: linear-gradient(to bottom, #f9fafb, #fdfdfd);
-      max-height: calc(100vh - 240px);
-      overflow-y: auto;
-      scrollbar-width: thin;
-    }
-    .aya-list::-webkit-scrollbar {
-      width: 6px;
-    }
-    .aya-list::-webkit-scrollbar-thumb {
-      background: rgba(148,163,184,0.8);
-      border-radius: 999px;
-    }
-
-    .aya-row {
-      display: grid;
-      grid-template-columns: auto minmax(0, 1fr) auto;
-      gap: 8px;
-      padding: 8px 10px;
-      border-bottom: 1px solid rgba(226,232,240,0.9);
-      background: white;
-      transition: background 0.12s, box-shadow 0.12s;
-    }
-    .aya-row:hover {
-      background: #eff6ff;
-      box-shadow: 0 1px 0 rgba(37,99,235,0.16) inset;
-    }
-
-    .aya-select {
-      padding-top: 5px;
-    }
-    .aya-select input {
-      width: 16px;
-      height: 16px;
-      cursor: pointer;
-    }
-
-    .aya-text {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      min-width: 0;
-    }
-    .aya-meta {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 6px;
-      font-size: 11px;
-      color: #6b7280;
-    }
-    .aya-number-pill {
-      border-radius: 999px;
-      padding: 2px 8px;
-      background: rgba(15,23,42,0.03);
-      border: 1px solid rgba(209,213,219,0.8);
-      font-weight: 500;
-    }
-
-    .aya-tags {
-      display: inline-flex;
-      gap: 4px;
-      flex-wrap: wrap;
-      justify-content: flex-end;
-    }
-    .tag-pill {
-      border-radius: 999px;
-      padding: 2px 6px;
-      font-size: 10px;
-      background: rgba(249,250,251,0.9);
-      border: 1px solid rgba(226,232,240,0.9);
-      display: inline-flex;
-      align-items: center;
-      gap: 3px;
-    }
-    .tag-pill.pin { color: #92400e; border-color: rgba(248,250,252,0.7); background: #fef3c7; }
-    .tag-pill.fav { color: #9a3412; border-color: rgba(254,215,170,0.9); background: #ffedd5; }
-
-    .aya-arabic {
-      font-family: "Scheherazade", "Amiri", "Traditional Arabic", system-ui;
-      font-size: 22px;
-      line-height: 1.7;
+    .sura-name-ar {
+      font-size: 0.7rem;
+      color: var(--text-muted);
       text-align: right;
-      direction: rtl;
-      word-spacing: 3px;
-      color: #0f172a;
-    }
-    .aya-bangla {
-      font-size: 14px;
-      line-height: 1.9;
-      text-align: justify;
-      color: #1f2933;
     }
 
-    .aya-actions {
+    .badge {
+      border-radius: 999px;
+      background: var(--bg-soft);
+      padding: 0.15rem 0.4rem;
+      font-size: 0.65rem;
+      color: var(--text-muted);
+    }
+
+    /* Content area */
+    .content-area {
+      flex: 1;
       display: flex;
       flex-direction: column;
-      align-items: flex-end;
-      gap: 6px;
-      font-size: 11px;
+      gap: 0.7rem;
+      min-width: 0;
     }
 
-    .aya-actions-top {
+    .content-header {
+      background: var(--bg-card);
+      border-radius: var(--radius-xl);
+      padding: 0.7rem 0.8rem;
+      box-shadow: var(--shadow-soft);
       display: flex;
-      flex-wrap: wrap;
-      gap: 4px;
-      justify-content: flex-end;
-    }
-    .icon-chip {
-      border-radius: 999px;
-      border: 1px solid rgba(209,213,219,0.9);
-      padding: 3px 7px;
-      font-size: 11px;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      background: #f9fafb;
-      cursor: pointer;
-    }
-    .icon-chip span.icon {
-      font-size: 13px;
-    }
-    .icon-chip.pin-active {
-      background: #fef3c7;
-      border-color: #facc15;
-      color: #854d0e;
-    }
-    .icon-chip.fav-active {
-      background: #ffedd5;
-      border-color: #fdba74;
-      color: #9a3412;
-    }
-    .icon-chip.main {
-      background: #0f172a;
-      border-color: #0f172a;
-      color: #e5e7eb;
+      flex-direction: column;
+      gap: 0.4rem;
     }
 
-    .aya-actions-bottom {
-      font-size: 10px;
-      color: #9ca3af;
+    .content-header-top {
       display: flex;
-      gap: 4px;
-      align-items: center;
-    }
-
-    /* multi select bar */
-    .multi-select-bar {
-      position: sticky;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      border-radius: 0 0 18px 18px;
-      padding: 6px 10px;
-      background: linear-gradient(90deg, #0f172a, #1e293b);
-      display: none;
       justify-content: space-between;
       align-items: center;
-      color: #e5e7eb;
-      font-size: 12px;
-    }
-    .multi-select-bar.active {
-      display: flex;
-    }
-    .multi-select-actions {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .multi-select-actions button {
-      border-radius: 999px;
-      border: none;
-      padding: 4px 8px;
-      font-size: 11px;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 3px;
-    }
-    .multi-copy {
-      background: #f1f5f9;
-      color: #020617;
-    }
-    .multi-share {
-      background: #0ea5e9;
-      color: white;
-    }
-    .multi-clear {
-      background: transparent;
-      color: #e5e7eb;
-      border: 1px solid rgba(148,163,184,0.9);
+      gap: 0.5rem;
     }
 
-    /* Floating settings button */
-    .floating-settings-btn {
-      position: fixed;
-      bottom: 16px;
-      right: 14px;
-      border-radius: 999px;
-      border: none;
-      padding: 10px 12px;
-      font-size: 13px;
-      cursor: pointer;
-      background: linear-gradient(135deg, #0f172a, #111827);
-      color: #e5e7eb;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      box-shadow: 0 20px 40px rgba(15,23,42,0.4);
-      z-index: 40;
-    }
-
-    /* Modals (same as before but with refined styling) */
-    .modal-backdrop {
-      position: fixed;
-      inset: 0;
-      background: rgba(15,23,42,0.55);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 50;
-      backdrop-filter: blur(8px);
-    }
-    .modal-backdrop.active {
-      display: flex;
-    }
-    .modal {
-      background: #f9fafb;
-      border-radius: 20px;
-      width: min(700px, 96vw);
-      max-height: 92vh;
+    .sura-heading {
       display: flex;
       flex-direction: column;
+      gap: 0.15rem;
+    }
+
+    .sura-heading-main {
+      font-size: 1rem;
+      font-weight: 700;
+    }
+
+    .sura-heading-sub {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .tabs {
+      display: inline-flex;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+      margin-top: 0.1rem;
+    }
+
+    .tab {
+      border-radius: 999px;
+      background: var(--bg-soft);
+      padding: 0.25rem 0.6rem;
+      font-size: 0.7rem;
+      cursor: pointer;
+      color: var(--text-muted);
+      transition: background var(--transition-fast), color var(--transition-fast), transform var(--transition-fast);
+    }
+
+    .tab.active {
+      background: var(--primary-soft);
+      color: var(--primary);
+      font-weight: 600;
+      transform: translateY(-1px);
+    }
+
+    .content-toolbar {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .font-size-toggle {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      border: 1px solid var(--border-soft);
       overflow: hidden;
-      box-shadow: 0 30px 70px rgba(15,23,42,0.45);
-      border: 1px solid rgba(209,213,219,0.9);
     }
-    .modal-header {
-      padding: 10px 14px;
-      border-bottom: 1px solid rgba(226,232,240,0.9);
+
+    .font-size-toggle button {
+      border: none;
+      background: transparent;
+      padding: 0.2rem 0.5rem;
+      font-size: 0.75rem;
+      cursor: pointer;
+      color: var(--text-muted);
+      transition: background var(--transition-fast), color var(--transition-fast);
+    }
+
+    .font-size-toggle button.active {
+      background: var(--primary-soft);
+      color: var(--primary);
+    }
+
+    /* Ayat list */
+    .ayat-container {
+      background: var(--bg-card);
+      border-radius: var(--radius-xl);
+      padding: 0.6rem 0.7rem;
+      box-shadow: var(--shadow-soft);
       display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 6px;
-      background: linear-gradient(90deg, #0f172a, #1e293b);
-      color: #e5e7eb;
-    }
-    .modal-header h2 {
-      font-size: 14px;
-      font-weight: 600;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .modal-body {
-      padding: 10px 12px;
+      flex-direction: column;
+      gap: 0.6rem;
+      max-height: calc(100vh - 70px - 2.5rem);
       overflow-y: auto;
-      font-size: 13px;
-    }
-    .modal-footer {
-      padding: 8px 12px;
-      border-top: 1px solid rgba(226,232,240,0.9);
-      display: flex;
-      justify-content: flex-end;
-      gap: 8px;
-      background: #f9fafb;
-    }
-    .close-btn {
-      border-radius: 999px;
-      border: 1px solid rgba(209,213,219,0.9);
-      background: rgba(249,250,251,0.95);
-      padding: 4px 9px;
-      font-size: 11px;
-      cursor: pointer;
     }
 
-    .copy-preview {
-      width: 100%;
-      min-height: 140px;
-      border-radius: 14px;
-      border: 1px solid rgba(209,213,219,0.9);
-      padding: 8px;
-      font-size: 13px;
-      resize: vertical;
-      background: white;
+    .ayat-item {
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-soft);
+      padding: 0.55rem 0.6rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+      position: relative;
+      transition: box-shadow var(--transition-fast), border-color var(--transition-fast), transform var(--transition-fast), background var(--transition-fast);
     }
 
-    .radio-group {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin-bottom: 8px;
+    .ayat-item:hover {
+      box-shadow: var(--shadow-soft);
+      border-color: var(--primary-soft);
+      transform: translateY(-1px);
+      background: rgba(16, 185, 129, 0.03);
     }
-    .radio-pill {
+
+    .ayat-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .ayat-num-badge {
       border-radius: 999px;
-      border: 1px solid rgba(209,213,219,0.9);
-      padding: 3px 8px;
-      font-size: 12px;
+      background: var(--primary-soft);
+      color: var(--primary);
+      padding: 0.1rem 0.5rem;
+      font-size: 0.7rem;
+      font-weight: 600;
       display: inline-flex;
       align-items: center;
-      gap: 5px;
-      cursor: pointer;
-      background: white;
-    }
-    .radio-pill input {
-      margin: 0;
+      gap: 0.25rem;
     }
 
-    .settings-group {
-      margin-bottom: 10px;
+    .ayat-last-read {
+      font-size: 0.65rem;
+      color: var(--primary);
     }
-    .settings-group label {
-      font-size: 12px;
-      font-weight: 600;
-      display: block;
-      margin-bottom: 4px;
-      color: #4b5563;
-    }
-    .settings-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
+
+    .ayat-checkbox {
+      display: inline-flex;
       align-items: center;
-      font-size: 12px;
-    }
-    .chip {
-      border-radius: 999px;
-      border: 1px solid rgba(209,213,219,0.9);
-      padding: 3px 8px;
-      cursor: pointer;
-      background: white;
-      color: #4b5563;
-      font-size: 12px;
-    }
-    .chip.active {
-      background: #0f172a;
-      color: #e5e7eb;
-      border-color: #0f172a;
+      gap: 0.25rem;
+      font-size: 0.7rem;
+      color: var(--text-muted);
     }
 
-    /* Pins modal list */
-    #pinsListContainer > div {
-      border-radius: 12px;
-      background: white;
-      border: 1px solid rgba(226,232,240,0.9);
-      padding: 6px 8px;
-      margin-bottom: 6px;
+    .ayat-checkbox input {
+      transform: scale(1.1);
+    }
+
+    .ayat-arabic {
+      font-family: "Scheherazade New", "Amiri", "Traditional Arabic", system-ui;
+      direction: rtl;
+      font-size: 1.1rem;
+      line-height: 1.8;
+      text-align: right;
+    }
+
+    .font-size-sm .ayat-arabic {
+      font-size: 0.95rem;
+    }
+
+    .font-size-lg .ayat-arabic {
+      font-size: 1.35rem;
+    }
+
+    .ayat-translation {
+      font-size: 0.8rem;
+      color: var(--text-main);
+      line-height: 1.5;
+    }
+
+    .font-size-sm .ayat-translation {
+      font-size: 0.75rem;
+    }
+
+    .font-size-lg .ayat-translation {
+      font-size: 0.9rem;
+    }
+
+    .ayat-actions {
+      display: flex;
+      gap: 0.25rem;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      margin-top: 0.1rem;
+    }
+
+    .ayat-actions button {
+      font-size: 0.7rem;
+      padding: 0.2rem 0.45rem;
+      border-radius: 999px;
+    }
+
+    .ayat-actions button span.icon {
+      font-size: 0.8rem;
+    }
+
+    /* Selection toolbar */
+    .selection-toolbar {
+      position: sticky;
+      bottom: 0.4rem;
+      align-self: flex-end;
+      margin-top: auto;
+      z-index: 10;
+    }
+
+    .selection-toolbar-inner {
+      background: var(--bg-card);
+      border-radius: 999px;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+      padding: 0.35rem 0.6rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      border: 1px solid var(--border-soft);
+    }
+
+    .selection-count {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-right: 0.2rem;
+    }
+
+    .selection-toolbar-inner button {
+      font-size: 0.75rem;
+      padding: 0.25rem 0.6rem;
     }
 
     /* Responsive */
-    @media (max-width: 960px) {
-      .app-body {
-        grid-template-columns: minmax(0,1fr);
+    @media (max-width: 900px) {
+      .main-layout {
+        flex-direction: column;
       }
       .sidebar {
-        order: 2;
+        width: 100%;
+        height: auto;
+        position: static;
       }
-      .main {
-        order: 1;
+      .content-area {
+        max-height: none;
+      }
+      .ayat-container {
+        max-height: none;
+      }
+      .topbar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.4rem;
       }
     }
-    @media (max-width: 720px) {
-      .app-shell {
-        margin: 6px auto 10px;
-        padding: 6px;
+
+    @media (max-width: 500px) {
+      .content-header {
+        padding: 0.6rem;
       }
-      .app-header {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-      .sura-bar-card {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-      .sura-bar-right {
-        width: 100%;
-        justify-content: space-between;
-      }
-      .aya-list {
-        max-height: calc(100vh - 260px);
-      }
-      .floating-settings-btn {
-        right: 10px;
-        bottom: 10px;
+      .ayat-item {
+        padding: 0.45rem 0.5rem;
       }
     }
   </style>
 </head>
-<body>
-
+<body data-theme="light">
 <div class="app-shell">
-  <!-- Top header -->
-  <header class="app-header">
-    <div class="app-title-block">
-      <div class="app-logo">ﻕ</div>
-      <div class="app-title-text">
-        <div class="app-title-main">Qur'an Ayaat Toolkit</div>
-        <div class="app-title-sub">দ্রুত পিন, ফেভারিট, কপি ও শেয়ার – এক জায়গায়</div>
+
+  <!-- Top bar -->
+  <header class="topbar">
+    <div class="app-title">
+      <span class="logo-circle">Q</span>
+      <div>
+        Qur'an Reader
+        <div style="font-size: 0.68rem; color: var(--text-muted);">
+          Ayaat tools · Pins · Favourites · Last Read
+        </div>
       </div>
     </div>
-    <div class="app-header-right">
-      <div class="pill-tag"><span class="emoji">📌</span><span>Pin & Favourites</span></div>
-      <div class="pill-tag"><span class="emoji">📋</span><span>Multi Ayaat Copy</span></div>
-      <div class="pill-tag"><span class="emoji">⚙️</span><span>Custom View</span></div>
+
+    <div class="topbar-right">
+      <button id="themeToggleBtn" class="btn btn-ghost btn-icon" title="Toggle light/dark">
+        🌗
+      </button>
+      <button id="languageToggleBtn" class="btn btn-ghost btn-small" title="Toggle translation language">
+        🌐 BN / EN
+      </button>
+      <div class="font-size-toggle" id="fontSizeToggle">
+        <button data-size="sm">A-</button>
+        <button data-size="md" class="active">A</button>
+        <button data-size="lg">A+</button>
+      </div>
     </div>
   </header>
 
-  <div class="app-body">
-    <!-- SIDEBAR -->
+  <main class="main-layout">
+    <!-- Sidebar: Sura list -->
     <aside class="sidebar">
-      <!-- Sura list -->
-      <section class="sidebar-section">
-        <div class="sidebar-header">
-          <div class="sidebar-header-title">
-            <span class="emoji">📖</span><span>সূরার তালিকা</span>
-          </div>
-          <button id="openSuraListModalBtn">পূর্ণ তালিকা</button>
-        </div>
-        <div class="sidebar-search">
-          <span class="sidebar-search-icon">🔍</span>
-          <input id="sidebarSuraSearch" type="text" placeholder="নাম / নং দিয়ে খুঁজুন..." />
-        </div>
-        <div id="sidebarSuraList" class="sura-list"></div>
-      </section>
-
-      <!-- Last read -->
-      <section class="sidebar-section">
-        <div class="sidebar-header">
-          <div class="sidebar-header-title">
-            <span class="emoji">⏱</span><span>সর্বশেষ পড়া</span>
-          </div>
-          <button id="clearLastReadBtn">মুছুন</button>
-        </div>
-        <div id="lastReadBox" class="last-read-box">
-          এখনো কোনো আয়াতকে সর্বশেষ পড়া হিসেবে সেট করা হয়নি।
-        </div>
-      </section>
-
-      <!-- Pins / Favs mini -->
-      <section class="sidebar-section">
-        <div class="sidebar-header">
-          <div class="sidebar-header-title">
-            <span class="emoji">⭐</span><span>পিন ও ফেভারিট</span>
-          </div>
-          <button id="openPinsModalBtn">সব দেখুন</button>
-        </div>
-        <div id="sidebarPinsFavs" class="sidebar-mini-list"></div>
-      </section>
+      <div class="sidebar-header">
+        <div class="sidebar-title">Sura List</div>
+        <span class="badge" id="totalSuraBadge">-- Suras</span>
+      </div>
+      <input
+        id="suraSearchInput"
+        class="search-input"
+        placeholder="Search by name or number..."
+      />
+      <div class="sura-list" id="suraList"></div>
     </aside>
 
-    <!-- MAIN -->
-    <main class="main">
-      <!-- Sura bar -->
-      <section class="sura-bar-card">
-        <div class="sura-bar-left">
-          <div class="sura-bar-label">বর্তমান সূরা</div>
-          <div id="currentSuraName" class="sura-bar-name">
-            লোড হচ্ছে...
-          </div>
-          <div class="sura-bar-sub">
-            <span id="currentSuraStats">–</span>
-            <span class="pill-mini">দ্রুত পিন, ফেভারিট ও কপি</span>
-          </div>
-        </div>
-        <div class="sura-bar-right">
-          <div class="view-controls">
-            <div class="toggle-group" id="viewToggle">
-              <button data-view="both" class="active">আরবি + বাংলা</button>
-              <button data-view="ar">শুধু আরবি</button>
-              <button data-view="bn">শুধু বাংলা</button>
-            </div>
-            <div class="font-slider">
-              <span>ফন্ট:</span>
-              <input id="fontSizeRange" type="range" min="14" max="28" step="1" value="18" />
+    <!-- Main content area -->
+    <section class="content-area">
+      <div class="content-header">
+        <div class="content-header-top">
+          <div class="sura-heading">
+            <div class="sura-heading-main" id="currentSuraTitle">Select a Sura</div>
+            <div class="sura-heading-sub" id="currentSuraMeta">
+              Choose a sura from the left panel to begin reading.
             </div>
           </div>
-          <button id="openSettingsModalBtn" class="btn btn-ghost">⚙️ বিস্তারিত সেটিংস</button>
-          <button id="openCopyModalBtn" class="btn btn-primary">📋 মাল্টি কপি / শেয়ার</button>
-        </div>
-      </section>
 
-      <!-- Ayaat card -->
-      <section class="aya-card">
-        <div class="aya-card-header">
-          <div class="aya-card-title">
-            <span class="icon">📜</span>
-            <span>আজকের আয়াতসমূহ</span>
-          </div>
-          <div id="ayaCountLabel" class="aya-card-count">০ টি আয়াত</div>
-        </div>
-
-        <div id="ayaList" class="aya-list"></div>
-
-        <div id="multiSelectBar" class="multi-select-bar">
-          <div id="multiSelectCount">০ টি আয়াত নির্বাচিত</div>
-          <div class="multi-select-actions">
-            <button id="multiCopyBtn" class="multi-copy">📋 কপি</button>
-            <button id="multiShareBtn" class="multi-share">🔗 শেয়ার</button>
-            <button id="multiClearBtn" class="multi-clear">✖ ক্লিয়ার</button>
+          <div class="content-toolbar">
+            <button class="btn btn-small btn-ghost" id="scrollLastReadBtn" title="Go to last read ayaat">
+              ⏱ Last Read
+            </button>
           </div>
         </div>
-      </section>
-    </main>
-  </div>
-</div>
 
-<!-- Floating Settings -->
-<button id="floatingSettingsBtn" class="floating-settings-btn">
-  ⚙️ দ্রুত সেটিংস
-</button>
-
-<!-- MODALS -->
-
-<!-- Sura List Modal -->
-<div id="suraListModal" class="modal-backdrop">
-  <div class="modal">
-    <div class="modal-header">
-      <h2>📖 সম্পূর্ণ সূরার তালিকা</h2>
-      <button class="close-btn" data-close-modal="suraListModal">বন্ধ</button>
-    </div>
-    <div class="modal-body">
-      <div class="sidebar-search" style="margin-bottom:6px;">
-        <span class="sidebar-search-icon">🔍</span>
-        <input id="modalSuraSearch" type="text" placeholder="সুরা নাম / নং..." style="background:white;color:#0f172a;border-color:#e5e7eb;">
-      </div>
-      <div id="modalSuraList" class="sura-list" style="max-height:60vh;background:white;border-radius:12px;border:1px solid rgba(226,232,240,0.9);"></div>
-    </div>
-  </div>
-</div>
-
-<!-- Settings Modal -->
-<div id="settingsModal" class="modal-backdrop">
-  <div class="modal">
-    <div class="modal-header">
-      <h2>⚙️ প্রদর্শন ও পছন্দসমূহ</h2>
-      <button class="close-btn" data-close-modal="settingsModal">বন্ধ</button>
-    </div>
-    <div class="modal-body">
-      <div class="settings-group">
-        <label>দেখার ধরন</label>
-        <div class="settings-row" id="settingsViewChips">
-          <span class="chip active" data-view="both">আরবি + বাংলা</span>
-          <span class="chip" data-view="ar">শুধু আরবি</span>
-          <span class="chip" data-view="bn">শুধু বাংলা</span>
+        <div class="tabs" id="viewTabs">
+          <div class="tab active" data-view="all">All Ayaat</div>
+          <div class="tab" data-view="pins">📌 Pins</div>
+          <div class="tab" data-view="favourites">⭐ Favourites</div>
+          <div class="tab" data-view="last">⏱ Last Read</div>
         </div>
       </div>
 
-      <div class="settings-group">
-        <label>ফন্ট সাইজ</label>
-        <div class="settings-row">
-          <span style="font-size:11px;">১৪</span>
-          <input id="settingsFontSizeRange" type="range" min="14" max="28" step="1" value="18" />
-          <span style="font-size:11px;">২৮</span>
+      <div class="ayat-container font-size-md" id="ayatContainer">
+        <!-- Ayaat will be rendered here -->
+      </div>
+
+      <div class="selection-toolbar" id="selectionToolbar" style="display:none;">
+        <div class="selection-toolbar-inner">
+          <div class="selection-count" id="selectionCount">0 selected</div>
+          <button class="btn btn-small" id="btnSelectionCopy">📋 Copy</button>
+          <button class="btn btn-small" id="btnSelectionShare">🔗 Share</button>
+          <button class="btn btn-small btn-ghost" id="btnSelectionClear">✖ Clear</button>
         </div>
       </div>
-
-      <div class="settings-group">
-        <label>লাইন স্পেসিং</label>
-        <div class="settings-row" id="lineHeightChips">
-          <span class="chip active" data-lh="1.7">কমফোর্ট</span>
-          <span class="chip" data-lh="1.9">রিল্যাক্স</span>
-          <span class="chip" data-lh="2.1">এক্সট্রা</span>
-        </div>
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button class="close-btn" data-close-modal="settingsModal">ঠিক আছে</button>
-    </div>
-  </div>
+    </section>
+  </main>
 </div>
 
-<!-- Copy / Share Modal -->
-<div id="copyModal" class="modal-backdrop">
-  <div class="modal">
-    <div class="modal-header">
-      <h2>📋 কপি / 🔗 শেয়ার</h2>
-      <button class="close-btn" data-close-modal="copyModal">বন্ধ</button>
-    </div>
-    <div class="modal-body">
-      <div class="radio-group">
-        <label class="radio-pill">
-          <input type="radio" name="copyFormat" value="both" checked />
-          <span>আরবি + বাংলা</span>
-        </label>
-        <label class="radio-pill">
-          <input type="radio" name="copyFormat" value="ar" />
-          <span>শুধু আরবি</span>
-        </label>
-        <label class="radio-pill">
-          <input type="radio" name="copyFormat" value="bn" />
-          <span>শুধু বাংলা</span>
-        </label>
-      </div>
-      <textarea id="copyPreview" class="copy-preview" placeholder="নির্বাচিত আয়াতের লেখা এখানে দেখা যাবে..."></textarea>
-    </div>
-    <div class="modal-footer">
-      <button id="copyModalCopyBtn" class="btn btn-primary">📋 ক্লিপবোর্ডে কপি</button>
-      <button id="copyModalShareBtn" class="btn btn-ghost">🔗 শেয়ার করুন</button>
-    </div>
-  </div>
-</div>
-
-<!-- Pins / Favs Modal -->
-<div id="pinsModal" class="modal-backdrop">
-  <div class="modal">
-    <div class="modal-header">
-      <h2>📌 পিন ও ⭐ ফেভারিট</h2>
-      <button class="close-btn" data-close-modal="pinsModal">বন্ধ</button>
-    </div>
-    <div class="modal-body" style="display:flex;flex-direction:column;gap:8px;">
-      <div class="radio-group">
-        <label class="radio-pill">
-          <input type="radio" name="pinsTab" value="pins" checked />
-          <span>📌 পিন করা আয়াত</span>
-        </label>
-        <label class="radio-pill">
-          <input type="radio" name="pinsTab" value="favs" />
-          <span>⭐ ফেভারিট আয়াত</span>
-        </label>
-      </div>
-      <div class="sidebar-search" style="margin-bottom:4px;">
-        <span class="sidebar-search-icon">🔍</span>
-        <input id="pinsSearchInput" type="text" placeholder="সুরা / শব্দ দিয়ে ফিল্টার..." style="background:white;color:#0f172a;border-color:#e5e7eb;">
-      </div>
-      <div style="font-size:12px;display:flex;gap:6px;align-items:center;">
-        <span>সাজানো:</span>
-        <span class="chip active" data-sort="recent">সর্বশেষ আগে</span>
-        <span class="chip" data-sort="sura">সূরা-আয়াত ক্রম</span>
-        <button id="clearAllPinsFavsBtn" class="close-btn" style="margin-left:auto;background:var(--danger-soft);color:var(--danger);border-color:#fecaca;">সব মুছুন</button>
-      </div>
-      <div id="pinsListContainer" style="max-height:55vh;overflow-y:auto;margin-top:4px;"></div>
-    </div>
-  </div>
-</div>
-
-<!-- Load suras.js -->
+<!-- suras.js must define window.suras -->
 <script src="suras.js"></script>
 
 <script>
-(function() {
-  if (typeof suras === "undefined" || !Array.isArray(suras)) {
-    console.error("❌ suras.js not loaded or suras is not an array.");
-    document.getElementById("currentSuraName").textContent =
-      "ত্রুটি: suras.js ফাইল লোড হয়নি বা ভ্যারিয়েবল 'suras' সঠিক নেই।";
-    document.getElementById("ayaList").innerHTML =
-      '<div style="padding:12px;font-size:13px;color:#b91c1c;">suras.js ফাইলের নাম/পাথ ও ভ্যারিয়েবল নাম (suras) ঠিক আছে কিনা চেক করুন।</div>';
-    return;
-  }
+  // ---- State ----
+  const state = {
+    suras: [],
+    currentSuraId: null,
+    currentView: "all", // all | pins | favourites | last
+    fontSize: "md",
+    theme: "light",
+    translationLanguage: "bn", // 'bn' or 'en'
+    selectedAyaat: new Set(), // keys: suraId:ayaNo
+    pins: new Set(),
+    favourites: new Set(),
+    lastRead: null, // { suraId, ayaNo }
+  };
 
-  let currentSuraIndex = 0;
-  let currentView = localStorage.getItem("q_view") || "both";
-  let fontSize = parseInt(localStorage.getItem("q_fontSize") || "18", 10);
-  let lineHeight = parseFloat(localStorage.getItem("q_lineHeight") || "1.7");
-  let selectedAyaat = new Set();
+  // ---- Local Storage Helpers ----
+  const STORAGE_KEYS = {
+    pins: "quran_pins",
+    favourites: "quran_favourites",
+    lastRead: "quran_last_read",
+    settings: "quran_reader_settings_v1",
+  };
 
-  let lastRead = loadLastRead();
-  let pins = loadPinsFavs("q_pins");
-  let favs = loadPinsFavs("q_favs");
+  function loadLocalStorage() {
+    try {
+      const pins = JSON.parse(localStorage.getItem(STORAGE_KEYS.pins) || "[]");
+      state.pins = new Set(pins);
 
-  function loadLastRead() {
-    try { const r = localStorage.getItem("q_lastRead"); return r ? JSON.parse(r) : null; } catch(e){ return null; }
-  }
-  function saveLastRead(obj) {
-    lastRead = obj;
-    localStorage.setItem("q_lastRead", JSON.stringify(obj));
-    renderLastRead();
-  }
-  function loadPinsFavs(key) {
-    try { const r = localStorage.getItem(key); return r ? JSON.parse(r) : []; } catch(e){ return []; }
-  }
-  function savePinsFavs(key, arr) {
-    localStorage.setItem(key, JSON.stringify(arr));
-  }
-  function ayahKey(sIdx,aIdx){ return sIdx+":"+aIdx; }
+      const fav = JSON.parse(localStorage.getItem(STORAGE_KEYS.favourites) || "[]");
+      state.favourites = new Set(fav);
 
-  const sidebarSuraListEl = document.getElementById("sidebarSuraList");
-  const sidebarSuraSearchEl = document.getElementById("sidebarSuraSearch");
-  const modalSuraListEl = document.getElementById("modalSuraList");
-  const modalSuraSearchEl = document.getElementById("modalSuraSearch");
+      const last = JSON.parse(localStorage.getItem(STORAGE_KEYS.lastRead) || "null");
+      state.lastRead = last;
 
-  function renderSuraList(filter="") {
-    const ft = filter.trim().toLowerCase();
-    const list = suras.map((s,idx)=>{
-      const bn=s.name_bn||s.name||"", ar=s.name_ar||"", id=(idx+1).toString();
-      const hit=!ft || bn.toLowerCase().includes(ft) || ar.toLowerCase().includes(ft) || id===ft;
-      return hit?{s,idx}:null;
-    }).filter(Boolean);
-
-    function buildList(target,isModal){
-      target.innerHTML="";
-      list.forEach(({s,idx})=>{
-        const div=document.createElement("div");
-        div.className="sura-item"+(idx===currentSuraIndex?" active":"");
-        div.dataset.suraIndex=idx;
-        const left=document.createElement("div");
-        left.className="sura-item-left";
-        const title=document.createElement("div");
-        title.className="sura-item-title";
-        title.textContent=(idx+1)+". "+(bn=s.name_bn||s.name);
-        const meta=document.createElement("div");
-        meta.className="sura-item-meta";
-        meta.textContent=(s.aya_count||(s.ayas?s.ayas.length:"?"))+" আয়াত";
-        left.appendChild(title); left.appendChild(meta);
-        const right=document.createElement("div");
-        right.className="sura-item-right";
-        right.textContent=s.name_ar||"";
-        div.appendChild(left); div.appendChild(right);
-        div.addEventListener("click",()=>{
-          setCurrentSura(idx);
-          if(isModal) closeModal("suraListModal");
-        });
-        target.appendChild(div);
-      });
+      const settings = JSON.parse(localStorage.getItem(STORAGE_KEYS.settings) || "null");
+      if (settings) {
+        if (settings.fontSize) state.fontSize = settings.fontSize;
+        if (settings.theme) state.theme = settings.theme;
+        if (settings.translationLanguage) state.translationLanguage = settings.translationLanguage;
+      }
+    } catch (e) {
+      console.warn("Error loading localStorage:", e);
     }
-    buildList(sidebarSuraListEl,false);
-    if(modalSuraListEl) buildList(modalSuraListEl,true);
   }
 
-  sidebarSuraSearchEl.addEventListener("input",()=>renderSuraList(sidebarSuraSearchEl.value));
-  if(modalSuraSearchEl){
-    modalSuraSearchEl.addEventListener("input",()=>renderSuraList(modalSuraSearchEl.value));
+  function saveLocalStorage() {
+    localStorage.setItem(STORAGE_KEYS.pins, JSON.stringify(Array.from(state.pins)));
+    localStorage.setItem(STORAGE_KEYS.favourites, JSON.stringify(Array.from(state.favourites)));
+    localStorage.setItem(STORAGE_KEYS.lastRead, JSON.stringify(state.lastRead));
+    localStorage.setItem(
+      STORAGE_KEYS.settings,
+      JSON.stringify({
+        fontSize: state.fontSize,
+        theme: state.theme,
+        translationLanguage: state.translationLanguage,
+      })
+    );
   }
 
-  const currentSuraNameEl=document.getElementById("currentSuraName");
-  const currentSuraStatsEl=document.getElementById("currentSuraStats");
-  const ayaListEl=document.getElementById("ayaList");
-  const ayaCountLabelEl=document.getElementById("ayaCountLabel");
-  const multiSelectBarEl=document.getElementById("multiSelectBar");
-  const multiSelectCountEl=document.getElementById("multiSelectCount");
+  // ---- DOM refs ----
+  const bodyEl = document.body;
+  const suraListEl = document.getElementById("suraList");
+  const suraSearchInput = document.getElementById("suraSearchInput");
+  const totalSuraBadge = document.getElementById("totalSuraBadge");
 
-  function setCurrentSura(idx){
-    currentSuraIndex=idx;
-    selectedAyaat.clear();
-    updateMultiSelectBar();
+  const currentSuraTitleEl = document.getElementById("currentSuraTitle");
+  const currentSuraMetaEl = document.getElementById("currentSuraMeta");
+  const ayatContainerEl = document.getElementById("ayatContainer");
 
-    const s=suras[idx];
-    const totalAyat=(s.ayas||s.ayat||s.verses||[]).length;
-    currentSuraNameEl.innerHTML =
-      (idx+1)+". "+(s.name_bn||s.name)+' <span class="ar">('+ (s.name_ar||"") +')</span>';
-    currentSuraStatsEl.textContent = totalAyat+"টি আয়াত · দ্রুত নোটস / কপি / শেয়ার";
+  const selectionToolbarEl = document.getElementById("selectionToolbar");
+  const selectionCountEl = document.getElementById("selectionCount");
+  const btnSelectionCopy = document.getElementById("btnSelectionCopy");
+  const btnSelectionShare = document.getElementById("btnSelectionShare");
+  const btnSelectionClear = document.getElementById("btnSelectionClear");
+  const scrollLastReadBtn = document.getElementById("scrollLastReadBtn");
 
-    renderSuraList(sidebarSuraSearchEl.value||"");
-    renderAyaList();
-  }
+  const themeToggleBtn = document.getElementById("themeToggleBtn");
+  const languageToggleBtn = document.getElementById("languageToggleBtn");
+  const fontSizeToggleEl = document.getElementById("fontSizeToggle");
+  const viewTabsEl = document.getElementById("viewTabs");
 
-  function renderAyaList(){
-    const s=suras[currentSuraIndex];
-    const ayas=s.ayas||s.ayat||s.verses||[];
-    ayaListEl.innerHTML="";
-    const count=ayas.length;
-    ayaCountLabelEl.textContent=count+" টি আয়াত";
+  // ---- Init ----
+  function init() {
+    loadLocalStorage();
 
-    ayas.forEach((aya,idx)=>{
-      const row=document.createElement("div");
-      row.className="aya-row";
-      row.id="aya-"+currentSuraIndex+"-"+idx;
-
-      const selectCol=document.createElement("div");
-      selectCol.className="aya-select";
-      const cb=document.createElement("input");
-      cb.type="checkbox";
-      const key=ayahKey(currentSuraIndex,idx);
-      cb.checked=selectedAyaat.has(key);
-      cb.addEventListener("change",()=>{
-        if(cb.checked) selectedAyaat.add(key); else selectedAyaat.delete(key);
-        updateMultiSelectBar();
-      });
-      selectCol.appendChild(cb);
-
-      const textCol=document.createElement("div");
-      textCol.className="aya-text";
-      textCol.style.fontSize=fontSize+"px";
-      textCol.style.lineHeight=lineHeight;
-
-      const meta=document.createElement("div");
-      meta.className="aya-meta";
-      const number=document.createElement("span");
-      number.className="aya-number-pill";
-      number.textContent=(currentSuraIndex+1)+":"+ (idx+1);
-      const tags=document.createElement("div");
-      tags.className="aya-tags";
-      if(isPinned(currentSuraIndex,idx)){
-        const t=document.createElement("div");
-        t.className="tag-pill pin";
-        t.innerHTML="📌 <span>পিন</span>";
-        tags.appendChild(t);
-      }
-      if(isFav(currentSuraIndex,idx)){
-        const t=document.createElement("div");
-        t.className="tag-pill fav";
-        t.innerHTML="⭐ <span>ফেভারিট</span>";
-        tags.appendChild(t);
-      }
-      meta.appendChild(number); meta.appendChild(tags);
-
-      const arEl=document.createElement("div");
-      arEl.className="aya-arabic";
-      arEl.textContent=aya.ar||aya.arabic||aya.text_ar||"";
-
-      const bnEl=document.createElement("div");
-      bnEl.className="aya-bangla";
-      bnEl.textContent=aya.bn||aya.bangla||aya.text_bn||"";
-
-      if(currentView==="both"){
-        arEl.style.display=""; bnEl.style.display="";
-      } else if(currentView==="ar"){
-        arEl.style.display=""; bnEl.style.display="none";
-      } else {
-        arEl.style.display="none"; bnEl.style.display="";
-      }
-
-      textCol.appendChild(meta);
-      textCol.appendChild(arEl);
-      textCol.appendChild(bnEl);
-
-      const actionsCol=document.createElement("div");
-      actionsCol.className="aya-actions";
-
-      const topRow=document.createElement("div");
-      topRow.className="aya-actions-top";
-
-      const pinBtn=document.createElement("button");
-      pinBtn.className="icon-chip";
-      pinBtn.innerHTML='<span class="icon">📌</span><span>পিন</span>';
-      if(isPinned(currentSuraIndex,idx)) pinBtn.classList.add("pin-active");
-      pinBtn.addEventListener("click",()=>{
-        togglePin(currentSuraIndex,idx);
-        renderAyaList();
-        renderPinsSidebar();
-      });
-
-      const favBtn=document.createElement("button");
-      favBtn.className="icon-chip";
-      favBtn.innerHTML='<span class="icon">⭐</span><span>ফেভারিট</span>';
-      if(isFav(currentSuraIndex,idx)) favBtn.classList.add("fav-active");
-      favBtn.addEventListener("click",()=>{
-        toggleFav(currentSuraIndex,idx);
-        renderAyaList();
-        renderPinsSidebar();
-      });
-
-      const copyBtn=document.createElement("button");
-      copyBtn.className="icon-chip";
-      copyBtn.innerHTML='<span class="icon">📋</span>';
-      copyBtn.title="এই আয়াত কপি করুন";
-      copyBtn.addEventListener("click",()=>{
-        const text=formatAyaForCopy(currentSuraIndex,idx,getCopyFormat());
-        navigator.clipboard.writeText(text).then(()=>alert("আয়াত কপি হয়েছে।"));
-      });
-
-      const shareBtn=document.createElement("button");
-      shareBtn.className="icon-chip";
-      shareBtn.innerHTML='<span class="icon">🔗</span>';
-      shareBtn.title="এই আয়াত শেয়ার করুন";
-      shareBtn.addEventListener("click",()=>{
-        const text=formatAyaForCopy(currentSuraIndex,idx,getCopyFormat());
-        doShare(text);
-      });
-
-      const lastBtn=document.createElement("button");
-      lastBtn.className="icon-chip main";
-      lastBtn.innerHTML='<span class="icon">⏱</span><span>শেষ পড়া</span>';
-      lastBtn.addEventListener("click",()=>{
-        saveLastRead({suraIndex:currentSuraIndex,ayaIndex:idx,time:Date.now()});
-        alert("এই আয়াতকে সর্বশেষ পড়া হিসেবে সেট করা হয়েছে।");
-      });
-
-      topRow.appendChild(pinBtn);
-      topRow.appendChild(favBtn);
-      topRow.appendChild(copyBtn);
-      topRow.appendChild(shareBtn);
-
-      const bottomRow=document.createElement("div");
-      bottomRow.className="aya-actions-bottom";
-      bottomRow.innerHTML="দ্রুত এক্সেসের জন্য ব্যবহার করুন";
-
-      actionsCol.appendChild(topRow);
-      actionsCol.appendChild(lastBtn);
-      actionsCol.appendChild(bottomRow);
-
-      row.appendChild(selectCol);
-      row.appendChild(textCol);
-      row.appendChild(actionsCol);
-
-      ayaListEl.appendChild(row);
-    });
-
-    updateMultiSelectBar();
-  }
-
-  function updateMultiSelectBar(){
-    const count=selectedAyaat.size;
-    if(count>0){
-      multiSelectBarEl.classList.add("active");
-      multiSelectCountEl.textContent=count+" টি আয়াত নির্বাচিত";
+    // Load suras from global variable
+    if (Array.isArray(window.suras)) {
+      state.suras = window.suras;
     } else {
-      multiSelectBarEl.classList.remove("active");
+      console.error("suras.js did not define window.suras as an array");
+      state.suras = [];
+    }
+
+    // Display sura count
+    totalSuraBadge.textContent = state.suras.length + " Suras";
+
+    // Apply theme & font size
+    applyTheme();
+    applyFontSize();
+
+    // Render sura list
+    renderSuraList();
+
+    // Event bindings
+    bindEvents();
+
+    // If there is a lastRead, pre-select that sura
+    if (state.lastRead && state.lastRead.suraId != null) {
+      selectSura(state.lastRead.suraId);
+      setActiveViewTab("last");
     }
   }
 
-  function isPinned(sIdx,aIdx){
-    const key=ayahKey(sIdx,aIdx);
-    return pins.some(p=>p.key===key);
-  }
-  function isFav(sIdx,aIdx){
-    const key=ayahKey(sIdx,aIdx);
-    return favs.some(p=>p.key===key);
-  }
-  function togglePin(sIdx,aIdx){
-    const key=ayahKey(sIdx,aIdx);
-    const i=pins.findIndex(p=>p.key===key);
-    if(i>=0) pins.splice(i,1);
-    else pins.unshift({key,suraIndex:sIdx,ayaIndex:aIdx,type:"pin",note:"",time:Date.now()});
-    savePinsFavs("q_pins",pins);
-  }
-  function toggleFav(sIdx,aIdx){
-    const key=ayahKey(sIdx,aIdx);
-    const i=favs.findIndex(p=>p.key===key);
-    if(i>=0) favs.splice(i,1);
-    else favs.unshift({key,suraIndex:sIdx,ayaIndex:aIdx,type:"fav",note:"",time:Date.now()});
-    savePinsFavs("q_favs",favs);
+  // ---- Rendering ----
+
+  function renderSuraList(filterText = "") {
+    suraListEl.innerHTML = "";
+
+    const normalizedFilter = filterText.trim().toLowerCase();
+
+    state.suras.forEach((sura, index) => {
+      const suraId = sura.id ?? (index + 1); // fallback if no id field
+
+      const nameEn = sura.name || ("Sura " + suraId);
+      const nameAr = sura.arabicName || "";
+      const ayaCount = Array.isArray(sura.ayaat || sura.ayahs)
+        ? (sura.ayaat || sura.ayahs).length
+        : (sura.ayahCount || "");
+
+      const searchSource = (suraId + " " + nameEn + " " + nameAr).toLowerCase();
+      if (normalizedFilter && !searchSource.includes(normalizedFilter)) {
+        return;
+      }
+
+      const item = document.createElement("div");
+      item.className = "sura-item";
+      if (state.currentSuraId === suraId) {
+        item.classList.add("active");
+      }
+
+      item.dataset.suraId = suraId;
+
+      const metaDiv = document.createElement("div");
+      metaDiv.className = "sura-meta";
+
+      const nameEnSpan = document.createElement("div");
+      nameEnSpan.className = "sura-name-en";
+      nameEnSpan.textContent = suraId + ". " + nameEn;
+
+      const nameArSpan = document.createElement("div");
+      nameArSpan.className = "sura-name-ar";
+      nameArSpan.textContent = nameAr;
+
+      metaDiv.appendChild(nameEnSpan);
+      metaDiv.appendChild(nameArSpan);
+
+      const right = document.createElement("div");
+      right.className = "sura-meta-right";
+      const ayaBadge = document.createElement("span");
+      ayaBadge.className = "badge";
+      ayaBadge.textContent = ayaCount ? (ayaCount + " Ayat") : "";
+      right.appendChild(ayaBadge);
+
+      item.appendChild(metaDiv);
+      item.appendChild(right);
+
+      item.addEventListener("click", () => {
+        selectSura(suraId);
+      });
+
+      suraListEl.appendChild(item);
+    });
   }
 
-  const sidebarPinsFavsEl=document.getElementById("sidebarPinsFavs");
-  function renderPinsSidebar(){
-    sidebarPinsFavsEl.innerHTML="";
-    const combined=[
-      ...pins.map(p=>({...p,kind:"pin"})),
-      ...favs.map(p=>({...p,kind:"fav"})),
-    ].sort((a,b)=>b.time-a.time).slice(0,15);
+  function selectSura(suraId) {
+    state.currentSuraId = suraId;
+    state.selectedAyaat.clear();
 
-    if(combined.length===0){
-      sidebarPinsFavsEl.innerHTML='<div style="font-size:11px;opacity:.8;">এখনও কোনো আয়াত পিন / ফেভারিট করা হয়নি।</div>';
+    // Update active in list
+    Array.from(suraListEl.querySelectorAll(".sura-item")).forEach((el) => {
+      el.classList.toggle("active", Number(el.dataset.suraId) === Number(suraId));
+    });
+
+    // Update header
+    const sura = state.suras.find(s => (s.id ?? null) === suraId) ||
+                 state.suras[suraId - 1] ||
+                 null;
+
+    if (!sura) {
+      currentSuraTitleEl.textContent = "Sura " + suraId;
+      currentSuraMetaEl.textContent = "";
+      ayatContainerEl.innerHTML = "<p>Unable to load this sura.</p>";
+      updateSelectionToolbar();
       return;
     }
 
-    combined.forEach(item=>{
-      const s=suras[item.suraIndex]; if(!s) return;
-      const ayas=s.ayas||s.ayat||s.verses||[];
-      const aya=ayas[item.ayaIndex]||{};
-      const wrap=document.createElement("div");
-      wrap.className="sidebar-mini-item";
+    const ayaCount = Array.isArray(sura.ayaat || sura.ayahs)
+      ? (sura.ayaat || sura.ayahs).length
+      : (sura.ayahCount || "");
 
-      const main=document.createElement("div");
-      main.className="sidebar-mini-main";
-      main.innerHTML =
-        '<strong>'+(item.kind==="pin"?"📌 ":"⭐ ")+
-        (item.suraIndex+1)+":"+ (item.ayaIndex+1)+'</strong>'+
-        '<small>'+(s.name_bn||s.name)+'</small>';
+    currentSuraTitleEl.textContent = (sura.name || ("Sura " + suraId)) + " · " + (sura.arabicName || "");
+    currentSuraMetaEl.textContent = "Sura " + suraId + " · " + ayaCount + " Ayaat";
 
-      const actions=document.createElement("div");
-      actions.className="sidebar-mini-actions";
-      const goBtn=document.createElement("button");
-      goBtn.textContent="যান";
-      goBtn.addEventListener("click",()=>{
-        setCurrentSura(item.suraIndex);
-        setTimeout(()=>{
-          const el=document.getElementById("aya-"+item.suraIndex+"-"+item.ayaIndex);
-          if(el) el.scrollIntoView({behavior:"smooth",block:"center"});
-        },120);
-      });
-      actions.appendChild(goBtn);
+    // Keep current view (all/pins/favourites/last) when switching sura
+    renderAyaat();
 
-      wrap.appendChild(main); wrap.appendChild(actions);
-      sidebarPinsFavsEl.appendChild(wrap);
-    });
-  }
-
-  const lastReadBoxEl=document.getElementById("lastReadBox");
-  const clearLastReadBtn=document.getElementById("clearLastReadBtn");
-
-  function renderLastRead(){
-    if(!lastRead){
-      lastReadBoxEl.innerHTML="এখনো কোনো আয়াতকে সর্বশেষ পড়া হিসেবে সেট করা হয়নি।";
-      return;
-    }
-    const s=suras[lastRead.suraIndex];
-    if(!s){ lastReadBoxEl.innerHTML="সর্বশেষ পড়া ডাটায় সমস্যা রয়েছে।"; return; }
-    const ayas=s.ayas||s.ayat||s.verses||[];
-    const aya=ayas[lastRead.ayaIndex]||{};
-    lastReadBoxEl.innerHTML=
-      '<div><strong>'+ (lastRead.suraIndex+1)+":"+(lastRead.ayaIndex+1) +
-      '</strong> - '+ (s.name_bn||s.name) +'</div>'+
-      '<div class="last-read-preview">'+
-      ( (aya.bn||aya.bangla||"").slice(0,65) )+'...</div>'+
-      '<div class="last-read-actions">'+
-      '<button class="btn-last-read-go" id="goLastReadBtn">⏱ এখান থেকে চালু করুন</button>'+
-      '<button class="btn-last-read-clear">রিসেট</button>'+
-      '</div>';
-    const goBtn=document.getElementById("goLastReadBtn");
-    if(goBtn){
-      goBtn.addEventListener("click",()=>{
-        setCurrentSura(lastRead.suraIndex);
-        setTimeout(()=>{
-          const el=document.getElementById("aya-"+lastRead.suraIndex+"-"+lastRead.ayaIndex);
-          if(el) el.scrollIntoView({behavior:"smooth",block:"center"});
-        },120);
-      });
-    }
-    const resetBtn=lastReadBoxEl.querySelector(".btn-last-read-clear");
-    if(resetBtn){
-      resetBtn.addEventListener("click",()=>{
-        lastRead=null;
-        localStorage.removeItem("q_lastRead");
-        renderLastRead();
-      });
+    // If current view is "last" and lastRead belongs to this sura, scroll to that aya
+    if (state.currentView === "last" && state.lastRead && Number(state.lastRead.suraId) === Number(suraId)) {
+      setTimeout(scrollToLastRead, 200);
     }
   }
 
-  clearLastReadBtn.addEventListener("click",()=>{
-    lastRead=null;
-    localStorage.removeItem("q_lastRead");
-    renderLastRead();
-  });
+  function renderAyaat() {
+    ayatContainerEl.innerHTML = "";
 
-  function getCopyFormat(){
-    const c=document.querySelector('input[name="copyFormat"]:checked');
-    return c?c.value:"both";
-  }
-  function formatAyaForCopy(sIdx,aIdx,mode){
-    const s=suras[sIdx];
-    const ayas=s.ayas||s.ayat||s.verses||[];
-    const aya=ayas[aIdx]||{};
-    const num=(sIdx+1)+":"+ (aIdx+1);
-    const ar=aya.ar||aya.arabic||aya.text_ar||"";
-    const bn=aya.bn||aya.bangla||aya.text_bn||"";
-    const lines=[];
-    if(mode==="both"){ if(ar) lines.push(ar); if(bn) lines.push(bn); }
-    else if(mode==="ar"){ if(ar) lines.push(ar); }
-    else { if(bn) lines.push(bn); }
-    lines.push("["+num+" - "+(s.name_bn||s.name)+"]");
-    return lines.join("\\n");
-  }
-  function formatMultipleSelectedAyaat(mode){
-    const list=Array.from(selectedAyaat).map(k=>{
-      const [sIdx,aIdx]=k.split(":").map(Number);
-      return {sIdx,aIdx};
-    }).sort((a,b)=>a.sIdx!==b.sIdx? a.sIdx-b.sIdx : a.aIdx-b.aIdx);
-    const out=[];
-    list.forEach(it=>{ out.push(formatAyaForCopy(it.sIdx,it.aIdx,mode)); out.push(""); });
-    return out.join("\\n");
-  }
-  function doShare(text){
-    if(navigator.share){
-      navigator.share({text}).catch(()=>{});
-    }else{
-      navigator.clipboard.writeText(text).then(()=>alert("শেয়ার সাপোর্ট নেই, টেক্সট কপি করা হয়েছে।"));
-    }
-  }
-
-  document.getElementById("multiCopyBtn").addEventListener("click",()=>{
-    if(!selectedAyaat.size) return;
-    const text=formatMultipleSelectedAyaat(getCopyFormat());
-    document.getElementById("copyPreview").value=text;
-    openModal("copyModal");
-    navigator.clipboard.writeText(text).catch(()=>{});
-  });
-  document.getElementById("multiShareBtn").addEventListener("click",()=>{
-    if(!selectedAyaat.size) return;
-    const text=formatMultipleSelectedAyaat(getCopyFormat());
-    doShare(text);
-  });
-  document.getElementById("multiClearBtn").addEventListener("click",()=>{
-    selectedAyaat.clear();
-    renderAyaList();
-  });
-
-  const copyPreviewEl=document.getElementById("copyPreview");
-  document.getElementById("copyModalCopyBtn").addEventListener("click",()=>{
-    navigator.clipboard.writeText(copyPreviewEl.value||"").then(()=>alert("ক্লিপবোর্ডে কপি হয়েছে।"));
-  });
-  document.getElementById("copyModalShareBtn").addEventListener("click",()=>{
-    doShare(copyPreviewEl.value||"");
-  });
-
-  const pinsSearchInputEl=document.getElementById("pinsSearchInput");
-  const pinsListContainerEl=document.getElementById("pinsListContainer");
-  const clearAllPinsFavsBtn=document.getElementById("clearAllPinsFavsBtn");
-
-  function renderPinsModalList(){
-    const tab=document.querySelector('input[name="pinsTab"]:checked').value;
-    const sortChip=document.querySelector('#pinsModal .chip.active[data-sort]');
-    const sortMode=sortChip?sortChip.dataset.sort:"recent";
-    const ft=(pinsSearchInputEl.value||"").trim().toLowerCase();
-
-    let list=(tab==="pins"?pins:favs).slice();
-    if(sortMode==="recent") list.sort((a,b)=>b.time-a.time);
-    else list.sort((a,b)=>a.suraIndex!==b.suraIndex?a.suraIndex-b.suraIndex:a.ayaIndex-b.ayaIndex);
-
-    list=list.filter(item=>{
-      const s=suras[item.suraIndex]; if(!s) return false;
-      const ayas=s.ayas||s.ayat||s.verses||[];
-      const aya=ayas[item.ayaIndex]||{};
-      const text=(s.name_bn||s.name||"")+" "+
-                 (s.name_ar||"")+" "+
-                 (aya.bn||aya.bangla||"")+" "+
-                 (item.note||"");
-      return !ft || text.toLowerCase().includes(ft);
-    });
-
-    pinsListContainerEl.innerHTML="";
-    if(!list.length){
-      pinsListContainerEl.innerHTML='<div style="font-size:13px;opacity:.7;padding:6px;">কোনো ডাটা নেই।</div>';
+    if (!state.currentSuraId) {
+      ayatContainerEl.innerHTML = "<p>Please select a sura from the left list.</p>";
+      updateSelectionToolbar();
       return;
     }
 
-    list.forEach(item=>{
-      const s=suras[item.suraIndex]; if(!s) return;
-      const ayas=s.ayas||s.ayat||s.verses||[];
-      const aya=ayas[item.ayaIndex]||{};
+    const suraIndex = (state.suras.findIndex(s => (s.id ?? null) === state.currentSuraId));
+    const sura = (suraIndex >= 0) ? state.suras[suraIndex] : state.suras[state.currentSuraId - 1];
 
-      const wrap=document.createElement("div");
-      const row1=document.createElement("div");
-      row1.style.display="flex";
-      row1.style.justifyContent="space-between";
-      row1.style.alignItems="center";
-      row1.style.fontSize="13px";
+    if (!sura) {
+      ayatContainerEl.innerHTML = "<p>Sura data not found.</p>";
+      updateSelectionToolbar();
+      return;
+    }
 
-      const left=document.createElement("div");
-      left.innerHTML='<strong>'+(item.kind==="pin"?"📌 ":"⭐ ")+
-        (item.suraIndex+1)+":"+ (item.ayaIndex+1)+'</strong> - '+(s.name_bn||s.name);
+    const ayaatArray = sura.ayaat || sura.ayahs || [];
+    if (!Array.isArray(ayaatArray) || ayaatArray.length === 0) {
+      ayatContainerEl.innerHTML = "<p>No ayaat found in suras.js for this sura.</p>";
+      updateSelectionToolbar();
+      return;
+    }
 
-      const right=document.createElement("div");
-      right.style.display="flex"; right.style.gap="4px";
+    // Filter based on view
+    let ayaFilter = ayaatArray;
+    if (state.currentView === "pins") {
+      ayaFilter = ayaatArray.filter(a => {
+        const no = a.aayatNo || a.aya || a.no || a.index;
+        const key = getAyaKey(state.currentSuraId, no);
+        return state.pins.has(key);
+      });
+    } else if (state.currentView === "favourites") {
+      ayaFilter = ayaatArray.filter(a => {
+        const no = a.aayatNo || a.aya || a.no || a.index;
+        const key = getAyaKey(state.currentSuraId, no);
+        return state.favourites.has(key);
+      });
+    } else if (state.currentView === "last") {
+      if (!state.lastRead || Number(state.lastRead.suraId) !== Number(state.currentSuraId)) {
+        ayatContainerEl.innerHTML = "<p>No last read ayaat stored for this sura.</p>";
+        updateSelectionToolbar();
+        return;
+      }
+      ayaFilter = ayaatArray.filter(a => {
+        const no = a.aayatNo || a.aya || a.no || a.index;
+        return Number(no) === Number(state.lastRead.ayaNo);
+      });
+    }
 
-      const goBtn=document.createElement("button");
-      goBtn.className="close-btn";
-      goBtn.textContent="যান";
-      goBtn.addEventListener("click",()=>{
-        setCurrentSura(item.suraIndex);
-        closeModal("pinsModal");
-        setTimeout(()=>{
-          const el=document.getElementById("aya-"+item.suraIndex+"-"+item.ayaIndex);
-          if(el) el.scrollIntoView({behavior:"smooth",block:"center"});
-        },120);
+    if (ayaFilter.length === 0) {
+      ayatContainerEl.innerHTML = "<p>No ayaat to show for this view.</p>";
+      updateSelectionToolbar();
+      return;
+    }
+
+    ayaFilter.forEach((ayatObj) => {
+      const no = ayatObj.aayatNo || ayatObj.aya || ayatObj.no || ayatObj.index;
+      const arabic = ayatObj.arabic || ayatObj.ar || "";
+      const bangla = ayatObj.bangla || ayatObj.bn || "";
+      const english = ayatObj.english || ayatObj.en || "";
+      const key = getAyaKey(state.currentSuraId, no);
+
+      const isLastRead =
+        state.lastRead &&
+        Number(state.lastRead.suraId) === Number(state.currentSuraId) &&
+        Number(state.lastRead.ayaNo) === Number(no);
+
+      const item = document.createElement("div");
+      item.className = "ayat-item";
+      item.dataset.ayaKey = key;
+      item.id = "aya-" + key.replace(":", "-");
+
+      // Header row
+      const header = document.createElement("div");
+      header.className = "ayat-header";
+
+      const leftHeader = document.createElement("div");
+      leftHeader.style.display = "flex";
+      leftHeader.style.alignItems = "center";
+      leftHeader.style.gap = "0.3rem";
+
+      const numBadge = document.createElement("span");
+      numBadge.className = "ayat-num-badge";
+      numBadge.innerHTML = `<span>#${no}</span>`;
+
+      leftHeader.appendChild(numBadge);
+
+      if (isLastRead) {
+        const lr = document.createElement("span");
+        lr.className = "ayat-last-read";
+        lr.textContent = "Last read";
+        leftHeader.appendChild(lr);
+      }
+
+      const rightHeader = document.createElement("label");
+      rightHeader.className = "ayat-checkbox";
+      rightHeader.innerHTML = `<input type="checkbox" /> Sel`;
+
+      header.appendChild(leftHeader);
+      header.appendChild(rightHeader);
+
+      // Arabic
+      const arabicDiv = document.createElement("div");
+      arabicDiv.className = "ayat-arabic";
+      arabicDiv.textContent = arabic || "";
+
+      // Translation
+      const transDiv = document.createElement("div");
+      transDiv.className = "ayat-translation";
+      transDiv.textContent = state.translationLanguage === "bn" ? (bangla || english) : (english || bangla);
+
+      // Actions row
+      const actions = document.createElement("div");
+      actions.className = "ayat-actions";
+      actions.innerHTML = `
+        <button class="btn btn-small btn-ghost" data-action="pin"><span class="icon">📌</span> Pin</button>
+        <button class="btn btn-small btn-ghost" data-action="fav"><span class="icon">⭐</span> Fav</button>
+        <button class="btn btn-small btn-ghost" data-action="copy"><span class="icon">📋</span> Copy</button>
+        <button class="btn btn-small btn-ghost" data-action="share"><span class="icon">🔗</span> Share</button>
+        <button class="btn btn-small btn-ghost" data-action="last"><span class="icon">⏱</span> Last</button>
+      `;
+
+      // Attach
+      item.appendChild(header);
+      item.appendChild(arabicDiv);
+      item.appendChild(transDiv);
+      item.appendChild(actions);
+
+      // Checkbox behaviour
+      const checkbox = rightHeader.querySelector("input");
+      checkbox.checked = state.selectedAyaat.has(key);
+      checkbox.addEventListener("change", (e) => {
+        if (e.target.checked) {
+          state.selectedAyaat.add(key);
+        } else {
+          state.selectedAyaat.delete(key);
+        }
+        updateSelectionToolbar();
       });
 
-      const cpBtn=document.createElement("button");
-      cpBtn.className="close-btn";
-      cpBtn.textContent="📋";
-      cpBtn.addEventListener("click",()=>{
-        const text=formatAyaForCopy(item.suraIndex,item.ayaIndex,getCopyFormat());
-        navigator.clipboard.writeText(text).then(()=>alert("কপি হয়েছে।"));
+      // Button handlers
+      actions.querySelectorAll("button").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const action = btn.dataset.action;
+          handleAyaAction(action, key, {
+            suraId: state.currentSuraId,
+            ayaNo: no,
+            arabic,
+            bangla,
+            english,
+          });
+        });
       });
 
-      const delBtn=document.createElement("button");
-      delBtn.className="close-btn";
-      delBtn.style.background="#fee2e2";
-      delBtn.style.color="#b91c1c";
-      delBtn.textContent="🗑";
-      delBtn.addEventListener("click",()=>{
-        if(tab==="pins"){ pins=pins.filter(p=>p.key!==item.key); savePinsFavs("q_pins",pins); }
-        else { favs=favs.filter(p=>p.key!==item.key); savePinsFavs("q_favs",favs); }
-        renderPinsModalList();
-        renderPinsSidebar();
-        renderAyaList();
+      ayatContainerEl.appendChild(item);
+    });
+
+    updateSelectionToolbar();
+  }
+
+  function getAyaKey(suraId, ayaNo) {
+    return String(suraId) + ":" + String(ayaNo);
+  }
+
+  // ---- Actions ----
+  function handleAyaAction(action, key, payload) {
+    switch (action) {
+      case "pin":
+        toggleSetEntry(state.pins, key);
+        saveLocalStorage();
+        renderAyaat(); // to update view if in pins tab
+        break;
+      case "fav":
+        toggleSetEntry(state.favourites, key);
+        saveLocalStorage();
+        renderAyaat(); // to update view if in favourites tab
+        break;
+      case "copy":
+        copyAyaText(payload);
+        break;
+      case "share":
+        shareAyaText(payload);
+        break;
+      case "last":
+        state.lastRead = { suraId: payload.suraId, ayaNo: payload.ayaNo };
+        saveLocalStorage();
+        renderAyaat();
+        alert("Last read updated to Sura " + payload.suraId + ", Aya " + payload.ayaNo);
+        break;
+    }
+  }
+
+  function toggleSetEntry(setObj, value) {
+    if (setObj.has(value)) {
+      setObj.delete(value);
+    } else {
+      setObj.add(value);
+    }
+  }
+
+  function composeAyatTextForCopy(payload) {
+    const line1 = `Sura ${payload.suraId}, Aya ${payload.ayaNo}`;
+    const line2 = payload.arabic || "";
+    const trans = state.translationLanguage === "bn"
+      ? (payload.bangla || payload.english || "")
+      : (payload.english || payload.bangla || "");
+    const line3 = trans;
+    return [line1, line2, line3].filter(Boolean).join("\n");
+  }
+
+  function copyAyaText(payload) {
+    const text = composeAyatTextForCopy(payload);
+    navigator.clipboard.writeText(text).then(() => {
+      alert("Ayat copied to clipboard.");
+    }).catch(() => {
+      alert("Unable to copy. Your browser blocked clipboard access.");
+    });
+  }
+
+  function shareAyaText(payload) {
+    const text = composeAyatTextForCopy(payload);
+    if (navigator.share) {
+      navigator.share({
+        title: "Qur'an Ayaat",
+        text,
+      }).catch(() => {});
+    } else {
+      navigator.clipboard.writeText(text).then(() => {
+        alert("Share not supported. Text copied. Paste it in WhatsApp, Messenger, etc.");
       });
+    }
+  }
 
-      right.appendChild(goBtn); right.appendChild(cpBtn); right.appendChild(delBtn);
-      row1.appendChild(left); row1.appendChild(right);
+  // ---- Multi-selection toolbar ----
+  function updateSelectionToolbar() {
+    const count = state.selectedAyaat.size;
+    if (count === 0) {
+      selectionToolbarEl.style.display = "none";
+    } else {
+      selectionToolbarEl.style.display = "block";
+      selectionCountEl.textContent = count + " selected";
+    }
+  }
 
-      const row2=document.createElement("div");
-      row2.style.fontSize="12px"; row2.style.opacity=0.85;
-      row2.style.marginTop="4px";
-      row2.textContent=(aya.bn||aya.bangla||"").slice(0,90)+"...";
+  function getSelectedAyatPayloads() {
+    const result = [];
+    state.selectedAyaat.forEach(key => {
+      const [suraIdStr, ayaNoStr] = key.split(":");
+      const suraId = Number(suraIdStr);
+      const ayaNo = Number(ayaNoStr);
 
-      wrap.appendChild(row1); wrap.appendChild(row2);
-      pinsListContainerEl.appendChild(wrap);
+      const suraIndex = state.suras.findIndex(s => (s.id ?? null) === suraId);
+      const sura = (suraIndex >= 0) ? state.suras[suraIndex] : state.suras[suraId - 1];
+      if (!sura) return;
+
+      const ayaArr = sura.ayaat || sura.ayahs || [];
+      const ayaObj = ayaArr.find(a =>
+        Number(a.aayatNo || a.aya || a.no || a.index) === ayaNo
+      );
+      if (!ayaObj) return;
+
+      result.push({
+        suraId,
+        ayaNo,
+        arabic: ayaObj.arabic || ayaObj.ar || "",
+        bangla: ayaObj.bangla || ayaObj.bn || "",
+        english: ayaObj.english || ayaObj.en || "",
+      });
+    });
+    return result;
+  }
+
+  function copySelection() {
+    const payloads = getSelectedAyatPayloads();
+    if (payloads.length === 0) {
+      alert("No ayaat selected.");
+      return;
+    }
+    const combined = payloads.map(p => composeAyatTextForCopy(p)).join("\n\n");
+    navigator.clipboard.writeText(combined).then(() => {
+      alert("Selected ayaat copied to clipboard.");
+    }).catch(() => {
+      alert("Unable to copy selection.");
     });
   }
 
-  pinsSearchInputEl.addEventListener("input",renderPinsModalList);
-  document.querySelectorAll('input[name="pinsTab"]').forEach(r=>r.addEventListener("change",renderPinsModalList));
-  document.querySelectorAll('#pinsModal .chip[data-sort]').forEach(ch=>{
-    ch.addEventListener("click",()=>{
-      document.querySelectorAll('#pinsModal .chip[data-sort]').forEach(c=>c.classList.remove("active"));
-      ch.classList.add("active");
-      renderPinsModalList();
-    });
-  });
-  clearAllPinsFavsBtn.addEventListener("click",()=>{
-    if(!confirm("সব পিন ও ফেভারিট মুছে ফেলতে চান?")) return;
-    pins=[]; favs=[];
-    savePinsFavs("q_pins",pins); savePinsFavs("q_favs",favs);
-    renderPinsModalList(); renderPinsSidebar(); renderAyaList();
-  });
-
-  const viewToggleEl=document.getElementById("viewToggle");
-  const fontSizeRangeEl=document.getElementById("fontSizeRange");
-  const settingsFontSizeRangeEl=document.getElementById("settingsFontSizeRange");
-  const settingsViewChipsEl=document.getElementById("settingsViewChips");
-  const lineHeightChipsEl=document.getElementById("lineHeightChips");
-
-  function applyView(){
-    localStorage.setItem("q_view",currentView);
-    viewToggleEl.querySelectorAll("button").forEach(btn=>{
-      btn.classList.toggle("active",btn.dataset.view===currentView);
-    });
-    settingsViewChipsEl.querySelectorAll(".chip").forEach(ch=>{
-      ch.classList.toggle("active",ch.dataset.view===currentView);
-    });
-    renderAyaList();
-  }
-  function applyFontSize(){
-    localStorage.setItem("q_fontSize",String(fontSize));
-    fontSizeRangeEl.value=String(fontSize);
-    settingsFontSizeRangeEl.value=String(fontSize);
-    renderAyaList();
-  }
-  function applyLineHeight(){
-    localStorage.setItem("q_lineHeight",String(lineHeight));
-    lineHeightChipsEl.querySelectorAll(".chip").forEach(ch=>{
-      ch.classList.toggle("active",parseFloat(ch.dataset.lh)===lineHeight);
-    });
-    renderAyaList();
+  function shareSelection() {
+    const payloads = getSelectedAyatPayloads();
+    if (payloads.length === 0) {
+      alert("No ayaat selected.");
+      return;
+    }
+    const combined = payloads.map(p => composeAyatTextForCopy(p)).join("\n\n");
+    if (navigator.share) {
+      navigator.share({
+        title: "Qur'an Ayaat",
+        text: combined,
+      }).catch(() => {});
+    } else {
+      navigator.clipboard.writeText(combined).then(() => {
+        alert("Share not supported. Text copied. Paste it in your app.");
+      });
+    }
   }
 
-  viewToggleEl.querySelectorAll("button").forEach(btn=>{
-    btn.addEventListener("click",()=>{ currentView=btn.dataset.view; applyView(); });
-  });
-  settingsViewChipsEl.querySelectorAll(".chip").forEach(ch=>{
-    ch.addEventListener("click",()=>{ currentView=ch.dataset.view; applyView(); });
-  });
-  fontSizeRangeEl.addEventListener("input",()=>{ fontSize=parseInt(fontSizeRangeEl.value,10); applyFontSize(); });
-  settingsFontSizeRangeEl.addEventListener("input",()=>{ fontSize=parseInt(settingsFontSizeRangeEl.value,10); applyFontSize(); });
-  lineHeightChipsEl.querySelectorAll(".chip").forEach(ch=>{
-    ch.addEventListener("click",()=>{ lineHeight=parseFloat(ch.dataset.lh); applyLineHeight(); });
-  });
+  function clearSelection() {
+    state.selectedAyaat.clear();
+    renderAyaat();
+  }
 
-  function openModal(id){ const el=document.getElementById(id); if(el) el.classList.add("active"); }
-  function closeModal(id){ const el=document.getElementById(id); if(el) el.classList.remove("active"); }
+  // ---- Theme, font size, language ----
+  function applyTheme() {
+    bodyEl.setAttribute("data-theme", state.theme);
+  }
 
-  document.querySelectorAll(".close-btn[data-close-modal]").forEach(btn=>{
-    btn.addEventListener("click",()=>closeModal(btn.dataset.closeModal));
-  });
-  document.getElementById("openSuraListModalBtn").addEventListener("click",()=>openModal("suraListModal"));
-  document.getElementById("openSettingsModalBtn").addEventListener("click",()=>openModal("settingsModal"));
-  document.getElementById("openCopyModalBtn").addEventListener("click",()=>openModal("copyModal"));
-  document.getElementById("openPinsModalBtn").addEventListener("click",()=>{ renderPinsModalList(); openModal("pinsModal"); });
-  document.getElementById("floatingSettingsBtn").addEventListener("click",()=>openModal("settingsModal"));
+  function applyFontSize() {
+    ayatContainerEl.classList.remove("font-size-sm", "font-size-md", "font-size-lg");
+    ayatContainerEl.classList.add("font-size-" + state.fontSize);
 
-  applyView();
-  applyFontSize();
-  applyLineHeight();
-  renderSuraList();
-  setCurrentSura(0);
-  renderLastRead();
-  renderPinsSidebar();
-})();
+    fontSizeToggleEl.querySelectorAll("button").forEach(btn => {
+      btn.classList.toggle("active", btn.dataset.size === state.fontSize);
+    });
+  }
+
+  function toggleTheme() {
+    state.theme = (state.theme === "light") ? "dark" : "light";
+    applyTheme();
+    saveLocalStorage();
+  }
+
+  function toggleLanguage() {
+    state.translationLanguage = (state.translationLanguage === "bn") ? "en" : "bn";
+    languageToggleBtn.textContent = state.translationLanguage === "bn" ? "🌐 BN / EN" : "🌐 EN / BN";
+    saveLocalStorage();
+    if (state.currentSuraId) {
+      renderAyaat();
+    }
+  }
+
+  // ---- View Tabs ----
+  function setActiveViewTab(view) {
+    state.currentView = view;
+    viewTabsEl.querySelectorAll(".tab").forEach(tab => {
+      tab.classList.toggle("active", tab.dataset.view === view);
+    });
+    if (state.currentSuraId) {
+      renderAyaat();
+      if (view === "last") {
+        setTimeout(scrollToLastRead, 200);
+      }
+    }
+  }
+
+  function scrollToLastRead() {
+    if (!state.lastRead) {
+      alert("No last read ayaat stored yet.");
+      return;
+    }
+    if (Number(state.lastRead.suraId) !== Number(state.currentSuraId)) {
+      // Select that sura first
+      selectSura(state.lastRead.suraId);
+      setActiveViewTab("last");
+      return;
+    }
+
+    const key = getAyaKey(state.lastRead.suraId, state.lastRead.ayaNo);
+    const el = document.getElementById("aya-" + key.replace(":", "-"));
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth", block: "center" });
+    } else {
+      alert("Last read ayaat not found in the current view.");
+    }
+  }
+
+  // ---- Events ----
+  function bindEvents() {
+    // Search sura
+    suraSearchInput.addEventListener("input", (e) => {
+      renderSuraList(e.target.value);
+    });
+
+    // Selection toolbar
+    btnSelectionCopy.addEventListener("click", copySelection);
+    btnSelectionShare.addEventListener("click", shareSelection);
+    btnSelectionClear.addEventListener("click", clearSelection);
+
+    scrollLastReadBtn.addEventListener("click", scrollToLastRead);
+
+    // Theme & language
+    themeToggleBtn.addEventListener("click", toggleTheme);
+    languageToggleBtn.addEventListener("click", toggleLanguage);
+
+    // Font size
+    fontSizeToggleEl.querySelectorAll("button").forEach(btn => {
+      btn.addEventListener("click", () => {
+        state.fontSize = btn.dataset.size;
+        applyFontSize();
+        saveLocalStorage();
+      });
+    });
+
+    // View tabs
+    viewTabsEl.querySelectorAll(".tab").forEach(tab => {
+      tab.addEventListener("click", () => {
+        const view = tab.dataset.view;
+        setActiveViewTab(view);
+      });
+    });
+  }
+
+  // ---- Start ----
+  document.addEventListener("DOMContentLoaded", init);
 </script>
 
 </body>
