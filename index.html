@@ -311,7 +311,6 @@
     @media (max-width: 640px) {
       .mode-tabs {
         width: 100%;
-        justify-content: space_between;
         justify-content: space-between;
       }
 
@@ -1737,11 +1736,27 @@
           console.error("Error loading surah JSON:", err);
           surahContent.innerHTML = `
             <div class="info-block">
-              <span style="color: ${"var(--danger)"};">⚠️ সূরা ডাটা লোড করতে সমস্যা হয়েছে।</span><br />
+              <span style="color: var(--danger);">⚠️ সূরা ডাটা লোড করতে সমস্যা হয়েছে।</span><br />
               ফাইল: <code>${fileName}</code> — অনুগ্রহ করে ফাইলের নাম/JSON সিনট্যাক্স চেক করুন।
             </div>
           `;
         });
+    }
+
+    // ===== Word Modal helpers =====
+    function openWordModal({ arabic, meaningBn, notesBn, ayahNumber }) {
+      wordModalArabic.textContent = arabic || "";
+      wordModalMeaning.textContent = meaningBn || "—";
+      wordModalNotes.textContent = notesBn || "—";
+      const ref = currentSurah
+        ? `${currentSurah.nameBn || ""} — আয়াত ${ayahNumber ?? ""}`
+        : `আয়াত ${ayahNumber ?? ""}`;
+      wordModalAyahRef.textContent = ref.trim();
+      wordModalBackdrop.style.display = "flex";
+    }
+
+    function closeWordModal() {
+      wordModalBackdrop.style.display = "none";
     }
 
     // ===== Render Logic =====
@@ -1773,11 +1788,19 @@
         <div class="surah-meta-tags">
           <div class="pill pill-accent">
             <span class="icon">📍</span>
-            <span>${currentSurah.revelationPlace === "Makki" ? "মাক্কী" : (currentSurah.revelationPlace === "Madani" ? "মাদানী" : "অজানা")}</span>
+            <span>${
+              currentSurah.revelationPlace === "Makki"
+                ? "মাক্কী"
+                : currentSurah.revelationPlace === "Madani"
+                ? "মাদানী"
+                : "অজানা"
+            }</span>
           </div>
           <div class="pill">
             <span class="icon">🔢</span>
-            <span>${currentSurah.ayahCount || (currentSurah.ayahs ? currentSurah.ayahs.length : "?")} আয়াত</span>
+            <span>${
+              currentSurah.ayahCount || (currentSurah.ayahs ? currentSurah.ayahs.length : "?")
+            } আয়াত</span>
           </div>
         </div>
       `;
@@ -1788,11 +1811,6 @@
         const b = currentSurah.bismillah;
         const bWrap = document.createElement("div");
         bWrap.className = "bismillah-block";
-
-        const lines = [];
-        if (b.bangla) {
-          lines.push(`<div class="bismillah-bn">${b.bangla}</div>`);
-        }
 
         let transHtml = "";
         if (currentMode !== "arabic" && b.translations) {
@@ -1810,87 +1828,95 @@
 
         bWrap.innerHTML = `
           <div class="bismillah-ar">${b.arabic || ""}</div>
-          ${lines.join("")}
+          ${b.bangla ? `<div class="bismillah-bn">${b.bangla}</div>` : ""}
           ${transHtml}
         `;
-
         container.appendChild(bWrap);
       }
 
       // Ayahs
-      if (!currentSurah.ayahs || !Array.isArray(currentSurah.ayahs)) {
-        const info = document.createElement("div");
-        info.className = "info-block";
-        info.innerHTML = `এই সূরার জন্য ayahs array পাওয়া যায়নি। JSON data চেক করুন।`;
-        container.appendChild(info);
-      } else {
+      if (Array.isArray(currentSurah.ayahs)) {
         currentSurah.ayahs.forEach((ayah) => {
           const card = document.createElement("div");
           card.className = "ayah-card";
 
-          // Header
+          // header
           const header = document.createElement("div");
           header.className = "ayah-header";
           header.innerHTML = `
-            <div class="ayah-number">${ayah.ayahNumber}</div>
+            <div class="ayah-number">${ayah.number}</div>
             <div class="ayah-meta">
-              <span>আয়াত ${ayah.ayahNumber}</span>
+              <span>আয়াত ${ayah.number}</span>
             </div>
           `;
           card.appendChild(header);
 
-          // Arabic
-          const arDiv = document.createElement("div");
-          arDiv.className = "ayah-text-ar";
+          // content by mode
+          if (currentMode === "arabic") {
+            // শুধু আরবি
+            const ar = document.createElement("div");
+            ar.className = "ayah-text-ar";
+            ar.textContent = ayah.arabic || "";
+            card.appendChild(ar);
+          } else if (currentMode === "translation") {
+            // শুধু অনুবাদ
+            const bn = document.createElement("div");
+            bn.className = "ayah-text-bn";
+            bn.textContent = ayah.bangla || "";
+            card.appendChild(bn);
 
-          if (currentMode === "word" && Array.isArray(ayah.words) && ayah.words.length > 0) {
-            ayah.words.forEach((w, idx) => {
+            if (ayah.translations && selectedWriters.length > 0) {
+              const transDiv = document.createElement("div");
+              transDiv.className = "ayah-translations";
+
+              if (selectedWriters.includes("osmani") && ayah.translations.osmani) {
+                const line = document.createElement("div");
+                line.innerHTML = `<span class="ayah-trans-label">[ওসমানী]</span>${ayah.translations.osmani}`;
+                transDiv.appendChild(line);
+              }
+
+              if (selectedWriters.includes("tawjih") && ayah.translations.tawjih) {
+                const line = document.createElement("div");
+                line.innerHTML = `<span class="ayah-trans-label">[তাওযীহ]</span>${ayah.translations.tawjih}`;
+                transDiv.appendChild(line);
+              }
+
+              if (transDiv.children.length > 0) {
+                card.appendChild(transDiv);
+              }
+            }
+          } else {
+            // শব্দে–শব্দে (word mode)
+            const ar = document.createElement("div");
+            ar.className = "ayah-text-ar";
+
+            if (Array.isArray(ayah.words) && ayah.words.length > 0) {
+              ayah.words.forEach((w) => {
+                const span = document.createElement("span");
+                span.className = "word-token";
+                span.textContent = w.arabic || "";
+                span.dataset.meaning = w.meaningBn || "";
+                span.dataset.notes = w.notesBn || "";
+                span.dataset.ayahNumber = ayah.number;
+                ar.appendChild(span);
+              });
+            } else {
+              // fallback: whole ayah as one token
               const span = document.createElement("span");
               span.className = "word-token";
-              span.textContent = w.text || "";
-              span.dataset.ayah = ayah.ayahNumber;
-              span.dataset.index = idx;
-
-              span.addEventListener("click", () => {
-                document.querySelectorAll(".word-token").forEach((t) => t.classList.remove("active"));
-                span.classList.add("active");
-                openWordModal(ayah, w);
-              });
-
-              arDiv.appendChild(span);
-            });
-          } else {
-            arDiv.textContent = ayah.arabic || "";
-          }
-
-          card.appendChild(arDiv);
-
-          // Bangla (main ayah meaning)
-          if (currentMode !== "arabic" && ayah.bangla) {
-            const bnDiv = document.createElement("div");
-            bnDiv.className = "ayah-text-bn";
-            bnDiv.textContent = ayah.bangla;
-            card.appendChild(bnDiv);
-          }
-
-          // Translations by writers (only in translation mode)
-          if (currentMode === "translation" && ayah.translations && selectedWriters.length > 0) {
-            const trDiv = document.createElement("div");
-            trDiv.className = "ayah-translations";
-
-            if (selectedWriters.includes("osmani") && ayah.translations.osmani) {
-              const line = document.createElement("div");
-              line.innerHTML = `<span class="ayah-trans-label">[ওসমানী]</span>${ayah.translations.osmani}`;
-              trDiv.appendChild(line);
+              span.textContent = ayah.arabic || "";
+              span.dataset.meaning = ayah.bangla || "";
+              span.dataset.notes = "";
+              span.dataset.ayahNumber = ayah.number;
+              ar.appendChild(span);
             }
 
-            if (selectedWriters.includes("tawjih") && ayah.translations.tawjih) {
-              const line = document.createElement("div");
-              line.innerHTML = `<span class="ayah-trans-label">[তাওযীহ]</span>${ayah.translations.tawjih}`;
-              trDiv.appendChild(line);
-            }
+            card.appendChild(ar);
 
-            card.appendChild(trDiv);
+            const bn = document.createElement("div");
+            bn.className = "ayah-text-bn";
+            bn.textContent = ayah.bangla || "";
+            card.appendChild(bn);
           }
 
           container.appendChild(card);
@@ -1899,120 +1925,114 @@
 
       surahContent.appendChild(container);
 
-      // Apply font settings every render
+      // Apply current font settings on newly rendered elements
       applyFontSettings();
+
+      // Attach word-token click handler (event delegation)
+      surahContent.querySelectorAll(".word-token").forEach((token) => {
+        token.addEventListener("click", () => {
+          const arabic = token.textContent;
+          const meaningBn = token.dataset.meaning || "";
+          const notesBn = token.dataset.notes || "";
+          const ayahNumber = token.dataset.ayahNumber || "";
+
+          // Active state
+          surahContent.querySelectorAll(".word-token.active").forEach((t) => {
+            t.classList.remove("active");
+          });
+          token.classList.add("active");
+
+          openWordModal({ arabic, meaningBn, notesBn, ayahNumber });
+        });
+      });
     }
 
-    // ===== Word Modal (center popup) =====
-
-    function openWordModal(ayah, word) {
-      wordModalArabic.textContent = word.text || "";
-      wordModalMeaning.textContent = word.meaningBn || "—";
-      const notesText = word.notes || "";
-      wordModalNotes.textContent = notesText || "—";
-
-      const surahName = currentSurah ? currentSurah.nameBn || "" : "";
-      const ayRef = `সূরা ${surahName} — আয়াত ${ayah.ayahNumber}`;
-      wordModalAyahRef.textContent = ayRef;
-
-      wordModalBackdrop.style.display = "flex";
-
-      // ensure latest sizes for popup
-      applyFontSettings();
-    }
-
-    wordModalClose.addEventListener("click", () => {
-      wordModalBackdrop.style.display = "none";
-      document.querySelectorAll(".word-token").forEach((t) => t.classList.remove("active"));
-    });
-
-    wordModalBackdrop.addEventListener("click", (e) => {
-      if (e.target === wordModalBackdrop) {
-        wordModalBackdrop.style.display = "none";
-        document.querySelectorAll(".word-token").forEach((t) => t.classList.remove("active"));
-      }
-    });
-
-    // ===== Event Bindings =====
-
-    surahSelect.addEventListener("change", onSurahChange);
-
-    modeWordBtn.addEventListener("click", () => setMode("word"));
-    modeTransBtn.addEventListener("click", () => setMode("translation"));
-    modeArabicBtn.addEventListener("click", () => setMode("arabic"));
-
-    writerOsmani.addEventListener("change", () => {
-      floatWriterOsmani.checked = writerOsmani.checked;
-      renderCurrentSurah();
-    });
-    writerTawjih.addEventListener("change", () => {
-      floatWriterTawjih.checked = writerTawjih.checked;
-      renderCurrentSurah();
-    });
-
-    arabicFontSizeInput.addEventListener("input", applyFontSettings);
-    banglaFontSizeInput.addEventListener("input", applyFontSettings);
-    arabicLineHeightInput.addEventListener("input", applyFontSettings);
-    banglaLineHeightInput.addEventListener("input", applyFontSettings);
-
-    // NEW: separate controls listeners
-    wordArabicFontSizeInput.addEventListener("input", applyFontSettings);
-    wordMeaningFontSizeInput.addEventListener("input", applyFontSettings);
-    wordNotesFontSizeInput.addEventListener("input", applyFontSettings);
-
-    scrollTopBtn.addEventListener("click", scrollToTop);
-    openSettingsBtn.addEventListener("click", toggleSettingsHighlight);
-
-    bottomSurahBtn.addEventListener("click", () => {
-      surahSelect.scrollIntoView({ behavior: "smooth", block: "center" });
-    });
-    bottomWordBtn.addEventListener("click", () => setMode("word"));
-    bottomTransBtn.addEventListener("click", () => setMode("translation"));
-    bottomSettingsBtn.addEventListener("click", toggleSettingsHighlight);
-
-    // Floating settings events
-    floatingSettingsToggle.addEventListener("click", () => {
-      if (floatingSettingsPanel.classList.contains("open")) {
-        closeFloatingSettings();
-      } else {
-        openFloatingSettings();
-      }
-    });
-
-    floatingSettingsClose.addEventListener("click", closeFloatingSettings);
-
-    floatingSettingsPanel.addEventListener("click", (e) => {
-      // prevent closing when clicking inside
-      e.stopPropagation();
-    });
-
-    document.addEventListener("click", (e) => {
-      // close floating when clicking outside (not on toggle)
-      if (
-        floatingSettingsPanel.classList.contains("open") &&
-        !floatingSettingsPanel.contains(e.target) &&
-        e.target !== floatingSettingsToggle
-      ) {
-        closeFloatingSettings();
-      }
-    });
-
-    // Floating inputs -> sync to sidebar & apply
-    floatArabicFontSizeInput.addEventListener("input", syncFloatingToSidebar);
-    floatBanglaFontSizeInput.addEventListener("input", syncFloatingToSidebar);
-    floatArabicLineHeightInput.addEventListener("input", syncFloatingToSidebar);
-    floatBanglaLineHeightInput.addEventListener("input", syncFloatingToSidebar);
-    floatWordArabicFontSizeInput.addEventListener("input", syncFloatingToSidebar);
-    floatWordMeaningFontSizeInput.addEventListener("input", syncFloatingToSidebar);
-    floatWordNotesFontSizeInput.addEventListener("input", syncFloatingToSidebar);
-    floatWriterOsmani.addEventListener("change", syncFloatingToSidebar);
-    floatWriterTawjih.addEventListener("change", syncFloatingToSidebar);
-
-    // ===== Init =====
+    // ===== Event Listeners =====
     document.addEventListener("DOMContentLoaded", () => {
       initSurahSelector();
-      // initial sync for floating panel default values
-      syncSidebarToFloating();
+      applyFontSettings();
+
+      // Surah change
+      surahSelect.addEventListener("change", onSurahChange);
+
+      // Mode buttons
+      modeWordBtn.addEventListener("click", () => setMode("word"));
+      modeTransBtn.addEventListener("click", () => setMode("translation"));
+      modeArabicBtn.addEventListener("click", () => setMode("arabic"));
+
+      // Scroll top
+      scrollTopBtn.addEventListener("click", scrollToTop);
+
+      // Open settings panel (highlight)
+      openSettingsBtn.addEventListener("click", toggleSettingsHighlight);
+
+      // Font inputs (sidebar)
+      [
+        arabicFontSizeInput,
+        banglaFontSizeInput,
+        arabicLineHeightInput,
+        banglaLineHeightInput,
+        wordArabicFontSizeInput,
+        wordMeaningFontSizeInput,
+        wordNotesFontSizeInput,
+      ].forEach((input) => {
+        input.addEventListener("input", () => {
+          applyFontSettings();
+        });
+      });
+
+      // Writer checkboxes (sidebar)
+      writerOsmani.addEventListener("change", () => renderCurrentSurah());
+      writerTawjih.addEventListener("change", () => renderCurrentSurah());
+
+      // Bottom bar buttons
+      bottomWordBtn.addEventListener("click", () => setMode("word"));
+      bottomTransBtn.addEventListener("click", () => setMode("translation"));
+      bottomSettingsBtn.addEventListener("click", openFloatingSettings);
+      bottomSurahBtn.addEventListener("click", () => {
+        // scroll to surah selector
+        surahSelect.scrollIntoView({ behavior: "smooth", block: "center" });
+      });
+
+      // Floating settings open/close
+      floatingSettingsToggle.addEventListener("click", openFloatingSettings);
+      floatingSettingsClose.addEventListener("click", closeFloatingSettings);
+      floatingSettingsPanel.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+          closeFloatingSettings();
+        }
+      });
+
+      // Floating inputs -> sync to sidebar
+      [
+        floatArabicFontSizeInput,
+        floatBanglaFontSizeInput,
+        floatArabicLineHeightInput,
+        floatBanglaLineHeightInput,
+        floatWordArabicFontSizeInput,
+        floatWordMeaningFontSizeInput,
+        floatWordNotesFontSizeInput,
+      ].forEach((input) => {
+        input.addEventListener("input", () => {
+          syncFloatingToSidebar();
+        });
+      });
+
+      floatWriterOsmani.addEventListener("change", () => syncFloatingToSidebar());
+      floatWriterTawjih.addEventListener("change", () => syncFloatingToSidebar());
+
+      // Word modal close
+      wordModalClose.addEventListener("click", closeWordModal);
+      wordModalBackdrop.addEventListener("click", (e) => {
+        if (e.target === wordModalBackdrop) {
+          closeWordModal();
+        }
+      });
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+          closeWordModal();
+        }
+      });
     });
   </script>
 </body>
