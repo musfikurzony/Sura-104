@@ -865,7 +865,6 @@
     .info-block strong {
       color: #e5e7eb;
     }
-
   </style>
 
   <script src="suras.js"></script>
@@ -1075,6 +1074,41 @@
                 value="1.6"
               />
             </div>
+
+            <!-- NEW: word-by-word & popup font controls -->
+            <div class="settings-field">
+              <div class="settings-label">🎛️ শব্দে–শব্দে আরবি ফন্ট</div>
+              <input
+                id="wordArabicFontSizeInput"
+                class="settings-input"
+                type="number"
+                min="18"
+                max="40"
+                value="24"
+              />
+            </div>
+            <div class="settings-field">
+              <div class="settings-label">🔤 বাংলা শব্দার্থ ফন্ট</div>
+              <input
+                id="wordMeaningFontSizeInput"
+                class="settings-input"
+                type="number"
+                min="12"
+                max="26"
+                value="15"
+              />
+            </div>
+            <div class="settings-field">
+              <div class="settings-label">📚 ব্যাকরণ নোটস ফন্ট</div>
+              <input
+                id="wordNotesFontSizeInput"
+                class="settings-input"
+                type="number"
+                min="12"
+                max="26"
+                value="14"
+              />
+            </div>
           </div>
 
           <div style="margin-top: 0.6rem;">
@@ -1156,6 +1190,11 @@
     const arabicLineHeightInput = document.getElementById("arabicLineHeightInput");
     const banglaLineHeightInput = document.getElementById("banglaLineHeightInput");
 
+    // NEW: separate word & popup font controls
+    const wordArabicFontSizeInput = document.getElementById("wordArabicFontSizeInput");
+    const wordMeaningFontSizeInput = document.getElementById("wordMeaningFontSizeInput");
+    const wordNotesFontSizeInput = document.getElementById("wordNotesFontSizeInput");
+
     const scrollTopBtn = document.getElementById("scrollTopBtn");
     const openSettingsBtn = document.getElementById("openSettingsBtn");
     const settingsPanel = document.getElementById("settingsPanel");
@@ -1175,6 +1214,7 @@
 
     let currentMode = "word"; // "word" | "translation" | "arabic"
     let currentSurah = null; // will store loaded JSON
+    let lastSurahNumber = null; // to control scroll on new surah only
 
     // ===== Helpers =====
 
@@ -1209,15 +1249,38 @@
       const arLH = parseFloat(arabicLineHeightInput.value) || 2.0;
       const bnLH = parseFloat(banglaLineHeightInput.value) || 1.6;
 
+      const wordArSize = parseFloat(wordArabicFontSizeInput.value) || arSize;
+      const wordMeaningSize = parseFloat(wordMeaningFontSizeInput.value) || bnSize;
+      const wordNotesSize = parseFloat(wordNotesFontSizeInput.value) || bnSize;
+
+      // Main ayah text (full ayah Arabic)
       document.querySelectorAll(".ayah-text-ar").forEach((el) => {
         el.style.fontSize = arSize + "px";
         el.style.lineHeight = arLH.toString();
       });
 
+      // Main Bangla ayah translation
       document.querySelectorAll(".ayah-text-bn").forEach((el) => {
         el.style.fontSize = bnSize + "px";
         el.style.lineHeight = bnLH.toString();
       });
+
+      // শব্দে–শব্দে আরবি word tokens
+      document.querySelectorAll(".word-token").forEach((el) => {
+        el.style.fontSize = wordArSize + "px";
+      });
+
+      // Popup বাংলা শব্দার্থ
+      if (wordModalMeaning) {
+        wordModalMeaning.style.fontSize = wordMeaningSize + "px";
+        wordModalMeaning.style.lineHeight = "1.6";
+      }
+
+      // Popup ব্যাকরণ নোটস
+      if (wordModalNotes) {
+        wordModalNotes.style.fontSize = wordNotesSize + "px";
+        wordModalNotes.style.lineHeight = "1.6";
+      }
     }
 
     function getSelectedWriters() {
@@ -1276,6 +1339,7 @@
           </div>
         `;
         highlightCurrentSurahChip(null);
+        lastSurahNumber = null;
         return;
       }
 
@@ -1292,7 +1356,11 @@
         .then((data) => {
           currentSurah = data;
           renderCurrentSurah();
-          scrollToTop();
+          // Only scroll to top when surah actually changes
+          if (lastSurahNumber !== suraMeta.number) {
+            scrollToTop();
+          }
+          lastSurahNumber = suraMeta.number;
         })
         .catch((err) => {
           console.error("Error loading surah JSON:", err);
@@ -1477,6 +1545,9 @@
       wordModalAyahRef.textContent = ayRef;
 
       wordModalBackdrop.style.display = "flex";
+
+      // ensure latest sizes for popup
+      applyFontSettings();
     }
 
     wordModalClose.addEventListener("click", () => {
@@ -1506,6 +1577,11 @@
     banglaFontSizeInput.addEventListener("input", applyFontSettings);
     arabicLineHeightInput.addEventListener("input", applyFontSettings);
     banglaLineHeightInput.addEventListener("input", applyFontSettings);
+
+    // NEW: separate controls listeners
+    wordArabicFontSizeInput.addEventListener("input", applyFontSettings);
+    wordMeaningFontSizeInput.addEventListener("input", applyFontSettings);
+    wordNotesFontSizeInput.addEventListener("input", applyFontSettings);
 
     scrollTopBtn.addEventListener("click", scrollToTop);
     openSettingsBtn.addEventListener("click", toggleSettingsHighlight);
