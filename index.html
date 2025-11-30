@@ -6,167 +6,395 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <style>
     :root{
-      --bg:#05090f; --panel:#071026; --muted:#98a6b6; --text:#e6eef8;
-      --accent:#22c55e; --gold:#f59e0b; --soft-border:rgba(148,163,184,0.18);
-      --radius:12px; --shadow:0 12px 30px rgba(0,0,0,0.6);
+      --bg:#020617;
+      --panel:#020a1a;
+      --panel-soft:#050f25;
+      --muted:#a8b3c7;
+      --text:#f9fafb;
+      --accent:#22c55e;
+      --gold:#fbbf24;
+      --soft-border:rgba(148,163,184,0.3);
+      --radius:12px;
+      --shadow:0 12px 28px rgba(0,0,0,0.75);
     }
     *{box-sizing:border-box}
-    body{margin:0;font-family:system-ui,-apple-system,"Noto Sans Bengali",sans-serif;background:var(--bg);color:var(--text)}
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,"Noto Sans Bengali",sans-serif;
+      background:radial-gradient(circle at top,#020c1f 0,#020617 45%,#000 100%);
+      color:var(--text);
+    }
     button{font-family:inherit;cursor:pointer}
-    a{color:inherit}
-    /* layout */
-    .app {
-      max-width:1200px;margin:10px auto;padding:8px;display:grid;grid-template-columns:1fr;gap:10px;
-    }
+    a{color:inherit;text-decoration:none}
+
+    .app{max-width:1150px;margin:8px auto 14px;padding:6px}
+
+    /* SINGLE TOP BAR (mobile-friendly) */
     .topbar{
-      display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px;border-radius:12px;
-      background:linear-gradient(90deg,var(--panel),#041029);border:1px solid var(--soft-border);box-shadow:var(--shadow);
+      position:sticky;top:0;z-index:120;
+      display:flex;align-items:center;justify-content:space-between;gap:6px;
+      padding:6px 8px;
+      border-radius:12px;
+      background:linear-gradient(90deg,rgba(15,23,42,0.98),rgba(15,23,42,0.92));
+      border:1px solid rgba(148,163,184,0.4);
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(8px);
+      transform:translateY(0);
+      transition:transform .25s ease;
     }
-    .left-controls{display:flex;align-items:center;gap:8px}
-    .hamburger{font-size:20px;padding:6px;border-radius:10px;border:1px solid var(--soft-border);background:transparent}
-    .title{font-weight:700;font-size:15px}
-    .top-actions{display:flex;gap:6px;align-items:center}
-    .btn{padding:6px 9px;border-radius:999px;border:1px solid var(--soft-border);background:transparent;color:var(--text)}
-    .btn.primary{background:linear-gradient(90deg,var(--accent),#10b981);border:none;color:#042014;font-weight:700}
-    /* container for main content and drawer */
-    .layout{display:grid;grid-template-columns:320px 1fr;gap:12px;margin-top:6px}
-    @media(max-width:980px){.layout{grid-template-columns:1fr}}
-    /* drawer (hidden by default, slides in) */
-    .drawer {
-      position:fixed;left:-340px;top:0;height:100vh;width:320px;padding:12px;background:var(--panel);z-index:120;
-      box-shadow: 8px 0 30px rgba(0,0,0,0.6);transition:left .25s ease;border-right:1px solid var(--soft-border);
+    .topbar.hidden{transform:translateY(-110%);}
+    .topbar.visible{transform:translateY(0);}
+
+    .top-left{display:flex;align-items:center;gap:8px}
+    .hamburger{
+      font-size:22px;
+      padding:4px 8px;
+      border-radius:999px;
+      border:1px solid var(--soft-border);
+      background:rgba(15,23,42,0.6);
+      color:#e5e7eb;  /* brighter */
     }
-    .drawer.open{left:6px}
-    .drawer .close-x{float:right}
-    .drawer h3{margin:4px 0 8px;font-size:14px}
-    .drawer .sura-full-list{max-height:calc(100vh - 140px);overflow:auto;padding-right:6px}
-    .sura-full-item{padding:8px;border-radius:8px;margin-bottom:6px;background:rgba(255,255,255,0.02);border:1px solid var(--soft-border);cursor:pointer}
-    .sura-full-item:hover{box-shadow:0 8px 20px rgba(0,0,0,0.6);transform:translateY(-2px)}
-    /* main header */
-    .main-header{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px;border-radius:12px;background:linear-gradient(90deg,#061122,#031026);border:1px solid var(--soft-border)}
-    .sura-title{font-size:18px;font-weight:700}
-    .sura-sub{font-size:12px;color:var(--muted)}
-    /* aya list card */
-    .card{margin-top:8px;padding:10px;border-radius:12px;background:linear-gradient(180deg,#041025,#02101f);border:1px solid var(--soft-border);box-shadow:var(--shadow)}
-    .aya-list{max-height:calc(100vh - 260px);overflow:auto;padding-right:6px}
-    .aya-row{display:grid;grid-template-columns:36px 1fr 52px;gap:8px;padding:8px;border-bottom:1px dashed rgba(255,255,255,0.03);align-items:start}
-    @media(max-width:980px){.aya-row{grid-template-columns:28px 1fr;gap:8px}}
-    .aya-check{display:flex;align-items:flex-start;justify-content:center;padding-top:4px}
-    .aya-check input{width:16px;height:16px;accent-color:var(--accent)}
+    .app-title{display:flex;flex-direction:column;}
+    .app-main-title{font-weight:700;font-size:14px}
+    .app-sub-title{font-size:11px;color:var(--muted)}
+
+    .top-right{display:flex;align-items:center;gap:6px}
+    .btn{
+      padding:5px 9px;
+      border-radius:999px;
+      border:1px solid var(--soft-border);
+      background:rgba(15,23,42,0.8);
+      color:var(--text);
+      font-size:12px;
+    }
+    .btn.primary{
+      background:linear-gradient(90deg,var(--accent),#16a34a);
+      border:none;
+      color:#022c22;
+      font-weight:700;
+    }
+
+    .card{
+      margin-top:8px;
+      padding:8px;
+      border-radius:14px;
+      background:radial-gradient(circle at top,rgba(15,23,42,0.9),rgba(15,23,42,0.95));
+      border:1px solid rgba(148,163,184,0.35);
+      box-shadow:var(--shadow);
+    }
+
+    .sura-header{
+      display:flex;justify-content:space-between;align-items:center;gap:6px;
+      margin-bottom:4px;
+    }
+    .sura-title{font-size:16px;font-weight:700;}
+    .sura-sub{font-size:11px;color:var(--muted)}
+
+    .view-chips{display:flex;gap:4px;align-items:center}
+    .chip{
+      padding:3px 7px;font-size:11px;border-radius:999px;
+      border:1px solid rgba(148,163,184,0.4);
+      background:rgba(15,23,42,0.7);
+      color:var(--muted);
+      cursor:pointer;
+    }
+    .chip.active{
+      background:linear-gradient(90deg,var(--accent),#16a34a);
+      color:#022c22;
+      border:none;
+      font-weight:600;
+    }
+
+    .aya-list{
+      max-height:calc(100vh - 170px);
+      overflow:auto;
+      padding-right:6px;
+    }
+    .aya-row{
+      display:grid;
+      grid-template-columns:1fr 40px;
+      gap:4px;
+      padding:6px 4px;
+      border-bottom:1px dashed rgba(148,163,184,0.25);
+    }
+    .aya-row:last-child{border-bottom:none;}
+
+    @media(min-width:900px){
+      .aya-row{grid-template-columns:26px 1fr 46px;}
+      .aya-check-desktop{display:flex;}
+    }
+    @media(max-width:899px){
+      .aya-check-desktop{display:none;}
+    }
+
+    .aya-check-desktop{
+      align-items:flex-start;justify-content:center;padding-top:4px;
+    }
+    .aya-check-desktop input{width:16px;height:16px;accent-color:var(--accent);}
+
     .aya-text{overflow:hidden}
-    .aya-meta{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px}
-    .ayah-num{font-size:11px;padding:4px 6px;border-radius:999px;background:rgba(255,255,255,0.03);color:var(--muted)}
+    .aya-meta{
+      display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;
+    }
+    .ayah-num{
+      font-size:10px;
+      padding:3px 6px;border-radius:999px;
+      background:rgba(15,23,42,0.9);
+      border:1px solid rgba(148,163,184,0.4);
+      color:var(--muted);
+    }
     .tags{font-size:11px;color:var(--gold)}
-    .aya-ar{font-family:"Scheherazade New","Amiri",serif;text-align:right;direction:rtl;margin-bottom:6px}
-    .word-token{display:inline-block;padding:2px 6px;margin:0 2px;border-radius:999px;cursor:pointer}
-    .word-token:hover{background:rgba(34,197,94,0.08)}
-    .aya-bn-block{margin-top:6px;padding:6px;border-radius:8px;background:rgba(255,255,255,0.02);border:1px solid var(--soft-border)}
-    .aya-bn-label{font-size:11px;color:var(--muted);margin-bottom:4px}
+
+    .aya-ar{
+      font-family:"Scheherazade New","Amiri",serif;
+      text-align:right;direction:rtl;
+      margin-bottom:4px;
+    }
+
+    /* word tokens → rounded square */
+    .word-token{
+      display:inline-block;
+      padding:3px 7px;
+      margin:2px 2px;
+      border-radius:8px;       /* square with rounded edge */
+      cursor:pointer;
+      background:rgba(15,23,42,0.75);
+      border:1px solid rgba(148,163,184,0.45);
+    }
+    .word-token:hover{background:rgba(34,197,94,0.12);}
+
+    .aya-bn-block{
+      margin-top:4px;
+      padding:5px 6px;
+      border-radius:10px;
+      background:rgba(15,23,42,0.85);
+      border:1px solid rgba(148,163,184,0.36);
+    }
+    .aya-bn-label{font-size:10px;color:var(--muted);margin-bottom:2px}
     .aya-bn-text{font-size:13px;line-height:1.6}
-    .aya-actions{display:flex;flex-direction:column;gap:6px;align-items:flex-end}
-    /* three-dot menu style */
-    .dots-btn{background:transparent;border:none;color:var(--muted);font-size:18px;padding:4px;border-radius:6px}
-    .mini-menu{position:absolute;right:10px;top:36px;min-width:160px;background:var(--panel);border:1px solid var(--soft-border);border-radius:8px;padding:6px;box-shadow:var(--shadow);display:none;z-index:140}
+
+    .aya-actions{display:flex;flex-direction:column;align-items:flex-end;gap:4px}
+    .dots-btn{
+      background:transparent;
+      border:none;
+      color:var(--muted);
+      font-size:18px;
+      padding:0 4px;
+      border-radius:6px;
+    }
+    .dots-btn:hover{background:rgba(15,23,42,0.7);}
+    .mini-menu{
+      position:absolute;
+      right:4px;top:26px;
+      min-width:160px;
+      background:var(--panel-soft);
+      border-radius:10px;
+      border:1px solid var(--soft-border);
+      padding:4px;
+      box-shadow:var(--shadow);
+      display:none;
+      z-index:140;
+    }
     .mini-menu.show{display:block}
-    .mini-menu button{display:block;width:100%;text-align:left;padding:6px;border-radius:6px;background:transparent;border:none;color:var(--text);font-size:13px}
-    .mini-menu button:hover{background:rgba(255,255,255,0.02)}
+    .mini-menu button{
+      display:block;width:100%;text-align:left;
+      padding:5px 7px;
+      font-size:12px;
+      background:transparent;border:none;color:var(--text);
+      border-radius:6px;
+    }
+    .mini-menu button:hover{background:rgba(148,163,184,0.12);}
+
     /* word popup */
-    .word-popup{position:fixed;z-index:200;min-width:220px;background:var(--panel);border:1px solid var(--soft-border);border-radius:10px;padding:8px;display:none}
-    .word-popup .arabic{font-family:"Scheherazade New","Amiri",serif;text-align:right}
-    .word-popup .meaning{margin-top:6px}
-    .word-popup .notes{margin-top:6px;font-size:12px;color:var(--muted);max-height:140px;overflow:auto}
-    /* last read compact */
-    .last-read{margin-top:8px;padding:8px;border-radius:10px;background:linear-gradient(90deg,rgba(34,197,94,0.06),rgba(56,189,248,0.04));border:1px solid var(--soft-border);display:flex;align-items:center;justify-content:space-between;gap:8px}
-    .last-read .info{font-size:13px}
-    .last-read .actions{display:flex;gap:6px}
-    /* multi bar */
-    .multi-bar{position:fixed;left:50%;transform:translateX(-50%);bottom:10px;background:linear-gradient(90deg,#021526,#04102a);border:1px solid var(--soft-border);padding:8px;border-radius:999px;display:none;gap:8px;z-index:210}
+    .word-popup{
+      position:fixed;
+      z-index:200;
+      min-width:230px;
+      max-width:320px;
+      background:var(--panel-soft);
+      border-radius:12px;
+      border:1px solid var(--soft-border);
+      padding:8px 8px 6px 8px;
+      display:none;
+      box-shadow:var(--shadow);
+    }
+    .word-popup-header{
+      display:flex;justify-content:space-between;align-items:flex-start;gap:6px;
+    }
+    .word-popup .arabic{
+      font-family:"Scheherazade New","Amiri",serif;
+      text-align:left;   /* left side for comfort */
+    }
+    .word-popup .meaning{
+      margin-top:4px;font-size:13px;
+    }
+    .word-popup .notes{
+      margin-top:4px;font-size:12px;color:var(--muted);
+      max-height:150px;overflow:auto;
+    }
+    .word-popup-close{
+      background:transparent;
+      border:none;
+      color:var(--muted);
+      font-size:16px;
+      padding:0 2px;
+      cursor:pointer;
+    }
+
+    /* drawer */
+    .drawer{
+      position:fixed;
+      left:-320px;top:0;
+      height:100vh;width:280px;
+      background:var(--panel-soft);
+      box-shadow:8px 0 28px rgba(0,0,0,0.8);
+      border-right:1px solid var(--soft-border);
+      padding:8px;
+      z-index:160;
+      transition:left .25s ease;
+    }
+    .drawer.open{left:4px;}
+    .drawer h3{margin:4px 0 6px;font-size:14px}
+    .drawer .close-x{float:right}
+    .sura-full-list{
+      max-height:calc(100vh - 120px);
+      overflow:auto;padding-right:4px;
+    }
+    .sura-full-item{
+      padding:6px;border-radius:9px;margin-bottom:4px;
+      background:rgba(15,23,42,0.9);
+      border:1px solid rgba(148,163,184,0.4);
+      cursor:pointer;
+    }
+    .sura-full-item:hover{
+      box-shadow:0 8px 20px rgba(0,0,0,0.7);
+      transform:translateY(-1px);
+    }
+
+    .last-read{
+      margin:6px 2px 4px;
+      padding:5px 7px;
+      border-radius:10px;
+      background:linear-gradient(90deg,rgba(22,163,74,0.2),rgba(56,189,248,0.15));
+      border:1px solid rgba(45,212,191,0.4);
+      display:flex;justify-content:space-between;gap:6px;align-items:center;
+      font-size:12px;
+    }
+    .last-read .actions{display:flex;gap:4px}
+
+    .multi-bar{
+      position:fixed;
+      left:50%;transform:translateX(-50%);
+      bottom:8px;
+      background:radial-gradient(circle at top,rgba(15,23,42,0.96),rgba(15,23,42,0.98));
+      border-radius:999px;
+      border:1px solid var(--soft-border);
+      padding:5px 8px;
+      display:none;
+      gap:6px;align-items:center;
+      z-index:200;
+      box-shadow:var(--shadow);
+    }
     .multi-bar.show{display:flex}
-    /* modal */
-    .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.6);display:none;align-items:center;justify-content:center;z-index:300}
+    #multiCount{font-size:11px;color:var(--muted)}
+
+    .modal-backdrop{
+      position:fixed;inset:0;
+      background:rgba(15,23,42,0.8);
+      display:none;align-items:center;justify-content:center;
+      z-index:220;
+    }
     .modal-backdrop.show{display:flex}
-    .modal{background:var(--panel);border:1px solid var(--soft-border);border-radius:10px;max-width:900px;width:96%;max-height:90vh;overflow:auto;padding:10px}
+    .modal{
+      background:var(--panel-soft);
+      border-radius:12px;
+      border:1px solid var(--soft-border);
+      max-width:900px;width:96%;
+      max-height:90vh;
+      overflow:auto;
+      padding:10px;
+      box-shadow:var(--shadow);
+    }
+    textarea{
+      background:#020617;
+      color:var(--text);
+      border-radius:10px;
+      border:1px solid var(--soft-border);
+    }
+
   </style>
 </head>
 <body>
   <div class="app">
-    <div class="topbar">
-      <div class="left-controls">
+    <!-- Top bar -->
+    <div id="topbar" class="topbar visible">
+      <div class="top-left">
         <button id="hamburger" class="hamburger" title="সূরা তালিকা">≡</button>
-        <div class="title">Qur'an • Word-by-Word</div>
+        <div class="app-title">
+          <div class="app-main-title">Qur'an • Word-by-Word</div>
+          <div id="topSuraName" class="app-sub-title">সূরা নির্বাচন করুন</div>
+        </div>
       </div>
-      <div class="top-actions">
-        <button id="openSettings" class="btn">⚙️ সেটিংস</button>
-        <button id="openPins" class="btn">📌 পিন/ফেভারিট</button>
-        <button id="openCopy" class="btn primary">📋 মাল্টি কপি</button>
+      <div class="top-right">
+        <button id="openSettings" class="btn">⚙️ Settings</button>
+        <button id="openMore" class="btn">⋮ More</button>
       </div>
     </div>
 
-    <div class="layout">
-      <!-- left column placeholder (kept for wide screens but drawer used) -->
-      <div style="display:none"></div>
-
-      <div>
-        <div class="main-header card">
-          <div>
-            <div id="currentSuraTitle" class="sura-title">সূরা নির্বাচন করুন</div>
-            <div id="currentSuraSub" class="sura-sub">সূরা তথ্য এখানে দেখবে</div>
-          </div>
-          <div>
-            <div style="display:flex;gap:8px;align-items:center">
-              <div id="viewButtons" style="display:flex;gap:6px">
-                <button class="btn" data-view="both">আরবি+বাংলা</button>
-                <button class="btn" data-view="ar">আরবি</button>
-                <button class="btn" data-view="bn">বাংলা</button>
-              </div>
-              <button id="settingsQuick" class="btn">⚙️</button>
-            </div>
-          </div>
+    <!-- main card: sura header + ayat list -->
+    <div class="card">
+      <div class="sura-header">
+        <div>
+          <div id="currentSuraTitle" class="sura-title">সূরা নির্বাচন করুন</div>
+          <div id="currentSuraSub" class="sura-sub">সূরা তথ্য এখানে দেখবে</div>
         </div>
-
-        <div class="card">
-          <div style="display:flex;justify-content:space-between;align-items:center">
-            <div style="font-weight:700">আয়াত তালিকা</div>
-            <div id="ayaCount" style="color:var(--muted)"></div>
-          </div>
-
-          <div id="ayaList" class="aya-list"></div>
-        </div>
-
-        <div id="multiBar" class="multi-bar">
-          <div id="multiCount" style="font-size:13px;color:var(--muted)">0 টি নির্বাচন</div>
-          <button id="multiCopyBtn" class="btn">📋 কপি</button>
-          <button id="multiShareBtn" class="btn primary">🔗 শেয়ার</button>
-          <button id="multiClearBtn" class="btn">✖ ক্লিয়ার</button>
+        <div class="view-chips" id="viewButtons">
+          <div class="chip" data-view="both">আরবি+বাংলা</div>
+          <div class="chip" data-view="ar">শুধু আরবি</div>
+          <div class="chip" data-view="bn">শুধু বাংলা</div>
         </div>
       </div>
+
+      <div id="lastReadContainer"></div>
+      <div id="ayaList" class="aya-list"></div>
     </div>
   </div>
 
-  <!-- DRAWER (sura list full single column) -->
-  <div id="drawer" class="drawer" aria-hidden="true">
-    <button id="drawerClose" class="close-x btn">✕</button>
+  <!-- Drawer -->
+  <div id="drawer" class="drawer">
+    <button id="drawerClose" class="btn close-x">✕</button>
     <h3>সূরার তালিকা</h3>
-    <input id="drawerSearch" placeholder="সূরা নাম / নং..." style="width:100%;padding:8px;border-radius:8px;border:1px solid var(--soft-border);margin-bottom:8px;background:transparent;color:var(--text)" />
+    <input id="drawerSearch" placeholder="সূরা নাম / নং..." style="width:100%;padding:6px;border-radius:999px;border:1px solid var(--soft-border);margin-bottom:6px;background:rgba(15,23,42,0.8);color:var(--text);font-size:12px"/>
     <div id="drawerList" class="sura-full-list"></div>
   </div>
 
-  <!-- WORD POPUP -->
+  <!-- Word popup -->
   <div id="wordPopup" class="word-popup">
-    <div class="arabic" id="wpArabic"></div>
-    <div class="meaning" id="wpMeaning"></div>
-    <div class="notes" id="wpNotes"></div>
-    <div style="text-align:right;margin-top:6px"><button id="wpClose" class="btn">Close</button></div>
+    <div class="word-popup-header">
+      <div>
+        <div id="wpArabic" class="arabic"></div>
+        <div id="wpMeaning" class="meaning"></div>
+      </div>
+      <button id="wpClose" class="word-popup-close" title="Close">✕</button>
+    </div>
+    <div id="wpNotes" class="notes"></div>
   </div>
 
-  <!-- MODALS -->
+  <!-- Modal -->
   <div id="modalBackdrop" class="modal-backdrop">
     <div id="modalWindow" class="modal"></div>
   </div>
 
-  <!-- load suras -->
-  <script src="suras.js"></script>
+  <!-- Multi-bar -->
+  <div id="multiBar" class="multi-bar">
+    <div id="multiCount">0 টি নির্বাচন</div>
+    <button id="multiCopyBtn" class="btn">📋 Copy</button>
+    <button id="multiShareBtn" class="btn primary">🔗 Share</button>
+    <button id="multiClearBtn" class="btn">✖ Clear</button>
+  </div>
 
+  <!-- sura meta -->
+  <script src="suras.js"></script>
   <script>
   (function(){
     if(!window.suras || !Array.isArray(window.suras)){
@@ -174,38 +402,44 @@
       return;
     }
 
-    // storage helper
-    const S = { get(k,def){try{const v=localStorage.getItem(k);return v?JSON.parse(v):def}catch(e){return def}}, set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){} } };
+    const S = {
+      get(k,def){try{const v=localStorage.getItem(k);return v?JSON.parse(v):def}catch(e){return def}},
+      set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+    };
 
-    // state
     const STATE = {
       curSuraIndex:0,
       curSurahData:null,
       view:S.get('q_view','both'),
       showOsmani:S.get('q_showOsmani',true),
       showTawjih:S.get('q_showTawjih',true),
-      fontArabic:S.get('q_fontArabic',20),
-      fontBangla:S.get('q_fontBangla',13),
+      fontArabic:S.get('q_fontArabic',22),
+      fontBanglaMain:S.get('q_fontBanglaMain',13),   // default translation
       fontOsmani:S.get('q_fontOsmani',12),
       fontTawjih:S.get('q_fontTawjih',12),
-      lineHeight:S.get('q_lineHeight',1.6),
+      fontGrammar:S.get('q_fontGrammar',12),
+      fontPopupArabic:S.get('q_fontPopupArabic',22),
+      lineHeight:S.get('q_lineHeight',1.7),
       pins:S.get('q_pins',[]),
       favs:S.get('q_favs',[]),
       lastRead:S.get('q_lastRead',null),
-      selected:new Set()
+      selected:new Set(),
+      multiMode:false,
+      fullscreen:S.get('q_fullscreen',false)
     };
 
-    // elements
-    const drawer=document.getElementById('drawer');
-    const hamburger=document.getElementById('hamburger');
-    const drawerClose=document.getElementById('drawerClose');
-    const drawerList=document.getElementById('drawerList');
-    const drawerSearch=document.getElementById('drawerSearch');
+    const topbar = document.getElementById('topbar');
+    const hamburger = document.getElementById('hamburger');
+    const drawer = document.getElementById('drawer');
+    const drawerClose = document.getElementById('drawerClose');
+    const drawerList = document.getElementById('drawerList');
+    const drawerSearch = document.getElementById('drawerSearch');
+    const topSuraName = document.getElementById('topSuraName');
 
     const currentSuraTitle=document.getElementById('currentSuraTitle');
     const currentSuraSub=document.getElementById('currentSuraSub');
     const ayaListEl=document.getElementById('ayaList');
-    const ayaCountEl=document.getElementById('ayaCount');
+    const lastReadContainer=document.getElementById('lastReadContainer');
 
     const wordPopup=document.getElementById('wordPopup');
     const wpArabic=document.getElementById('wpArabic');
@@ -219,370 +453,494 @@
     const multiBar=document.getElementById('multiBar');
     const multiCount=document.getElementById('multiCount');
 
-    // open/close drawer
-    hamburger.addEventListener('click',()=>{ drawer.classList.add('open'); drawer.setAttribute('aria-hidden','false'); });
-    drawerClose.addEventListener('click',()=>{ drawer.classList.remove('open'); drawer.setAttribute('aria-hidden','true'); });
+    // drawer
+    hamburger.addEventListener('click',()=>{ drawer.classList.add('open'); });
+    drawerClose.addEventListener('click',()=>{ drawer.classList.remove('open'); });
     drawerSearch.addEventListener('input',()=>renderDrawerList(drawerSearch.value));
 
-    // populate drawer list single column
     function renderDrawerList(filter=''){
       drawerList.innerHTML='';
       const ft=(filter||'').trim().toLowerCase();
       window.suras.forEach((s,idx)=>{
-        const bn = s.nameBn || s.name_bn || s.name || '';
-        const ar = s.nameAr || s.name_ar || '';
-        const id = s.number || (idx+1);
+        const bn=s.nameBn||s.name_bn||s.name||'';
+        const ar=s.nameAr||s.name_ar||'';
+        const id=s.number||idx+1;
         if(ft && !(bn.toLowerCase().includes(ft) || ar.toLowerCase().includes(ft) || String(id)===ft)) return;
         const div=document.createElement('div');
         div.className='sura-full-item';
-        div.innerHTML = '<div style="font-weight:700">'+id+'. '+bn+'</div><div style="font-size:12px;color:var(--muted)">'+ar+' • '+(s.ayahCount|| (s.ayahs?s.ayahs.length:'?'))+' আয়াত</div>';
+        div.innerHTML='<div style="font-weight:600;font-size:13px">'+id+'. '+bn+'</div><div style="font-size:11px;color:var(--muted)">'+ar+' • '+(s.ayahCount||(s.ayahs?s.ayahs.length:'?'))+' আয়াত</div>';
         div.addEventListener('click',()=>{ setCurrentSura(idx); drawer.classList.remove('open'); });
         drawerList.appendChild(div);
       });
     }
-
-    // initial drawer list
     renderDrawerList();
 
-    // set current sura (load JSON if file provided)
-    async function setCurrentSura(idx){
-      STATE.curSuraIndex = idx;
-      const meta = window.suras[idx] || {};
-      currentSuraTitle.textContent = (meta.number||idx+1)+'. '+(meta.nameBn||meta.name||'');
-      currentSuraSub.textContent = (meta.nameAr||'') + ' • ' + (meta.revelationPlace||meta.type||'') + ' • ' + ((meta.ayahCount)||(meta.ayahs?meta.ayahs.length:'?')) + ' আয়াত';
+    function keyOf(s,a){return s+':'+a}
+    function findIndexByKey(arr,key){return arr.findIndex(x=>x.key===key)}
+    function escapeHtml(s){if(!s) return '';return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 
-      // load surah JSON if file property exists
-      STATE.curSurahData = null;
+    function extractTranslationsFromAyah(ayah){
+      const main = ayah.bangla||ayah.bn||ayah.bangla_main||ayah.main_bn||ayah.translation||ayah.text_bn||ayah.meaning||'';
+      let os='',tw='';
+      if(ayah.translations && typeof ayah.translations==='object'){
+        os = ayah.translations.osmani || ayah.translations.osman || ayah.translations.osmn || '';
+        tw = ayah.translations.tawjih || ayah.translations.tawzeeh || ayah.translations.tawjihul || '';
+      }
+      os = os || ayah.bangla_osmani || ayah.bn_osmani || ayah.osmani || ayah.tafseer_osmani || '';
+      tw = tw || ayah.bangla_tawzeeh || ayah.bn_tawzeeh || ayah.tawzeeh || ayah.taozeeh || '';
+      return {main,os,tw};
+    }
+
+    async function setCurrentSura(idx){
+      STATE.curSuraIndex=idx;
+      const meta=window.suras[idx]||{};
+      currentSuraTitle.textContent=(meta.number||idx+1)+'. '+(meta.nameBn||meta.name||'');
+      currentSuraSub.textContent=(meta.nameAr||'')+' • '+(meta.revelationPlace||meta.type||'')+' • '+((meta.ayahCount)||(meta.ayahs?meta.ayahs.length:'?'))+' আয়াত';
+      topSuraName.textContent = meta.nameBn || meta.name || 'সূরা নির্বাচন করুন';
+
+      STATE.curSurahData=null;
       if(meta.file){
         try{
           const res = await fetch(meta.file);
-          if(!res.ok) throw new Error('fetch failed');
+          if(!res.ok) throw new Error('HTTP error');
           STATE.curSurahData = await res.json();
         }catch(e){
-          console.error('Failed loading surah file',e);
-          STATE.curSurahData = meta; // fallback
+          console.error('surah load failed',e);
+          STATE.curSurahData = meta;
         }
-      } else {
-        STATE.curSurahData = meta;
-      }
+      }else STATE.curSurahData = meta;
 
-      // reset selection
       STATE.selected.clear();
       renderAyaList();
+      renderLastRead();
       renderMultiBar();
     }
 
-    // utility: ayah key
-    function keyOf(s,a){ return `${s}:${a}`; }
-    function findIndexByKey(arr,key){ return arr.findIndex(x=>x.key===key); }
-
-    // detect translations in ayah robustly, returns { osmani: '', tawjih: '', mainBangla: '' }
-    function extractTranslationsFromAyah(ayah){
-      // main bangla text
-      const main = ayah.bangla || ayah.bn || ayah.bangla_main || ayah.main_bn || ayah.translation || ayah.text_bn || ayah.meaning || '';
-      // translations object maybe present
-      let os = '';
-      let tw = '';
-      if(ayah.translations && typeof ayah.translations === 'object'){
-        os = ayah.translations.osmani || ayah.translations.osman || ayah.translations.osmn || '';
-        tw = ayah.translations.tawjih || ayah.translations.tawzeeh || ayah.translations.tawjih || ayah.translations.tawjihul || ayah.translations.tawjih || ayah.translations.tawjih || '';
-      }
-      // also check common alternative keys
-      os = os || ayah.bangla_osmani || ayah.bn_osmani || ayah.osmani || ayah.tafseer_osmani || '';
-      tw = tw || ayah.bangla_tawzeeh || ayah.bn_tawzeeh || ayah.tawzeeh || ayah.taozeeh || '';
-      return { main, os, tw };
-    }
-
-    // render aya list
     function renderAyaList(){
-      ayaListEl.innerHTML = '';
-      const data = STATE.curSurahData || {};
-      const ayas = Array.isArray(data.ayahs)? data.ayahs : (data.ayas||[]);
-      ayaCountEl.textContent = (ayas.length || 0) + ' আয়াত';
+      ayaListEl.innerHTML='';
+      const data=STATE.curSurahData||{};
+      const ayas=Array.isArray(data.ayahs)?data.ayahs:(data.ayas||[]);
+      ayas.forEach((ayah,idx)=>{
+        const row=document.createElement('div');
+        row.className='aya-row';
+        row.id='aya-'+STATE.curSuraIndex+'-'+idx;
 
-      ayas.forEach((ayah, idx) => {
-        const row = document.createElement('div');
-        row.className = 'aya-row';
-        row.id = `aya-${STATE.curSuraIndex}-${idx}`;
-
-        // checkbox
-        const chkCol = document.createElement('div'); chkCol.className='aya-check';
-        const cb = document.createElement('input'); cb.type='checkbox';
-        const k = keyOf(STATE.curSuraIndex, idx);
-        cb.checked = STATE.selected.has(k);
-        cb.addEventListener('change', ()=>{ if(cb.checked) STATE.selected.add(k); else STATE.selected.delete(k); renderMultiBar(); });
+        const chkCol=document.createElement('div');
+        chkCol.className='aya-check-desktop';
+        const cb=document.createElement('input');
+        cb.type='checkbox';
+        const k=keyOf(STATE.curSuraIndex,idx);
+        cb.checked=STATE.selected.has(k);
+        cb.addEventListener('change',()=>{
+          if(cb.checked) STATE.selected.add(k); else STATE.selected.delete(k);
+          renderMultiBar();
+        });
         chkCol.appendChild(cb);
 
-        // text column
-        const textCol = document.createElement('div'); textCol.className='aya-text';
-        const metaRow = document.createElement('div'); metaRow.className='aya-meta';
-        const num = document.createElement('div'); num.className='ayah-num'; num.textContent = (STATE.curSuraIndex+1)+':'+(idx+1);
-        const tags = document.createElement('div'); tags.className='tags';
-        if(findIndexByKey(STATE.pins, k) !== -1) tags.textContent += '📌 ';
-        if(findIndexByKey(STATE.favs, k) !== -1) tags.textContent += '⭐';
+        const textCol=document.createElement('div'); textCol.className='aya-text';
+        const metaRow=document.createElement('div'); metaRow.className='aya-meta';
+        const num=document.createElement('div'); num.className='ayah-num'; num.textContent=(STATE.curSuraIndex+1)+':'+(idx+1);
+        const tags=document.createElement('div'); tags.className='tags';
+        if(findIndexByKey(STATE.pins,k)!==-1) tags.textContent+='📌 ';
+        if(findIndexByKey(STATE.favs,k)!==-1) tags.textContent+='⭐';
         metaRow.appendChild(num); metaRow.appendChild(tags);
         textCol.appendChild(metaRow);
 
-        // Arabic line (word tokens if present)
-        const arDiv = document.createElement('div'); arDiv.className='aya-ar';
-        arDiv.style.fontSize = STATE.fontArabic + 'px';
-        arDiv.style.lineHeight = STATE.lineHeight;
-        if(Array.isArray(ayah.words) && ayah.words.length){
+        const arDiv=document.createElement('div'); arDiv.className='aya-ar';
+        arDiv.style.fontSize=STATE.fontArabic+'px';
+        arDiv.style.lineHeight=STATE.lineHeight;
+        if(Array.isArray(ayah.words)&&ayah.words.length){
           ayah.words.forEach(w=>{
-            const span = document.createElement('span');
-            span.className = 'word-token';
-            span.textContent = w.text || w.word || '';
-            // store meaning/notes on dataset
-            span.dataset.meaning = w.meaningBn || w.meaning || w.meaning_bn || w.meaning_en || '';
-            span.dataset.notes = w.notes || w.note || w.grammar || ayah.grammar || '';
-            span.addEventListener('click', (ev)=> openWordPopup(ev.currentTarget, ayah));
-            span.style.fontSize = STATE.fontArabic + 'px';
+            const span=document.createElement('span');
+            span.className='word-token';
+            span.textContent=w.text||w.word||'';
+            span.dataset.meaning=w.meaningBn||w.meaning||w.meaning_bn||w.meaning_en||'';
+            span.dataset.notes=w.notes||w.note||w.grammar||ayah.grammar||'';
+            span.addEventListener('click',(ev)=>openWordPopup(ev.currentTarget,ayah));
             arDiv.appendChild(span);
           });
-        } else {
-          arDiv.textContent = ayah.arabic || ayah.ar || ayah.text_ar || '';
+        }else{
+          arDiv.textContent=ayah.arabic||ayah.ar||ayah.text_ar||'';
         }
-        if(STATE.view === 'bn') arDiv.style.display = 'none';
+        if(STATE.view==='bn') arDiv.style.display='none';
         textCol.appendChild(arDiv);
 
-        // Bangla blocks: main, osmani, tawjih, grammar
-        if(STATE.view !== 'ar'){
-          const blocks = extractTranslationsFromAyah(ayah);
+        if(STATE.view!=='ar'){
+          const blocks=extractTranslationsFromAyah(ayah);
           if(blocks.main){
-            const mainDiv = document.createElement('div');
-            mainDiv.className = 'aya-bn-block';
-            mainDiv.style.fontSize = STATE.fontBangla + 'px';
-            mainDiv.innerHTML = '<div class="aya-bn-text">'+escapeHtml(blocks.main)+'</div>';
-            textCol.appendChild(mainDiv);
-          }
-          if(blocks.os && STATE.showOsmani){
-            const b = document.createElement('div'); b.className='aya-bn-block';
-            b.innerHTML = '<div class="aya-bn-label">তাফসীরে ওসমানী</div><div class="aya-bn-text" style="font-size:'+STATE.fontOsmani+'px">'+escapeHtml(blocks.os)+'</div>';
+            const b=document.createElement('div'); b.className='aya-bn-block';
+            b.style.fontSize=STATE.fontBanglaMain+'px';
+            b.innerHTML='<div class="aya-bn-text">'+escapeHtml(blocks.main)+'</div>';
             textCol.appendChild(b);
           }
-          if(blocks.tw && STATE.showTawjih){
-            const b = document.createElement('div'); b.className='aya-bn-block';
-            b.innerHTML = '<div class="aya-bn-label">তাওযীহুল কুরআন</div><div class="aya-bn-text" style="font-size:'+STATE.fontTawjih+'px">'+escapeHtml(blocks.tw)+'</div>';
+          if(blocks.os&&STATE.showOsmani){
+            const b=document.createElement('div'); b.className='aya-bn-block';
+            b.innerHTML='<div class="aya-bn-label">তাফসীরে ওসমানী</div><div class="aya-bn-text" style="font-size:'+STATE.fontOsmani+'px">'+escapeHtml(blocks.os)+'</div>';
             textCol.appendChild(b);
           }
-          // grammar (if present at ayah level)
-          const g = ayah.grammar || ayah.grammarNotes || ayah.notes || '';
+          if(blocks.tw&&STATE.showTawjih){
+            const b=document.createElement('div'); b.className='aya-bn-block';
+            b.innerHTML='<div class="aya-bn-label">তাওযীহুল কুরআন</div><div class="aya-bn-text" style="font-size:'+STATE.fontTawjih+'px">'+escapeHtml(blocks.tw)+'</div>';
+            textCol.appendChild(b);
+          }
+          const g=ayah.grammar||ayah.grammarNotes||ayah.notes||'';
           if(g){
-            const b = document.createElement('div'); b.className='aya-bn-block';
-            b.innerHTML = '<div class="aya-bn-label">ব্যাকরণ নোট</div><div class="aya-bn-text" style="font-size:'+STATE.fontTawjih+'px">'+escapeHtml(g)+'</div>';
+            const b=document.createElement('div'); b.className='aya-bn-block';
+            b.innerHTML='<div class="aya-bn-label">ব্যাকরণ নোট</div><div class="aya-bn-text" style="font-size:'+STATE.fontGrammar+'px">'+escapeHtml(g)+'</div>';
             textCol.appendChild(b);
           }
         }
 
-        // actions column with three-dot menu
-        const actCol = document.createElement('div'); actCol.className='aya-actions';
-        // three-dot button
-        const dotsWrap = document.createElement('div'); dotsWrap.style.position='relative';
-        const dotsBtn = document.createElement('button'); dotsBtn.className='dots-btn'; dotsBtn.innerHTML = '⋯';
-        const miniMenu = document.createElement('div'); miniMenu.className='mini-menu';
-        // menu items: pin, fav, copy, share, set last
-        const miPin = document.createElement('button'); miPin.textContent = (findIndexByKey(STATE.pins,k)!==-1?'Unpin 📍':'Pin 📌');
-        const miFav = document.createElement('button'); miFav.textContent = (findIndexByKey(STATE.favs,k)!==-1?'Unfav ☆':'Favourite ⭐');
-        const miCopy = document.createElement('button'); miCopy.textContent = 'Copy 📋';
-        const miShare = document.createElement('button'); miShare.textContent = 'Share 🔗';
-        const miLast = document.createElement('button'); miLast.textContent = 'Set as Last Read ⏱';
-        miniMenu.appendChild(miPin); miniMenu.appendChild(miFav); miniMenu.appendChild(miCopy); miniMenu.appendChild(miShare); miniMenu.appendChild(miLast);
-        // hook actions
-        miPin.addEventListener('click',()=>{ togglePin(k,STATE.curSuraIndex,idx); miniMenu.classList.remove('show'); renderAyaList(); renderMiniPins(); });
-        miFav.addEventListener('click',()=>{ toggleFav(k,STATE.curSuraIndex,idx); miniMenu.classList.remove('show'); renderAyaList(); renderMiniPins(); });
-        miCopy.addEventListener('click',()=>{ navigator.clipboard.writeText(formatAyaForCopy(STATE.curSuraIndex,idx,'both')).then(()=>alert('Copied')) ; miniMenu.classList.remove('show'); });
-        miShare.addEventListener('click',()=>{ doShare(formatAyaForCopy(STATE.curSuraIndex,idx,'both')); miniMenu.classList.remove('show'); });
-        miLast.addEventListener('click',()=>{ STATE.lastRead={surahIndex:STATE.curSuraIndex,ayaIndex:idx,time:Date.now()}; S.set('q_lastRead',STATE.lastRead); renderLastRead(); miniMenu.classList.remove('show'); alert('Last read set'); });
+        textCol.addEventListener('click',(ev)=>{
+          if(ev.target.classList.contains('word-token')) return;
+          if(STATE.multiMode){
+            const key=keyOf(STATE.curSuraIndex,idx);
+            if(STATE.selected.has(key)) STATE.selected.delete(key);
+            else STATE.selected.add(key);
+            renderMultiBar();
+            cb.checked = STATE.selected.has(key);
+          }
+        });
 
-        dotsBtn.addEventListener('click',(e)=>{ e.stopPropagation(); document.querySelectorAll('.mini-menu').forEach(m=>m.classList.remove('show')); miniMenu.classList.toggle('show'); });
+        const actCol=document.createElement('div'); actCol.className='aya-actions';
+        const wrap=document.createElement('div'); wrap.style.position='relative';
+        const dotsBtn=document.createElement('button'); dotsBtn.className='dots-btn'; dotsBtn.innerHTML='⋯';
+        const menu=document.createElement('div'); menu.className='mini-menu';
+        const miPin=document.createElement('button'); miPin.textContent=(findIndexByKey(STATE.pins,k)!==-1?'Unpin 📍':'Pin 📌');
+        const miFav=document.createElement('button'); miFav.textContent=(findIndexByKey(STATE.favs,k)!==-1?'Unfav ☆':'Favourite ⭐');
+        const miCopy=document.createElement('button'); miCopy.textContent='Copy 📋';
+        const miShare=document.createElement('button'); miShare.textContent='Share 🔗';
+        const miLast=document.createElement('button'); miLast.textContent='Set Last Read ⏱';
 
-        // close mini-menus on outside click
-        document.addEventListener('click',()=>{ document.querySelectorAll('.mini-menu').forEach(m=>m.classList.remove('show')); });
+        [miPin,miFav,miCopy,miShare,miLast].forEach(btn=>menu.appendChild(btn));
+        dotsBtn.addEventListener('click',(e)=>{
+          e.stopPropagation();
+          document.querySelectorAll('.mini-menu').forEach(m=>m.classList.remove('show'));
+          menu.classList.toggle('show');
+        });
+        document.addEventListener('click',()=>{ menu.classList.remove('show'); });
 
-        dotsWrap.appendChild(dotsBtn); dotsWrap.appendChild(miniMenu);
-        actCol.appendChild(dotsWrap);
+        miPin.addEventListener('click',()=>{
+          togglePin(k,STATE.curSuraIndex,idx); menu.classList.remove('show'); renderAyaList();
+        });
+        miFav.addEventListener('click',()=>{
+          toggleFav(k,STATE.curSuraIndex,idx); menu.classList.remove('show'); renderAyaList();
+        });
+        miCopy.addEventListener('click',()=>{
+          navigator.clipboard.writeText(formatAyaForCopy(STATE.curSuraIndex,idx,'both')).then(()=>alert('Copied'));
+          menu.classList.remove('show');
+        });
+        miShare.addEventListener('click',()=>{
+          doShare(formatAyaForCopy(STATE.curSuraIndex,idx,'both'));
+          menu.classList.remove('show');
+        });
+        miLast.addEventListener('click',()=>{
+          STATE.lastRead={surahIndex:STATE.curSuraIndex,ayaIndex:idx,time:Date.now()};
+          S.set('q_lastRead',STATE.lastRead);
+          renderLastRead();
+          alert('Last read set');
+          menu.classList.remove('show');
+        });
 
-        // append columns to row
-        row.appendChild(chkCol); row.appendChild(textCol); row.appendChild(actCol);
+        wrap.appendChild(dotsBtn); wrap.appendChild(menu);
+        actCol.appendChild(wrap);
+
+        row.appendChild(chkCol);
+        row.appendChild(textCol);
+        row.appendChild(actCol);
         ayaListEl.appendChild(row);
       });
-
-      renderLastRead();
-      renderMiniPins();
-      renderMultiBar();
     }
 
-    // format functions
     function formatAyaForCopy(sIdx,aIdx,mode){
-      const sura = window.suras[sIdx] || {};
-      const data = (STATE.curSurahData && (STATE.curSuraIndex===sIdx)) ? (STATE.curSurahData.ayahs||STATE.curSurahData.ayas||[]) : (sura.ayahs||sura.ayas||[]);
-      const aya = (data[aIdx]||{});
-      const ar = aya.arabic || aya.ar || aya.text_ar || '';
-      const blocks = extractTranslationsFromAyah(aya);
-      const bn = blocks.main || '';
-      const head = '['+(sura.nameBn||sura.name||'')+' '+(sIdx+1)+':'+(aIdx+1)+']';
-      if(mode==='ar') return ar + '\n' + head;
-      if(mode==='bn') return bn + '\n' + head;
-      return (ar ? ar + '\n' : '') + (bn ? bn + '\n' : '') + head;
+      const sura=window.suras[sIdx]||{};
+      const data=(STATE.curSurahData && STATE.curSuraIndex===sIdx)?(STATE.curSurahData.ayahs||STATE.curSurahData.ayas||[]):(sura.ayahs||sura.ayas||[]);
+      const aya=data[aIdx]||{};
+      const ar=aya.arabic||aya.ar||aya.text_ar||'';
+      const blocks=extractTranslationsFromAyah(aya);
+      const bn=blocks.main||'';
+      const head='['+(sura.nameBn||sura.name||'')+' '+(sIdx+1)+':'+(aIdx+1)+']';
+      if(mode==='ar') return ar+'\n'+head;
+      if(mode==='bn') return bn+'\n'+head;
+      return (ar?ar+'\n':'')+(bn?bn+'\n':'')+head;
     }
     function formatMultipleSelection(mode){
       return Array.from(STATE.selected).map(k=>{
-        const [s,a] = k.split(':').map(Number);
+        const [s,a]=k.split(':').map(Number);
         return formatAyaForCopy(s,a,mode);
       }).join('\n\n');
     }
 
-    // sharing/copy
     function doShare(text){
-      if(navigator.share) navigator.share({text}).catch(()=>{ navigator.clipboard.writeText(text).then(()=>alert('Copied to clipboard')); });
+      if(navigator.share) navigator.share({text}).catch(()=>{navigator.clipboard.writeText(text)});
       else navigator.clipboard.writeText(text).then(()=>alert('Copied to clipboard'));
     }
 
-    // pin/fav toggles
     function togglePin(key,sIdx,aIdx){
-      const i = findIndexByKey(STATE.pins,key);
+      const i=findIndexByKey(STATE.pins,key);
       if(i>=0) STATE.pins.splice(i,1);
       else STATE.pins.unshift({key,surahIndex:sIdx,ayahIndex:aIdx,note:'',time:Date.now()});
       S.set('q_pins',STATE.pins);
     }
     function toggleFav(key,sIdx,aIdx){
-      const i = findIndexByKey(STATE.favs,key);
+      const i=findIndexByKey(STATE.favs,key);
       if(i>=0) STATE.favs.splice(i,1);
       else STATE.favs.unshift({key,surahIndex:sIdx,ayahIndex:aIdx,note:'',time:Date.now()});
       S.set('q_favs',STATE.favs);
     }
 
-    // render mini pins list (top-right small list or side)
-    function renderMiniPins(){
-      // simple quick list in console or could add to UI — for now update drawer header count
-      // (we will show in pins modal)
-    }
-
-    // Last read render (compact)
     function renderLastRead(){
-      // find or update a compact element above aya list — implementing minimal in-page small banner
-      // We'll put a small banner at top of aya list if lastRead exists
-      const existing = document.querySelector('.last-read');
-      if(existing) existing.remove();
+      lastReadContainer.innerHTML='';
       if(!STATE.lastRead) return;
-      const lr = STATE.lastRead;
-      const sura = window.suras[lr.surahIndex] || {};
-      const el = document.createElement('div'); el.className='last-read';
-      el.innerHTML = '<div class="info"><strong>শেষ পড়া:</strong> '+ (sura.nameBn||sura.name||'') +' — '+ (lr.surahIndex+1)+':'+(lr.ayaIndex+1) +'</div><div class="actions"><button id="goLastBtn" class="btn primary">⏱ Continue</button><button id="clearLastBtn" class="btn">Reset</button></div>';
-      const parentCard = document.querySelector('.card');
-      if(parentCard) parentCard.parentNode.insertBefore(el, parentCard);
-      document.getElementById('goLastBtn').addEventListener('click', ()=>{
+      const lr=STATE.lastRead;
+      const sura=window.suras[lr.surahIndex]||{};
+      const el=document.createElement('div');
+      el.className='last-read';
+      el.innerHTML='<div><strong>শেষ পড়া:</strong> '+(sura.nameBn||sura.name||'')+' '+(lr.surahIndex+1)+':'+(lr.ayaIndex+1)+'</div><div class="actions"><button id="goLast" class="btn primary">⏱ Continue</button><button id="clrLast" class="btn">Reset</button></div>';
+      lastReadContainer.appendChild(el);
+      document.getElementById('goLast').onclick=()=>{
         setCurrentSura(lr.surahIndex);
-        setTimeout(()=>{ const node = document.getElementById('aya-'+lr.surahIndex+'-'+lr.ayaIndex); if(node) node.scrollIntoView({behavior:'smooth',block:'center'}); },150);
-      });
-      document.getElementById('clearLastBtn').addEventListener('click', ()=>{
-        STATE.lastRead = null; S.set('q_lastRead',null); el.remove();
-      });
-    }
-
-    // multiBar handling
-    function renderMultiBar(){
-      const c = STATE.selected.size;
-      if(c>0){ multiCount.textContent = c + ' টি নির্বাচন'; multiBar.classList.add('show'); }
-      else multiBar.classList.remove('show');
-    }
-    document.getElementById('multiCopyBtn').addEventListener('click', ()=> {
-      if(STATE.selected.size===0) return alert('কোনো আয়াত নির্বাচন করা হয়নি');
-      const txt = formatMultipleSelection('both');
-      openCopyModal(txt);
-    });
-    document.getElementById('multiShareBtn').addEventListener('click', ()=> {
-      if(STATE.selected.size===0) return alert('কোনো আয়াত নির্বাচন করা হয়নি');
-      const txt = formatMultipleSelection('both'); doShare(txt);
-    });
-    document.getElementById('multiClearBtn').addEventListener('click', ()=> { STATE.selected.clear(); renderAyaList(); renderMultiBar(); });
-
-    // open copy modal
-    function openCopyModal(prefill){
-      modalWindow.innerHTML = '<h3>কপি / শেয়ার</h3><div style="margin-top:8px"><label><input type="radio" name="fmt" value="both" checked> আরবি+বাংলা</label> &nbsp; <label><input type="radio" name="fmt" value="ar"> শুধু আরবি</label> &nbsp; <label><input type="radio" name="fmt" value="bn"> শুধু বাংলা</label></div><textarea id="copyPreview" style="width:100%;height:160px;margin-top:8px;padding:8px">'+(prefill||'')+'</textarea><div style="margin-top:8px;display:flex;gap:8px;justify-content:flex-end"><button id="copyDo" class="btn primary">Copy</button><button id="shareDo" class="btn">Share</button><button id="copyClose" class="btn">Close</button></div>';
-      modalBackdrop.classList.add('show');
-      document.getElementById('copyDo').onclick = ()=>{ navigator.clipboard.writeText(document.getElementById('copyPreview').value||'').then(()=>alert('Copied')); };
-      document.getElementById('shareDo').onclick = ()=>{ doShare(document.getElementById('copyPreview').value||''); };
-      document.getElementById('copyClose').onclick = ()=>{ modalBackdrop.classList.remove('show'); };
-    }
-
-    // settings modal (quick)
-    document.getElementById('openSettings').addEventListener('click', openSettingsModal);
-    function openSettingsModal(){
-      modalWindow.innerHTML = '<h3>Settings</h3><div style="margin-top:8px"><label><input type="checkbox" id="cOsmani"> Show তাফসীরে ওসমানী</label><br><label><input type="checkbox" id="cTawjih"> Show তাওযীহুল কুরআন</label></div><div style="margin-top:8px"><label>Arabic font <input id="fArabic" type="range" min="14" max="34" value="'+STATE.fontArabic+'"></label><div style="font-size:12px;color:var(--muted)">Bangla font <input id="fBangla" type="range" min="11" max="20" value="'+STATE.fontBangla+'"></div></div><div style="margin-top:8px;display:flex;justify-content:flex-end;gap:8px"><button id="saveSt" class="btn primary">Save</button><button id="closeSt" class="btn">Close</button></div>';
-      modalBackdrop.classList.add('show');
-      document.getElementById('cOsmani').checked = STATE.showOsmani;
-      document.getElementById('cTawjih').checked = STATE.showTawjih;
-      document.getElementById('closeSt').onclick = ()=> modalBackdrop.classList.remove('show');
-      document.getElementById('saveSt').onclick = ()=>{
-        STATE.showOsmani = document.getElementById('cOsmani').checked;
-        STATE.showTawjih = document.getElementById('cTawjih').checked;
-        STATE.fontArabic = +document.getElementById('fArabic').value;
-        STATE.fontBangla = +document.getElementById('fBangla').value;
-        S.set('q_showOsmani',STATE.showOsmani); S.set('q_showTawjih',STATE.showTawjih);
-        S.set('q_fontArabic',STATE.fontArabic); S.set('q_fontBangla',STATE.fontBangla);
-        modalBackdrop.classList.remove('show'); renderAyaList();
+        setTimeout(()=>{
+          const node=document.getElementById('aya-'+lr.surahIndex+'-'+lr.ayaIndex);
+          if(node) node.scrollIntoView({behavior:'smooth',block:'center'});
+        },200);
+      };
+      document.getElementById('clrLast').onclick=()=>{
+        STATE.lastRead=null; S.set('q_lastRead',null); renderLastRead();
       };
     }
 
-    // pins modal
-    document.getElementById('openPins').addEventListener('click', ()=> {
-      // build simple list of pins and favs with go/copy/delete
-      let body = '<h3>Pins & Favourites</h3><div style="margin-top:8px">';
-      const combo = [...STATE.pins.map(p=>({kind:'pin',...p})), ...STATE.favs.map(f=>({kind:'fav',...f}))];
-      if(combo.length===0) body += '<div style="color:var(--muted)">No pins or favourites</div>';
-      combo.forEach(it=>{
-        const s = window.suras[it.surahIndex]||{};
-        const label = (it.kind==='pin'?'📌 ':'⭐ ')+ (s.nameBn||s.name||'') + ' ' + (it.surahIndex+1)+':'+(it.ayahIndex+1);
-        body += '<div style="display:flex;justify-content:space-between;align-items:center;padding:6px;border-bottom:1px solid var(--soft-border)"><div><strong>'+label+'</strong><div style="font-size:12px;color:var(--muted)">'+(it.note||'')+'</div></div><div style="display:flex;gap:6px"><button data-go class="btn">Go</button><button data-copy class="btn">📋</button><button data-del class="btn">🗑</button></div></div>';
-      });
-      body += '</div><div style="margin-top:8px;display:flex;justify-content:flex-end"><button id="closePinsModal" class="btn">Close</button></div>';
-      modalWindow.innerHTML = body;
+    function renderMultiBar(){
+      const c=STATE.selected.size;
+      if(c>0){multiCount.textContent=c+' টি নির্বাচন';multiBar.classList.add('show');}
+      else multiBar.classList.remove('show');
+    }
+
+    document.getElementById('multiCopyBtn').onclick=()=>{
+      if(STATE.selected.size===0) return alert('কোনো আয়াত নির্বাচন করা হয়নি');
+      const txt=formatMultipleSelection('both');
+      openCopyModal(txt);
+    };
+    document.getElementById('multiShareBtn').onclick=()=>{
+      if(STATE.selected.size===0) return alert('কোনো আয়াত নির্বাচন করা হয়নি');
+      doShare(formatMultipleSelection('both'));
+    };
+    document.getElementById('multiClearBtn').onclick=()=>{
+      STATE.selected.clear(); renderMultiBar(); renderAyaList();
+    };
+
+    function openCopyModal(prefill){
+      modalWindow.innerHTML='<h3>Copy / Share</h3>'+
+        '<div style="margin-top:6px;font-size:12px">'+
+        '<label><input type="radio" name="fmt" value="both" checked> আরবি+বাংলা</label> &nbsp;'+
+        '<label><input type="radio" name="fmt" value="ar"> শুধু আরবি</label> &nbsp;'+
+        '<label><input type="radio" name="fmt" value="bn"> শুধু বাংলা</label>'+
+        '</div>'+
+        '<textarea id="copyPreview" style="width:100%;height:160px;margin-top:6px;padding:6px">'+(prefill||'')+'</textarea>'+
+        '<div style="margin-top:6px;display:flex;justify-content:flex-end;gap:6px">'+
+        '<button id="copyDo" class="btn primary">Copy</button>'+
+        '<button id="shareDo" class="btn">Share</button>'+
+        '<button id="copyClose" class="btn">Close</button>'+
+        '</div>';
       modalBackdrop.classList.add('show');
-      modalWindow.querySelectorAll('[data-go]').forEach((b,i)=>b.addEventListener('click',()=>{ const it = combo[i]; modalBackdrop.classList.remove('show'); setCurrentSura(it.surahIndex); setTimeout(()=>{ const el=document.getElementById('aya-'+it.surahIndex+'-'+it.ayahIndex); if(el) el.scrollIntoView({behavior:'smooth',block:'center'}); },150); }));
-      modalWindow.querySelectorAll('[data-copy]').forEach((b,i)=>b.addEventListener('click',()=>{ const it = combo[i]; navigator.clipboard.writeText(formatAyaForCopy(it.surahIndex,it.ayahIndex,'both')).then(()=>alert('Copied')); }));
-      modalWindow.querySelectorAll('[data-del]').forEach((b,i)=>b.addEventListener('click',()=>{ const it = combo[i]; if(confirm('Delete?')){ if(it.kind==='pin'){ STATE.pins = STATE.pins.filter(x=>x.key!==it.key); S.set('q_pins',STATE.pins);} else { STATE.favs = STATE.favs.filter(x=>x.key!==it.key); S.set('q_favs',STATE.favs);} renderAyaList(); modalBackdrop.classList.remove('show'); } }));
-      document.getElementById('closePinsModal').onclick = ()=> modalBackdrop.classList.remove('show');
+      document.getElementById('copyDo').onclick=()=>{navigator.clipboard.writeText(document.getElementById('copyPreview').value||'').then(()=>alert('Copied'));};
+      document.getElementById('shareDo').onclick=()=>{doShare(document.getElementById('copyPreview').value||'');};
+      document.getElementById('copyClose').onclick=()=>{modalBackdrop.classList.remove('show');};
+    }
+
+    // Settings modal
+    document.getElementById('openSettings').addEventListener('click',()=>{
+      modalWindow.innerHTML=
+        '<h3>Settings</h3>'+
+        '<div style="margin-top:6px;font-size:13px">'+
+          '<label><input type="checkbox" id="cOsmani"> তাফসীরে ওসমানী দেখাও</label><br>'+
+          '<label><input type="checkbox" id="cTawjih"> তাওযীহুল কুরআন দেখাও</label><br>'+
+          '<label><input type="checkbox" id="cFull"> Full screen reading (top bar auto hide)</label>'+
+        '</div>'+
+        '<div style="margin-top:8px;font-size:12px;line-height:1.8">'+
+          '<div>Arabic font size (<span id="nArabic">'+STATE.fontArabic+'</span>)<br><input id="fArabic" type="range" min="18" max="32" value="'+STATE.fontArabic+'"></div>'+
+          '<div style="margin-top:4px;">Default বাংলা অনুবাদ (<span id="nBanglaMain">'+STATE.fontBanglaMain+'</span>)<br><input id="fBanglaMain" type="range" min="11" max="22" value="'+STATE.fontBanglaMain+'"></div>'+
+          '<div style="margin-top:4px;">তাফসীরে ওসমানী (<span id="nOsmani">'+STATE.fontOsmani+'</span>)<br><input id="fOsmani" type="range" min="11" max="22" value="'+STATE.fontOsmani+'"></div>'+
+          '<div style="margin-top:4px;">তাওযীহুল কুরআন (<span id="nTawjih">'+STATE.fontTawjih+'</span>)<br><input id="fTawjih" type="range" min="11" max="22" value="'+STATE.fontTawjih+'"></div>'+
+          '<div style="margin-top:4px;">Grammar notes (<span id="nGrammar">'+STATE.fontGrammar+'</span>)<br><input id="fGrammar" type="range" min="11" max="22" value="'+STATE.fontGrammar+'"></div>'+
+          '<div style="margin-top:4px;">Word popup Arabic (<span id="nPopupAr">'+STATE.fontPopupArabic+'</span>)<br><input id="fPopupAr" type="range" min="18" max="32" value="'+STATE.fontPopupArabic+'"></div>'+
+        '</div>'+
+        '<div style="margin-top:8px;display:flex;justify-content:flex-end;gap:6px">'+
+          '<button id="saveSt" class="btn primary">Save</button>'+
+          '<button id="closeSt" class="btn">Close</button>'+
+        '</div>';
+      modalBackdrop.classList.add('show');
+
+      document.getElementById('cOsmani').checked=STATE.showOsmani;
+      document.getElementById('cTawjih').checked=STATE.showTawjih;
+      document.getElementById('cFull').checked=STATE.fullscreen;
+
+      const bindRange=(idRange,idNum,prop)=>{
+        const r=document.getElementById(idRange);
+        const n=document.getElementById(idNum);
+        r.addEventListener('input',()=>{n.textContent=r.value;});
+      };
+      bindRange('fArabic','nArabic');
+      bindRange('fBanglaMain','nBanglaMain');
+      bindRange('fOsmani','nOsmani');
+      bindRange('fTawjih','nTawjih');
+      bindRange('fGrammar','nGrammar');
+      bindRange('fPopupAr','nPopupAr');
+
+      document.getElementById('closeSt').onclick=()=>modalBackdrop.classList.remove('show');
+      document.getElementById('saveSt').onclick=()=>{
+        STATE.showOsmani=document.getElementById('cOsmani').checked;
+        STATE.showTawjih=document.getElementById('cTawjih').checked;
+        STATE.fullscreen=document.getElementById('cFull').checked;
+
+        STATE.fontArabic=+document.getElementById('fArabic').value;
+        STATE.fontBanglaMain=+document.getElementById('fBanglaMain').value;
+        STATE.fontOsmani=+document.getElementById('fOsmani').value;
+        STATE.fontTawjih=+document.getElementById('fTawjih').value;
+        STATE.fontGrammar=+document.getElementById('fGrammar').value;
+        STATE.fontPopupArabic=+document.getElementById('fPopupAr').value;
+
+        S.set('q_showOsmani',STATE.showOsmani);
+        S.set('q_showTawjih',STATE.showTawjih);
+        S.set('q_fontArabic',STATE.fontArabic);
+        S.set('q_fontBanglaMain',STATE.fontBanglaMain);
+        S.set('q_fontOsmani',STATE.fontOsmani);
+        S.set('q_fontTawjih',STATE.fontTawjih);
+        S.set('q_fontGrammar',STATE.fontGrammar);
+        S.set('q_fontPopupArabic',STATE.fontPopupArabic);
+        S.set('q_fullscreen',STATE.fullscreen);
+
+        modalBackdrop.classList.remove('show');
+        applyFullscreenMode();
+        renderAyaList();
+      };
     });
+
+    // More menu
+    document.getElementById('openMore').addEventListener('click',()=>{
+      modalWindow.innerHTML=
+        '<h3>More</h3>'+
+        '<div style="margin-top:6px;font-size:13px">'+
+          '<p><label><input type="checkbox" id="cMultiMode"> Multi-select mode (tap ayah to select)</label></p>'+
+          '<button id="openPins" class="btn">📌 Pins & Favourites</button>'+
+        '</div>'+
+        '<div style="margin-top:8px;display:flex;justify-content:flex-end"><button id="closeMore" class="btn">Close</button></div>';
+      modalBackdrop.classList.add('show');
+      document.getElementById('cMultiMode').checked=STATE.multiMode;
+      document.getElementById('cMultiMode').onchange=(e)=>{
+        STATE.multiMode=e.target.checked;
+        if(!STATE.multiMode){STATE.selected.clear();renderMultiBar();renderAyaList();}
+      };
+      document.getElementById('openPins').onclick=()=>{openPinsModal();};
+      document.getElementById('closeMore').onclick=()=>modalBackdrop.classList.remove('show');
+    });
+
+    function openPinsModal(){
+      let html='<h3>Pins & Favourites</h3><div style="margin-top:6px">';
+      const combo=[...STATE.pins.map(p=>({kind:'pin',...p})),...STATE.favs.map(f=>({kind:'fav',...f}))];
+      if(combo.length===0) html+='<div style="color:var(--muted);font-size:12px">No pins or favourites.</div>';
+      combo.forEach((it,i)=>{
+        const s=window.suras[it.surahIndex]||{};
+        const label=(it.kind==='pin'?'📌 ':'⭐ ')+(s.nameBn||s.name||'')+' '+(it.surahIndex+1)+':'+(it.ayahIndex+1);
+        html+='<div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid rgba(148,163,184,0.3)">'+
+          '<div style="font-size:12px"><strong>'+label+'</strong></div>'+
+          '<div style="display:flex;gap:4px">'+
+          '<button data-go="'+i+'" class="btn">Go</button>'+
+          '<button data-copy="'+i+'" class="btn">📋</button>'+
+          '<button data-del="'+i+'" class="btn">🗑</button>'+
+          '</div></div>';
+      });
+      html+='</div><div style="margin-top:6px;display:flex;justify-content:flex-end"><button id="closePinsModal" class="btn">Close</button></div>';
+      modalWindow.innerHTML=html;
+      modalWindow.querySelectorAll('[data-go]').forEach(btn=>{
+        btn.onclick=()=>{
+          const i=+btn.dataset.go;const it=combo[i];
+          modalBackdrop.classList.remove('show');
+          setCurrentSura(it.surahIndex);
+          setTimeout(()=>{
+            const el=document.getElementById('aya-'+it.surahIndex+'-'+it.ayahIndex);
+            if(el) el.scrollIntoView({behavior:'smooth',block:'center'});
+          },200);
+        };
+      });
+      modalWindow.querySelectorAll('[data-copy]').forEach(btn=>{
+        btn.onclick=()=>{
+          const i=+btn.dataset.copy;const it=combo[i];
+          navigator.clipboard.writeText(formatAyaForCopy(it.surahIndex,it.ayahIndex,'both')).then(()=>alert('Copied'));
+        };
+      });
+      modalWindow.querySelectorAll('[data-del]').forEach(btn=>{
+        btn.onclick=()=>{
+          const i=+btn.dataset.del;const it=combo[i];
+          if(confirm('Delete?')){
+            if(it.kind==='pin') STATE.pins=STATE.pins.filter(x=>x.key!==it.key);
+            else STATE.favs=STATE.favs.filter(x=>x.key!==it.key);
+            S.set('q_pins',STATE.pins); S.set('q_favs',STATE.favs);
+            openPinsModal();
+          }
+        };
+      });
+      document.getElementById('closePinsModal').onclick=()=>modalBackdrop.classList.remove('show');
+    }
 
     // word popup
-    function openWordPopup(target, ayah){
-      const meaning = target.dataset.meaning || target.textContent || '';
-      const notes = target.dataset.notes || ayah.grammar || ayah.notes || '';
-      wpArabic.textContent = target.textContent || '';
-      wpMeaning.textContent = meaning;
-      wpNotes.textContent = notes;
-      // position
-      const rect = target.getBoundingClientRect();
-      let top = rect.bottom + window.scrollY + 6;
-      let left = rect.left + window.scrollX - 20;
-      if(left + 300 > window.innerWidth) left = window.innerWidth - 320;
-      if(left < 6) left = 6;
-      wordPopup.style.top = top + 'px'; wordPopup.style.left = left + 'px';
-      wordPopup.style.display = 'block';
+    function openWordPopup(target,ayah){
+      const meaning = target.dataset.meaning || '';
+      const notes   = target.dataset.notes || ayah.grammar || ayah.notes || '';
+      wpArabic.textContent=target.textContent||'';
+      wpMeaning.textContent=meaning;
+      wpNotes.textContent=notes;
+      wpArabic.style.fontSize=STATE.fontPopupArabic+'px';
+
+      const rect=target.getBoundingClientRect();
+      let top=rect.bottom+window.scrollY+6;
+      let left=rect.left+window.scrollX-20;
+      if(left+320>window.innerWidth) left=window.innerWidth-330;
+      if(left<6) left=6;
+      wordPopup.style.top=top+'px';
+      wordPopup.style.left=left+'px';
+      wordPopup.style.display='block';
     }
-    wpClose.addEventListener('click', ()=> wordPopup.style.display='none');
+    wpClose.onclick=()=>{wordPopup.style.display='none';};
 
-    // close modal on backdrop click
-    modalBackdrop.addEventListener('click',(ev)=>{ if(ev.target===modalBackdrop) modalBackdrop.classList.remove('show'); });
+    modalBackdrop.addEventListener('click',(e)=>{if(e.target===modalBackdrop) modalBackdrop.classList.remove('show');});
 
-    // helper escape
-    function escapeHtml(s){ if(!s) return ''; return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-
-    // init: set first sura
-    setCurrentSura(0);
-
-    // helper: when page loads render full drawer list for quick nav
-    renderDrawerList();
-
-    // small improvements: view toggle
-    document.querySelectorAll('#viewButtons button').forEach(b=>{
-      if(b.dataset.view === STATE.view) b.classList.add('primary');
-      b.addEventListener('click', ()=>{ document.querySelectorAll('#viewButtons button').forEach(x=>x.classList.remove('primary')); b.classList.add('primary'); STATE.view = b.dataset.view; S.set('q_view',STATE.view); renderAyaList(); });
+    // view
+    document.querySelectorAll('#viewButtons .chip').forEach(ch=>{
+      if(ch.dataset.view===STATE.view) ch.classList.add('active');
+      ch.addEventListener('click',()=>{
+        document.querySelectorAll('#viewButtons .chip').forEach(x=>x.classList.remove('active'));
+        ch.classList.add('active');
+        STATE.view=ch.dataset.view;
+        S.set('q_view',STATE.view);
+        renderAyaList();
+      });
     });
 
-    // expose for debugging
-    window.QAPP = { STATE, setCurrentSura };
+    // fullscreen mode
+    function applyFullscreenMode(){
+      if(!STATE.fullscreen){
+        topbar.classList.add('visible');
+        topbar.classList.remove('hidden');
+        document.body.onclick=null;
+      }else{
+        topbar.classList.add('visible');
+        topbar.classList.remove('hidden');
+        document.body.onclick=(e)=>{
+          if(e.target.closest && (e.target.closest('.topbar') || e.target.closest('.drawer') || e.target.closest('.modal') || e.target.closest('.word-popup'))) return;
+          if(topbar.classList.contains('hidden')){
+            topbar.classList.remove('hidden');topbar.classList.add('visible');
+          }else{
+            topbar.classList.remove('visible');topbar.classList.add('hidden');
+          }
+        };
+      }
+    }
+    applyFullscreenMode();
+
+    // initial
+    setCurrentSura(0);
+    window.QAPP={STATE,setCurrentSura};
   })();
   </script>
 </body>
