@@ -18,7 +18,7 @@
       --danger:#fb7185;
       --gold:#fbbf24;
       --radius:14px;
-      --shadow-soft:0 18px 40px rgba(0,0,0,0.65);
+      --shadow-soft:0 16px 32px rgba(0,0,0,0.6);
     }
     body.theme-dark{
       --bg:#05090f;
@@ -50,61 +50,61 @@
       background:var(--bg);
       color:var(--text);
     }
-    a{color:inherit}
     button{font-family:inherit;cursor:pointer}
+    a{color:inherit}
 
     .container{
       max-width:1140px;
-      margin:10px auto;
-      padding:8px;
+      margin:8px auto;
+      padding:6px;
       display:grid;
-      grid-template-columns:310px 1fr;
-      gap:12px;
+      grid-template-columns:280px 1fr;
+      gap:10px;
       align-items:start;
     }
 
     .sidebar{
       background:var(--bg-panel);
       border-radius:12px;
-      padding:10px;
+      padding:8px;
       border:1px solid var(--border-soft);
       box-shadow:var(--shadow-soft);
-      height:calc(100vh - 40px);
+      height:calc(100vh - 32px);
       overflow:auto;
     }
     .logo{
       display:flex;
       gap:8px;
       align-items:center;
-      margin-bottom:8px;
+      margin-bottom:6px;
     }
     .logo .dot{
-      width:40px;height:40px;
+      width:36px;height:36px;
       border-radius:12px;
       background:radial-gradient(circle at 30% 20%,#bbf7d0 0,#22c55e 35%,#16a34a 70%,#0f766e 100%);
       display:flex;align-items:center;justify-content:center;
       font-weight:800;color:#022c22;
-      box-shadow:0 6px 18px rgba(22,163,74,0.8);
+      box-shadow:0 5px 14px rgba(22,163,74,0.8);
     }
-    .logo .title{font-weight:700;font-size:15px}
-    .logo-sub{font-size:12px;color:var(--muted)}
+    .logo .title{font-weight:700;font-size:14px}
+    .logo-sub{font-size:11px;color:var(--muted)}
     .panel-title{
       font-size:11px;
       color:var(--muted);
       margin-bottom:4px;
-      letter-spacing:0.05em;
+      letter-spacing:0.04em;
       text-transform:uppercase;
     }
 
     .search{position:relative;margin-bottom:6px}
     .search input{
       width:100%;
-      padding:6px 9px;
+      padding:5px 9px;
       border-radius:999px;
       border:1px solid var(--border-soft);
-      background:rgba(15,23,42,0.8);
+      background:rgba(15,23,42,0.9);
       color:var(--text);
-      font-size:12px;
+      font-size:11px;
     }
     body.theme-sepia .search input{
       background:#fefce8;
@@ -115,19 +115,19 @@
     .sura-list{
       display:grid;
       grid-template-columns:1fr 1fr;
-      gap:6px;
+      gap:5px;
     }
     .sura-item{
       padding:5px 6px;
-      border-radius:10px;
+      border-radius:9px;
       display:flex;
       flex-direction:column;
       gap:1px;
-      background:linear-gradient(135deg,rgba(15,23,42,0.95),rgba(15,23,42,0.85));
+      background:linear-gradient(135deg,rgba(15,23,42,0.96),rgba(15,23,42,0.9));
       border:1px solid var(--border-soft);
       cursor:pointer;
       color:var(--text-soft);
-      box-shadow:0 4px 12px rgba(15,23,42,0.7);
+      box-shadow:0 3px 10px rgba(15,23,42,0.7);
       transition:transform 0.1s,box-shadow 0.1s,border-color 0.1s,background 0.1s;
     }
     body.theme-sepia .sura-item{
@@ -138,40 +138,41 @@
     .sura-item:hover{
       transform:translateY(-1px);
       border-color:var(--accent);
-      box-shadow:0 6px 18px rgba(34,197,94,0.4);
+      box-shadow:0 5px 14px rgba(34,197,94,0.5);
     }
     .sura-item.active{
       background:linear-gradient(135deg,#22c55e,#0f172a);
       border-color:#bbf7d0;
       color:#ecfdf5;
-      box-shadow:0 7px 22px rgba(34,197,94,0.6);
+      box-shadow:0 6px 16px rgba(34,197,94,0.6);
     }
-    .sura-item .bn{font-weight:600;font-size:12px}
-    .sura-item .meta{font-size:11px;color:#cbd5f5}
+    .sura-item .bn{font-weight:600;font-size:11px}
+    .sura-item .meta{font-size:10px;color:#cbd5f5}
     .sura-item .ar{
       font-family:"Scheherazade New","Amiri",serif;
-      font-size:15px;
+      font-size:13px;
       text-align:right;
       color:#f9fafb;
     }
 
     .last-read-box{
       margin-top:6px;
-      padding:7px 8px;
-      border-radius:10px;
-      background:linear-gradient(120deg,rgba(34,197,94,0.1),rgba(56,189,248,0.08));
+      padding:6px 7px;
+      border-radius:9px;
+      background:linear-gradient(120deg,rgba(34,197,94,0.12),rgba(56,189,248,0.08));
       border:1px solid var(--border-soft);
       color:var(--text-soft);
-      font-size:12px;
+      font-size:11px;
     }
-    .mini-list{margin-top:8px;display:flex;flex-direction:column;gap:5px}
+
+    .mini-list{margin-top:6px;display:flex;flex-direction:column;gap:4px}
     .mini-item{
       display:flex;justify-content:space-between;align-items:center;
-      padding:5px 7px;
-      border-radius:9px;
-      background:rgba(15,23,42,0.92);
+      padding:4px 6px;
+      border-radius:8px;
+      background:rgba(15,23,42,0.9);
       border:1px solid var(--border-soft);
-      font-size:11px;
+      font-size:10px;
       color:var(--text-soft);
     }
     body.theme-sepia .mini-item{
@@ -180,14 +181,14 @@
       color:#1f2933;
     }
 
-    .main{min-height:80vh}
+    .main{min-height:75vh}
     .header-card{
       display:flex;
       justify-content:space-between;
       align-items:center;
       gap:8px;
-      padding:10px;
-      border-radius:14px;
+      padding:8px 9px;
+      border-radius:12px;
       background:linear-gradient(135deg,#0f172a,#020617);
       border:1px solid var(--border-soft);
       box-shadow:var(--shadow-soft);
@@ -196,25 +197,21 @@
       background:linear-gradient(135deg,#fef3c7,#fde68a);
       border-color:#fbbf24;
     }
-    .sura-meta{display:flex;flex-direction:column;gap:3px}
-    .sura-name{font-size:17px;font-weight:700}
-    .sura-info{font-size:12px;color:var(--muted)}
-    .writer-badge{
-      font-size:11px;
-      color:var(--text-soft);
-      margin-top:2px;
-    }
+    .sura-meta{display:flex;flex-direction:column;gap:2px}
+    .sura-name{font-size:15px;font-weight:700}
+    .sura-info{font-size:11px;color:var(--muted)}
+    .writer-badge{font-size:10px;color:var(--text-soft);margin-top:2px}
     .writer-badge span{
       padding:2px 6px;
       border-radius:999px;
       border:1px solid var(--border-soft);
-      margin-right:4px;
-      font-size:11px;
+      margin-right:3px;
+      font-size:10px;
     }
 
-    .controls{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+    .controls{display:flex;gap:5px;align-items:center;flex-wrap:wrap}
     .btn{
-      padding:6px 9px;
+      padding:5px 8px;
       border-radius:999px;
       border:1px solid var(--border-soft);
       background:rgba(15,23,42,0.9);
@@ -230,10 +227,10 @@
       border:none;
       color:#022c22;
       font-weight:600;
-      box-shadow:0 6px 16px rgba(34,197,94,0.6);
+      box-shadow:0 4px 11px rgba(34,197,94,0.55);
     }
     .btn.danger{
-      background:rgba(248,113,113,0.15);
+      background:rgba(248,113,113,0.12);
       border-color:#fecaca;
       color:#fecaca;
     }
@@ -245,15 +242,13 @@
       border:1px solid var(--border-soft);
       background:rgba(15,23,42,0.9);
     }
-    body.theme-sepia .view-toggle{
-      background:#fefce8;
-    }
+    body.theme-sepia .view-toggle{background:#fefce8;}
     .view-toggle button{
-      padding:5px 9px;
+      padding:4px 8px;
       background:transparent;
       border:none;
       color:#9ca3af;
-      font-size:11px;
+      font-size:10px;
     }
     .view-toggle button.active{
       background:linear-gradient(90deg,#22c55e,#16a34a);
@@ -262,9 +257,9 @@
     }
 
     .aya-card{
-      margin-top:10px;
-      padding:8px;
-      border-radius:14px;
+      margin-top:8px;
+      padding:7px;
+      border-radius:12px;
       background:var(--bg-alt);
       border:1px solid var(--border-soft);
       box-shadow:var(--shadow-soft);
@@ -277,22 +272,22 @@
       display:flex;justify-content:space-between;align-items:center;font-size:12px;
     }
     .aya-list{
-      margin-top:8px;
-      border-radius:10px;
+      margin-top:6px;
+      border-radius:9px;
       overflow:auto;
-      max-height:calc(100vh - 240px);
-      padding-bottom:50px;
+      max-height:calc(100vh - 220px);
+      padding-bottom:40px;
     }
 
     .aya-row{
       display:grid;
-      grid-template-columns:38px 1fr 132px;
-      gap:8px;
-      padding:7px 8px;
+      grid-template-columns:32px 1fr 120px;
+      gap:6px;
+      padding:6px 7px;
       border-bottom:1px dashed rgba(55,65,81,0.7);
-      background:rgba(15,23,42,0.9);
+      background:rgba(15,23,42,0.96);
     }
-    .aya-row:nth-child(even){background:rgba(17,24,39,0.9)}
+    .aya-row:nth-child(even){background:rgba(17,24,39,0.95)}
     body.theme-sepia .aya-row{
       background:#fdf4e3;
       border-color:#fbbf24;
@@ -300,7 +295,7 @@
     .aya-row:last-child{border-bottom:none}
 
     .aya-check{
-      display:flex;align-items:flex-start;justify-content:center;padding-top:6px;
+      display:flex;align-items:flex-start;justify-content:center;padding-top:4px;
     }
     .aya-check input{width:14px;height:14px;accent-color:#22c55e}
 
@@ -313,28 +308,28 @@
       color:#e5e7eb;
       padding:2px 6px;
       border-radius:999px;
-      background:rgba(15,23,42,0.95);
+      background:rgba(15,23,42,0.97);
       border:1px solid var(--border-soft);
     }
     body.theme-sepia .aya-number{
       background:#fef9c3;
       color:#1f2933;
     }
-    .aya-tags{font-size:10px;color:#facc15;display:flex;gap:5px}
+    .aya-tags{font-size:10px;color:#facc15;display:flex;gap:4px}
 
     .aya-ar{
       font-family:"Scheherazade New","Amiri",serif;
       direction:rtl;
       text-align:right;
-      margin-bottom:4px;
+      margin-bottom:3px;
       color:#fefce8;
     }
     body.theme-sepia .aya-ar{color:#111827}
 
     .word-token{
       display:inline-block;
-      padding:2px 5px;
-      margin:0 2px;
+      padding:1px 4px;
+      margin:0 1px;
       border-radius:999px;
       cursor:pointer;
       border:1px solid transparent;
@@ -344,14 +339,14 @@
       border-color:rgba(34,197,94,0.4);
     }
 
-    .aya-bn-main{margin-bottom:3px;}
+    .aya-bn-main{margin-bottom:2px;}
     .aya-bn-block{
       margin-top:2px;
-      padding:3px 6px;
+      padding:3px 5px;
       border-radius:6px;
-      background:rgba(15,23,42,0.8);
+      background:rgba(15,23,42,0.88);
       border:1px solid rgba(148,163,184,0.4);
-      font-size:12px;
+      font-size:11px;
     }
     body.theme-sepia .aya-bn-block{
       background:#fef9c3;
@@ -363,23 +358,23 @@
       margin-bottom:1px;
     }
     .aya-bn-text{
-      line-height:1.7;
+      line-height:1.6;
     }
 
     .aya-actions{
-      display:flex;flex-direction:column;gap:5px;align-items:flex-end;font-size:11px;
+      display:flex;flex-direction:column;gap:4px;align-items:flex-end;font-size:10px;
     }
-    .action-row{display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end}
+    .action-row{display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end}
     .icon-chip{
-      padding:4px 6px;
+      padding:3px 5px;
       border-radius:999px;
       border:1px solid var(--border-soft);
-      background:rgba(15,23,42,0.95);
+      background:rgba(15,23,42,0.97);
       color:var(--text-soft);
       cursor:pointer;
       display:inline-flex;
       align-items:center;
-      font-size:11px;
+      font-size:10px;
     }
     .icon-chip.active{
       background:radial-gradient(circle at top,#fef9c3,#facc15);
@@ -401,17 +396,17 @@
     .multi-bar{
       position:fixed;
       left:50%;transform:translateX(-50%);
-      bottom:10px;
-      padding:7px 10px;
+      bottom:8px;
+      padding:6px 9px;
       border-radius:999px;
       background:var(--bg-panel);
       border:1px solid var(--border-soft);
       display:none;
-      gap:6px;
+      gap:5px;
       z-index:60;
       align-items:center;
       box-shadow:var(--shadow-soft);
-      font-size:11px;
+      font-size:10px;
     }
     .multi-bar.show{display:flex}
     .multi-bar .count{margin-right:4px;color:var(--text-soft)}
@@ -428,7 +423,7 @@
     .modal{
       background:var(--bg-panel);
       color:var(--text);
-      border-radius:14px;
+      border-radius:12px;
       max-width:900px;
       width:96%;
       max-height:90vh;
@@ -438,13 +433,13 @@
     }
     .modal-header{
       display:flex;justify-content:space-between;align-items:center;
-      padding:8px 12px;
+      padding:7px 10px;
       border-bottom:1px solid var(--border-soft);
     }
     .modal-title{font-weight:600;font-size:13px}
-    .modal-body{padding:8px 12px;font-size:12px}
+    .modal-body{padding:7px 10px;font-size:12px}
     .modal-footer{
-      padding:8px 12px;
+      padding:7px 10px;
       border-top:1px solid var(--border-soft);
       display:flex;justify-content:flex-end;gap:6px;
       background:var(--bg-panel);
@@ -453,25 +448,25 @@
     .word-popup{
       position:fixed;
       z-index:80;
-      min-width:260px;
-      max-width:320px;
+      min-width:240px;
+      max-width:300px;
       background:var(--bg-panel);
-      border-radius:12px;
-      padding:8px;
+      border-radius:10px;
+      padding:7px;
       border:1px solid var(--border-soft);
       box-shadow:var(--shadow-soft);
       display:none;
-      font-size:12px;
+      font-size:11px;
     }
     .word-popup .arabic{
       font-family:"Scheherazade New","Amiri",serif;
-      font-size:20px;
+      font-size:18px;
       text-align:right;
     }
-    .word-popup .meaning{margin-top:4px;font-size:13px}
+    .word-popup .meaning{margin-top:3px;font-size:12px}
     .word-popup .notes{
-      margin-top:6px;
-      max-height:150px;
+      margin-top:4px;
+      max-height:130px;
       overflow:auto;
       font-size:11px;
       color:var(--text-soft);
@@ -480,17 +475,18 @@
     textarea{
       background:var(--bg);
       color:var(--text-soft);
-      border-radius:10px;
+      border-radius:8px;
       border:1px solid var(--border-soft);
+      font-size:12px;
     }
 
     @media (max-width:980px){
-      .container{grid-template-columns:1fr;padding:6px}
+      .container{grid-template-columns:1fr;padding:5px}
       .sidebar{order:2;height:auto;max-height:45vh}
       .main{order:1}
       .aya-list{max-height:none}
-      .aya-row{grid-template-columns:32px 1fr}
-      .aya-actions{flex-direction:row;justify-content:flex-start;align-items:flex-start;margin-top:4px}
+      .aya-row{grid-template-columns:26px 1fr;gap:5px;padding:5px 6px;}
+      .aya-actions{flex-direction:row;justify-content:flex-start;align-items:flex-start;margin-top:3px}
     }
   </style>
 </head>
@@ -511,10 +507,10 @@
       </div>
       <div id="suraList" class="sura-list"></div>
 
-      <div style="margin-top:8px" class="panel-title">সর্বশেষ পড়া</div>
+      <div style="margin-top:6px" class="panel-title">সর্বশেষ পড়া</div>
       <div id="lastReadBox" class="last-read-box">এখনো কোনো আয়াতকে শেষ পড়া হিসেবে সেভ করা হয়নি।</div>
 
-      <div style="margin-top:8px" class="panel-title">পিন / প্রিয় শর্টকাট</div>
+      <div style="margin-top:6px" class="panel-title">পিন / প্রিয় শর্টকাট</div>
       <div id="miniPins" class="mini-list"></div>
     </aside>
 
@@ -560,7 +556,7 @@
     <div class="arabic" id="wpArabic"></div>
     <div class="meaning" id="wpMeaning"></div>
     <div class="notes" id="wpNotes"></div>
-    <div style="text-align:right;margin-top:6px">
+    <div style="text-align:right;margin-top:4px">
       <button id="wpClose" class="btn">✕</button>
     </div>
   </div>
@@ -597,13 +593,13 @@
       theme:storage.get('q_theme','dark'),
       showOsmani:storage.get('q_showOsmani',true),
       showTawzeeh:storage.get('q_showTawzeeh',true),
-      fontArabic:storage.get('q_fontArabic',22),
-      fontBanglaMain:storage.get('q_fontBanglaMain',14),
-      fontOsmani:storage.get('q_fontOsmani',13),
-      fontTawzeeh:storage.get('q_fontTawzeeh',13),
-      fontWordMeaning:storage.get('q_fontWordMeaning',13),
-      fontGrammar:storage.get('q_fontGrammar',12),
-      lineHeight:storage.get('q_lineHeight',1.8),
+      fontArabic:storage.get('q_fontArabic',20),
+      fontBanglaMain:storage.get('q_fontBanglaMain',13),
+      fontOsmani:storage.get('q_fontOsmani',12),
+      fontTawzeeh:storage.get('q_fontTawzeeh',12),
+      fontWordMeaning:storage.get('q_fontWordMeaning',12),
+      fontGrammar:storage.get('q_fontGrammar',11),
+      lineHeight:storage.get('q_lineHeight',1.6),
       pins:storage.get('q_pins',[]),
       favs:storage.get('q_favs',[]),
       lastRead:storage.get('q_lastRead',null),
@@ -757,12 +753,12 @@
         }
         tcol.appendChild(ar);
 
-        // Bangla sections
+        // Bangla sections (with more robust key names)
         if(STATE.view!=='ar'){
           const bnWrap=document.createElement('div');
-          bnWrap.style.marginTop='3px';
+          bnWrap.style.marginTop='2px';
 
-          const mainBn=aya.bangla||aya.bn||aya.bangla_main||'';
+          const mainBn=aya.bangla||aya.bn||aya.bangla_main||aya.main_bn||'';
           if(mainBn){
             const main=document.createElement('div');
             main.className='aya-bn-main';
@@ -772,7 +768,7 @@
             bnWrap.appendChild(main);
           }
 
-          const os=aya.bangla_osmani||aya.osmani||aya.bn_osmani||'';
+          const os=aya.bangla_osmani||aya.bn_osmani||aya.osmani||aya.tafseer_osmani||'';
           if(os && STATE.showOsmani){
             const block=document.createElement('div');
             block.className='aya-bn-block';
@@ -788,7 +784,7 @@
             bnWrap.appendChild(block);
           }
 
-          const tw=aya.bangla_tawzeeh||aya.tawzeeh||aya.bn_tawzeeh||'';
+          const tw=aya.bangla_tawzeeh||aya.bn_tawzeeh||aya.tawzeeh||aya.taozeeh||'';
           if(tw && STATE.showTawzeeh){
             const block=document.createElement('div');
             block.className='aya-bn-block';
@@ -894,10 +890,10 @@
       wpArabic.textContent=w.text||target.textContent||'';
       wpMeaning.textContent=w.meaningBn||w.meaning||'—';
       wpNotes.textContent=w.notes||aya.grammar||aya.grammarNotes||'—';
-      let top=rect.bottom+window.scrollY+6;
+      let top=rect.bottom+window.scrollY+5;
       let left=rect.left+window.scrollX-40;
-      if(left+320>window.innerWidth)left=window.innerWidth-330;
-      if(left<6)left=6;
+      if(left+300>window.innerWidth)left=window.innerWidth-310;
+      if(left<5)left=5;
       wordPopup.style.top=top+'px';
       wordPopup.style.left=left+'px';
       wordPopup.style.display='block';
@@ -941,7 +937,7 @@
         const s=window.suras[it.surahIndex]||{};
         const div=document.createElement('div');
         div.className='mini-item';
-        div.innerHTML='<div><strong>'+(it.kind==='pin'?'📌 ':'⭐ ')+(s.nameBn||s.name||'')+' '+(it.surahIndex+1)+':'+(it.ayahIndex+1)+'</strong><div style="font-size:10px;max-width:150px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+(it.note||'')+'</div></div>';
+        div.innerHTML='<div><strong>'+(it.kind==='pin'?'📌 ':'⭐ ')+(s.nameBn||s.name||'')+' '+(it.surahIndex+1)+':'+(it.ayahIndex+1)+'</strong><div style="font-size:10px;max-width:140px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+(it.note||'')+'</div></div>';
         const right=document.createElement('div');
         const go=document.createElement('button');go.className='btn';go.textContent='যান';
         go.onclick=()=>{
@@ -1017,17 +1013,17 @@
         ayaData=arr[aIdx]||{};
       }
       const ar=ayaData.arabic||ayaData.ar||ayaData.text_ar||'';
-      const bn=ayaData.bangla||ayaData.bn||ayaData.bangla_main||'';
+      const bn=ayaData.bangla||ayaData.bn||ayaData.bangla_main||ayaData.main_bn||'';
       const head='['+(sdata.nameBn||sdata.name||'')+' '+(sIdx+1)+':'+(aIdx+1)+']';
-      if(mode==='ar')return ar+'\\n'+head;
-      if(mode==='bn')return bn+'\\n'+head;
-      return ar+'\\n'+bn+'\\n'+head;
+      if(mode==='ar')return ar+'\n'+head;
+      if(mode==='bn')return bn+'\n'+head;
+      return ar+'\n'+bn+'\n'+head;
     }
     function formatMultipleForCopy(keys,mode){
       return keys.map(k=>{
         const [s,a]=k.split(':').map(Number);
         return formatAyaForCopy(s,a,mode);
-      }).join('\\n\\n');
+      }).join('\n\n');
     }
     function doShare(text){
       if(navigator.share){
@@ -1050,7 +1046,7 @@
     modalBackdrop.addEventListener('click',ev=>{if(ev.target===modalBackdrop)closeModal();});
 
     function openCopyModal(prefill){
-      const body='<div style="margin-bottom:6px"><label style="font-weight:600;font-size:12px">ফরম্যাট নির্বাচন</label><div style="display:flex;gap:6px;margin-top:4px;flex-wrap:wrap"><label><input type="radio" name="copyFormat" value="both" checked> আরবি+বাংলা</label><label><input type="radio" name="copyFormat" value="ar"> শুধু আরবি</label><label><input type="radio" name="copyFormat" value="bn"> শুধু বাংলা</label></div></div><textarea id="copyPreview" style="width:100%;min-height:130px;padding:6px;font-size:12px">'+(prefill||'')+'</textarea>';
+      const body='<div style="margin-bottom:6px"><label style="font-weight:600;font-size:12px">ফরম্যাট নির্বাচন</label><div style="display:flex;gap:6px;margin-top:4px;flex-wrap:wrap"><label><input type="radio" name="copyFormat" value="both" checked> আরবি+বাংলা</label><label><input type="radio" name="copyFormat" value="ar"> শুধু আরবি</label><label><input type="radio" name="copyFormat" value="bn"> শুধু বাংলা</label></div></div><textarea id="copyPreview" style="width:100%;min-height:110px;padding:6px;font-size:12px">'+(prefill||'')+'</textarea>';
       const footer='<button id="copyDo" class="btn primary">📋 কপি</button><button id="shareDo" class="btn">🔗 শেয়ার</button><button id="copyClose" class="btn">বন্ধ</button>';
       openModal('কপি / শেয়ার',body,footer);
       setTimeout(()=>{
@@ -1098,9 +1094,9 @@
           filtered.forEach(item=>{
             const s=window.suras[item.surahIndex]||{};
             const wrap=document.createElement('div');
-            wrap.style.padding='6px 0';
+            wrap.style.padding='5px 0';
             wrap.style.borderBottom='1px solid rgba(148,163,184,0.4)';
-            wrap.innerHTML='<div style="display:flex;justify-content:space-between;align-items:center;gap:6px"><div><strong>'+(s.nameBn||s.name||'')+' '+(item.surahIndex+1)+':'+(item.ayahIndex+1)+'</strong><div style="font-size:11px;color:#9ca3af">'+(item.note||'')+'</div></div><div style="display:flex;gap:4px;flex-wrap:wrap"><button class="btn" data-go>যান</button><button class="btn" data-copy>📋</button><button class="btn" data-edit>✏</button><button class="btn danger" data-del>🗑</button></div></div>';
+            wrap.innerHTML='<div style="display:flex;justify-content:space-between;align-items:center;gap:6px"><div><strong>'+(s.nameBn||s.name||'')+' '+(item.surahIndex+1)+':'+(item.ayahIndex+1)+'</strong><div style="font-size:10px;color:#9ca3af">'+(item.note||'')+'</div></div><div style="display:flex;gap:4px;flex-wrap:wrap"><button class="btn" data-go>যান</button><button class="btn" data-copy>📋</button><button class="btn" data-edit>✏</button><button class="btn danger" data-del>🗑</button></div></div>';
             listDiv.appendChild(wrap);
             wrap.querySelector('[data-go]').onclick=()=>{
               setCurrentSura(item.surahIndex);closeModal();
@@ -1144,13 +1140,13 @@
 
         '<hr style="border-color:rgba(148,163,184,0.4)">' +
         '<div><div style="font-weight:600;font-size:12px;margin-bottom:3px">ফন্ট সাইজ</div>' +
-        sliderBlock("Arabic word","stFontArabic",STATE.fontArabic,16,32) +
-        sliderBlock("বাংলা মূল অর্থ","stFontBanglaMain",STATE.fontBanglaMain,12,20) +
-        sliderBlock("তাফসীরে ওসমানী","stFontOsmani",STATE.fontOsmani,11,20) +
-        sliderBlock("তাওযীহুল কুরআন","stFontTawzeeh",STATE.fontTawzeeh,11,20) +
-        sliderBlock("শব্দার্থ","stFontWordMeaning",STATE.fontWordMeaning,11,20) +
-        sliderBlock("Grammar notes","stFontGrammar",STATE.fontGrammar,10,18) +
-        sliderBlock("লাইন হাইট","stLineHeight",Math.round(STATE.lineHeight*10),16,22,true) +
+        sliderBlock("Arabic word","stFontArabic",STATE.fontArabic,16,30) +
+        sliderBlock("বাংলা মূল অর্থ","stFontBanglaMain",STATE.fontBanglaMain,11,18) +
+        sliderBlock("তাফসীরে ওসমানী","stFontOsmani",STATE.fontOsmani,11,18) +
+        sliderBlock("তাওযীহুল কুরআন","stFontTawzeeh",STATE.fontTawzeeh,11,18) +
+        sliderBlock("শব্দার্থ","stFontWordMeaning",STATE.fontWordMeaning,11,18) +
+        sliderBlock("Grammar notes","stFontGrammar",STATE.fontGrammar,10,16) +
+        sliderBlock("লাইন হাইট","stLineHeight",Math.round(STATE.lineHeight*10),14,20,true) +
         '</div></div>';
 
       const footer='<button id="stSave" class="btn primary">সেভ</button><button id="stCancel" class="btn">বন্ধ</button>';
@@ -1162,6 +1158,15 @@
         document.querySelectorAll('input[name="themeSel"]').forEach(r=>{
           if(r.value===STATE.theme)r.checked=true;
         });
+
+        // live preview for sliders
+        bindSlider('stFontArabic',STATE.fontArabic,false);
+        bindSlider('stFontBanglaMain',STATE.fontBanglaMain,false);
+        bindSlider('stFontOsmani',STATE.fontOsmani,false);
+        bindSlider('stFontTawzeeh',STATE.fontTawzeeh,false);
+        bindSlider('stFontWordMeaning',STATE.fontWordMeaning,false);
+        bindSlider('stFontGrammar',STATE.fontGrammar,false);
+        bindSlider('stLineHeight',Math.round(STATE.lineHeight*10),true);
 
         document.getElementById('stSave').onclick=()=>{
           STATE.showOsmani=document.getElementById('stOsmani').checked;
@@ -1201,6 +1206,14 @@
         ' <span id="'+id+'Val" style="opacity:0.7">'+(isLH?(val/10).toFixed(1):val)+'px</span></div>'+
         '<input type="range" id="'+id+'" min="'+min+'" max="'+max+'" value="'+val+'" style="width:100%"></div>';
     }
+    function bindSlider(id,initial,isLH){
+      const input=document.getElementById(id);
+      const label=document.getElementById(id+'Val');
+      input.addEventListener('input',()=>{
+        const v=+input.value;
+        label.textContent=isLH?(v/10).toFixed(1):v+'px';
+      });
+    }
 
     viewToggle.querySelectorAll('button').forEach(btn=>{
       if(btn.dataset.view===STATE.view)btn.classList.add('active');
@@ -1212,8 +1225,6 @@
         renderAyaList();
       };
     });
-
-    document.getElementById('multiCount'); // just to avoid unused
 
     renderSuraList();
     setCurrentSura(0);
