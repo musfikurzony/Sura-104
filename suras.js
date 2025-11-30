@@ -1,1032 +1,937 @@
 // suras.js
-// Master list of all 114 surahs with basic metadata.
-// Ayah arrays are left empty for now so UI can be tested and later filled.
 
-const SURAS = [
+window.suras = [
+  // 1–10
   {
     number: 1,
-    nameArabic: "الفاتحة",
-    nameEnglish: "Al-Faatiha",
-    nameBangla: "আল-ফাতিহা",
-    totalAyah: 7,
-    revelationPlace: "Makki",
-    ayahs: []
+    nameAr: "سورة الفاتحة",
+    nameBn: "সূরা আল-ফাতিহা",
+    type: "Makki",
+    ayahCount: 7,
+    file: "surah_001.json"
   },
   {
     number: 2,
-    nameArabic: "البقرة",
-    nameEnglish: "Al-Baqarah",
-    nameBangla: "আল-বাকারা",
-    totalAyah: 286,
-    revelationPlace: "Madani",
-    ayahs: []
+    nameAr: "سورة البقرة",
+    nameBn: "সূরা আল-বাক্বারাহ",
+    type: "Madani",
+    ayahCount: 286,
+    file: "surah_002.json"
   },
   {
     number: 3,
-    nameArabic: "آل عمران",
-    nameEnglish: "Aal Imran",
-    nameBangla: "আলে ইমরান",
-    totalAyah: 200,
-    revelationPlace: "Madani",
-    ayahs: []
+    nameAr: "سورة آل عمران",
+    nameBn: "সূরা আলে-ইমরান",
+    type: "Madani",
+    ayahCount: 200,
+    file: "surah_003.json"
   },
   {
     number: 4,
-    nameArabic: "النساء",
-    nameEnglish: "An-Nisa",
-    nameBangla: "আন-নিসা",
-    totalAyah: 176,
-    revelationPlace: "Madani",
-    ayahs: []
+    nameAr: "سورة النساء",
+    nameBn: "সূরা আন-নিসা",
+    type: "Madani",
+    ayahCount: 176,
+    file: "surah_004.json"
   },
   {
     number: 5,
-    nameArabic: "المائدة",
-    nameEnglish: "Al-Ma'idah",
-    nameBangla: "আল-মায়িদা",
-    totalAyah: 120,
-    revelationPlace: "Madani",
-    ayahs: []
+    nameAr: "سورة المائدة",
+    nameBn: "সূরা আল-মায়েদাহ",
+    type: "Madani",
+    ayahCount: 120,
+    file: "surah_005.json"
   },
   {
     number: 6,
-    nameArabic: "الأنعام",
-    nameEnglish: "Al-An'am",
-    nameBangla: "আল-আনআম",
-    totalAyah: 165,
-    revelationPlace: "Makki",
-    ayahs: []
+    nameAr: "سورة الأنعام",
+    nameBn: "সূরা আল-আন’আম",
+    type: "Makki",
+    ayahCount: 165,
+    file: "surah_006.json"
   },
   {
     number: 7,
-    nameArabic: "الأعراف",
-    nameEnglish: "Al-A'raf",
-    nameBangla: "আল-আ'রাফ",
-    totalAyah: 206,
-    revelationPlace: "Makki",
-    ayahs: []
+    nameAr: "سورة الأعراف",
+    nameBn: "সূরা আল-আ’রাফ",
+    type: "Makki",
+    ayahCount: 206,
+    file: "surah_007.json"
   },
   {
     number: 8,
-    nameArabic: "الأنفال",
-    nameEnglish: "Al-Anfal",
-    nameBangla: "আল-আনফাল",
-    totalAyah: 75,
-    revelationPlace: "Madani",
-    ayahs: []
+    nameAr: "سورة الأنفال",
+    nameBn: "সূরা আল-আনফাল",
+    type: "Madani",
+    ayahCount: 75,
+    file: "surah_008.json"
   },
   {
     number: 9,
-    nameArabic: "التوبة",
-    nameEnglish: "At-Tawbah",
-    nameBangla: "আত-তাওবা",
-    totalAyah: 129,
-    revelationPlace: "Madani",
-    ayahs: []
+    nameAr: "سورة التوبة",
+    nameBn: "সূরা আত-তাওবাহ",
+    type: "Madani",
+    ayahCount: 129,
+    file: "surah_009.json"
   },
   {
     number: 10,
-    nameArabic: "يونس",
-    nameEnglish: "Yunus",
-    nameBangla: "ইউনুস",
-    totalAyah: 109,
-    revelationPlace: "Makki",
-    ayahs: []
+    nameAr: "سورة يونس",
+    nameBn: "সূরা ইউনুস",
+    type: "Makki",
+    ayahCount: 109,
+    file: "surah_010.json"
   },
+
+  // 11–20
   {
     number: 11,
-    nameArabic: "هود",
-    nameEnglish: "Hud",
-    nameBangla: "হুদ",
-    totalAyah: 123,
-    revelationPlace: "Makki",
-    ayahs: []
+    nameAr: "سورة هود",
+    nameBn: "সূরা হুদ",
+    type: "Makki",
+    ayahCount: 123,
+    file: "surah_011.json"
   },
   {
     number: 12,
-    nameArabic: "يوسف",
-    nameEnglish: "Yusuf",
-    nameBangla: "ইউসুফ",
-    totalAyah: 111,
-    revelationPlace: "Makki",
-    ayahs: []
+    nameAr: "سورة يوسف",
+    nameBn: "সূরা ইউসুফ",
+    type: "Makki",
+    ayahCount: 111,
+    file: "surah_012.json"
   },
   {
     number: 13,
-    nameArabic: "الرعد",
-    nameEnglish: "Ar-Ra'd",
-    nameBangla: "আর-রা'দ",
-    totalAyah: 43,
-    revelationPlace: "Madani",
-    ayahs: []
+    nameAr: "سورة الرعد",
+    nameBn: "সূরা আর-রা’দ",
+    type: "Madani",
+    ayahCount: 43,
+    file: "surah_013.json"
   },
   {
     number: 14,
-    nameArabic: "إبراهيم",
-    nameEnglish: "Ibrahim",
-    nameBangla: "ইব্রাহীম",
-    totalAyah: 52,
-    revelationPlace: "Makki",
-    ayahs: []
+    nameAr: "سورة إبراهيم",
+    nameBn: "সূরা ইবরাহীম",
+    type: "Makki",
+    ayahCount: 52,
+    file: "surah_014.json"
   },
   {
     number: 15,
-    nameArabic: "الحجر",
-    nameEnglish: "Al-Hijr",
-    nameBangla: "আল-হিজর",
-    totalAyah: 99,
-    revelationPlace: "Makki",
-    ayahs: []
+    nameAr: "سورة الحجر",
+    nameBn: "সূরা আল-হিজর",
+    type: "Makki",
+    ayahCount: 99,
+    file: "surah_015.json"
   },
   {
     number: 16,
-    nameArabic: "النحل",
-    nameEnglish: "An-Nahl",
-    nameBangla: "আন-নাহল",
-    totalAyah: 128,
-    revelationPlace: "Makki",
-    ayahs: []
+    nameAr: "سورة النحل",
+    nameBn: "সূরা আন-নাহল",
+    type: "Makki",
+    ayahCount: 128,
+    file: "surah_016.json"
   },
   {
     number: 17,
-    nameArabic: "الإسراء",
-    nameEnglish: "Al-Isra",
-    nameBangla: "আল-ইসরা",
-    totalAyah: 111,
-    revelationPlace: "Makki",
-    ayahs: []
+    nameAr: "سورة الإسراء",
+    nameBn: "সূরা আল-ইসরাঃ",
+    type: "Makki",
+    ayahCount: 111,
+    file: "surah_017.json"
   },
   {
     number: 18,
-    nameArabic: "الكهف",
-    nameEnglish: "Al-Kahf",
-    nameBangla: "আল-কাহফ",
-    totalAyah: 110,
-    revelationPlace: "Makki",
-    ayahs: []
+    nameAr: "سورة الكهف",
+    nameBn: "সূরা আল-কাহফ",
+    type: "Makki",
+    ayahCount: 110,
+    file: "surah_018.json"
   },
   {
     number: 19,
-    nameArabic: "مريم",
-    nameEnglish: "Maryam",
-    nameBangla: "মারইয়াম",
-    totalAyah: 98,
-    revelationPlace: "Makki",
-    ayahs: []
+    nameAr: "سورة مريم",
+    nameBn: "সূরা মরিয়ম",
+    type: "Makki",
+    ayahCount: 98,
+    file: "surah_019.json"
   },
   {
     number: 20,
-    nameArabic: "طه",
-    nameEnglish: "Ta-Ha",
-    nameBangla: "ত্বা-হা",
-    totalAyah: 135,
-    revelationPlace: "Makki",
-    ayahs: []
+    nameAr: "سورة طه",
+    nameBn: "সূরা ত্বা-হা",
+    type: "Makki",
+    ayahCount: 135,
+    file: "surah_020.json"
   },
+
+  // 21–30
   {
     number: 21,
-    nameArabic: "الأنبياء",
-    nameEnglish: "Al-Anbiya",
-    nameBangla: "আল-আম্বিয়া",
-    totalAyah: 112,
-    revelationPlace: "Makki",
-    ayahs: []
+    nameAr: "سورة الأنبياء",
+    nameBn: "সূরা আল-আম্বিয়া",
+    type: "Makki",
+    ayahCount: 112,
+    file: "surah_021.json"
   },
   {
     number: 22,
-    nameArabic: "الحج",
-    nameEnglish: "Al-Hajj",
-    nameBangla: "আল-হাজ্জ",
-    totalAyah: 78,
-    revelationPlace: "Madani",
-    ayahs: []
+    nameAr: "سورة الحج",
+    nameBn: "সূরা আল-হাজ্জ",
+    type: "Madani",
+    ayahCount: 78,
+    file: "surah_022.json"
   },
   {
     number: 23,
-    nameArabic: "المؤمنون",
-    nameEnglish: "Al-Mu'minun",
-    nameBangla: "আল-মু'মিনুন",
-    totalAyah: 118,
-    revelationPlace: "Makki",
-    ayahs: []
+    nameAr: "سورة المؤمنون",
+    nameBn: "সূরা আল-মু’মিনুন",
+    type: "Makki",
+    ayahCount: 118,
+    file: "surah_023.json"
   },
   {
     number: 24,
-    nameArabic: "النور",
-    nameEnglish: "An-Nur",
-    nameBangla: "আন-নূর",
-    totalAyah: 64,
-    revelationPlace: "Madani",
-    ayahs: []
+    nameAr: "سورة النور",
+    nameBn: "সূরা আন-নূর",
+    type: "Madani",
+    ayahCount: 64,
+    file: "surah_024.json"
   },
   {
     number: 25,
-    nameArabic: "الفرقان",
-    nameEnglish: "Al-Furqan",
-    nameBangla: "আল-ফুরকান",
-    totalAyah: 77,
-    revelationPlace: "Makki",
-    ayahs: []
+    nameAr: "سورة الفرقان",
+    nameBn: "সূরা আল-ফুরকান",
+    type: "Makki",
+    ayahCount: 77,
+    file: "surah_025.json"
   },
   {
     number: 26,
-    nameArabic: "الشعراء",
-    nameEnglish: "Ash-Shu'ara",
-    nameBangla: "আশ-শু'আরা",
-    totalAyah: 227,
-    revelationPlace: "Makki",
-    ayahs: []
+    nameAr: "سورة الشعراء",
+    nameBn: "সূরা আশ-শু’আরা",
+    type: "Makki",
+    ayahCount: 227,
+    file: "surah_026.json"
   },
   {
     number: 27,
-    nameArabic: "النمل",
-    nameEnglish: "An-Naml",
-    nameBangla: "আন-নামল",
-    totalAyah: 93,
-    revelationPlace: "Makki",
-    ayahs: []
+    nameAr: "سورة النمل",
+    nameBn: "সূরা আন-নামল",
+    type: "Makki",
+    ayahCount: 93,
+    file: "surah_027.json"
   },
   {
     number: 28,
-    nameArabic: "القصص",
-    nameEnglish: "Al-Qasas",
-    nameBangla: "আল-কাসাস",
-    totalAyah: 88,
-    revelationPlace: "Makki",
-    ayahs: []
+    nameAr: "سورة القصص",
+    nameBn: "সূরা আল-কাসাস",
+    type: "Makki",
+    ayahCount: 88,
+    file: "surah_028.json"
   },
   {
     number: 29,
-    nameArabic: "العنكبوت",
-    nameEnglish: "Al-Ankabut",
-    nameBangla: "আল-আনকাবুত",
-    totalAyah: 69,
-    revelationPlace: "Makki",
-    ayahs: []
+    nameAr: "سورة العنكبوت",
+    nameBn: "সূরা আল-আনকাবূত",
+    type: "Makki",
+    ayahCount: 69,
+    file: "surah_029.json"
   },
   {
     number: 30,
-    nameArabic: "الروم",
-    nameEnglish: "Ar-Rum",
-    nameBangla: "আর-রূম",
-    totalAyah: 60,
-    revelationPlace: "Makki",
-    ayahs: []
+    nameAr: "سورة الروم",
+    nameBn: "সূরা আর-রূম",
+    type: "Makki",
+    ayahCount: 60,
+    file: "surah_030.json"
   },
+
+  // 31–40
   {
     number: 31,
-    nameArabic: "لقمان",
-    nameEnglish: "Luqman",
-    nameBangla: "লুকমান",
-    totalAyah: 34,
-    revelationPlace: "Makki",
-    ayahs: []
+    nameAr: "سورة لقمان",
+    nameBn: "সূরা লুকমান",
+    type: "Makki",
+    ayahCount: 34,
+    file: "surah_031.json"
   },
   {
     number: 32,
-    nameArabic: "السجدة",
-    nameEnglish: "As-Sajdah",
-    nameBangla: "আস-সাজদা",
-    totalAyah: 30,
-    revelationPlace: "Makki",
-    ayahs: []
+    nameAr: "سورة السجدة",
+    nameBn: "সূরা আস-সাজদাহ",
+    type: "Makki",
+    ayahCount: 30,
+    file: "surah_032.json"
   },
   {
     number: 33,
-    nameArabic: "الأحزاب",
-    nameEnglish: "Al-Ahzab",
-    nameBangla: "আল-আহযাব",
-    totalAyah: 73,
-    revelationPlace: "Madani",
-    ayahs: []
+    nameAr: "سورة الأحزاب",
+    nameBn: "সূরা আল-আহযাব",
+    type: "Madani",
+    ayahCount: 73,
+    file: "surah_033.json"
   },
   {
     number: 34,
-    nameArabic: "سبإ",
-    nameEnglish: "Saba",
-    nameBangla: "সাবা",
-    totalAyah: 54,
-    revelationPlace: "Makki",
-    ayahs: []
+    nameAr: "سورة سبإ",
+    nameBn: "সূরা সাবা",
+    type: "Makki",
+    ayahCount: 54,
+    file: "surah_034.json"
   },
   {
     number: 35,
-    nameArabic: "فاطر",
-    nameEnglish: "Fatir",
-    nameBangla: "ফাতির",
-    totalAyah: 45,
-    revelationPlace: "Makki",
-    ayahs: []
+    nameAr: "سورة فاطر",
+    nameBn: "সূরা ফাতির",
+    type: "Makki",
+    ayahCount: 45,
+    file: "surah_035.json"
   },
   {
     number: 36,
-    nameArabic: "يس",
-    nameEnglish: "Ya-Sin",
-    nameBangla: "ইয়াসিন",
-    totalAyah: 83,
-    revelationPlace: "Makki",
-    ayahs: []
+    nameAr: "سورة يس",
+    nameBn: "সূরা ইয়াসীন",
+    type: "Makki",
+    ayahCount: 83,
+    file: "surah_036.json"
   },
   {
     number: 37,
-    nameArabic: "الصافات",
-    nameEnglish: "As-Saffat",
-    nameBangla: "আস-সাফফাত",
-    totalAyah: 182,
-    revelationPlace: "Makki",
-    ayahs: []
+    nameAr: "سورة الصافات",
+    nameBn: "সূরা আস-সাফ্ফাত",
+    type: "Makki",
+    ayahCount: 182,
+    file: "surah_037.json"
   },
   {
     number: 38,
-    nameArabic: "ص",
-    nameEnglish: "Sad",
-    nameBangla: "সাদ",
-    totalAyah: 88,
-    revelationPlace: "Makki",
-    ayahs: []
+    nameAr: "سورة ص",
+    nameBn: "সূরা সাদ",
+    type: "Makki",
+    ayahCount: 88,
+    file: "surah_038.json"
   },
   {
     number: 39,
-    nameArabic: "الزمر",
-    nameEnglish: "Az-Zumar",
-    nameBangla: "আয-যুমার",
-    totalAyah: 75,
-    revelationPlace: "Makki",
-    ayahs: []
+    nameAr: "سورة الزمر",
+    nameBn: "সূরা আজ-জুমার",
+    type: "Makki",
+    ayahCount: 75,
+    file: "surah_039.json"
   },
   {
     number: 40,
-    nameArabic: "غافر",
-    nameEnglish: "Ghafir",
-    nameBangla: "গাফির",
-    totalAyah: 85,
-    revelationPlace: "Makki",
-    ayahs: []
+    nameAr: "سورة غافر",
+    nameBn: "সূরা গাফির",
+    type: "Makki",
+    ayahCount: 85,
+    file: "surah_040.json"
   },
+
+  // 41–50
   {
     number: 41,
-    nameArabic: "فصلت",
-    nameEnglish: "Fussilat",
-    nameBangla: "ফুসসিলাত",
-    totalAyah: 54,
-    revelationPlace: "Makki",
-    ayahs: []
+    nameAr: "سورة فصلت",
+    nameBn: "সূরা ফুসসিলাত",
+    type: "Makki",
+    ayahCount: 54,
+    file: "surah_041.json"
   },
   {
     number: 42,
-    nameArabic: "الشورى",
-    nameEnglish: "Ash-Shura",
-    nameBangla: "আশ-শুরা",
-    totalAyah: 53,
-    revelationPlace: "Makki",
-    ayahs: []
+    nameAr: "سورة الشورى",
+    nameBn: "সূরা আশ-শূরা",
+    type: "Makki",
+    ayahCount: 53,
+    file: "surah_042.json"
   },
   {
     number: 43,
-    nameArabic: "الزخرف",
-    nameEnglish: "Az-Zukhruf",
-    nameBangla: "আয-যুখরুফ",
-    totalAyah: 89,
-    revelationPlace: "Makki",
-    ayahs: []
+    nameAr: "سورة الزخرف",
+    nameBn: "সূরা আজ-যুখরুফ",
+    type: "Makki",
+    ayahCount: 89,
+    file: "surah_043.json"
   },
   {
     number: 44,
-    nameArabic: "الدخان",
-    nameEnglish: "Ad-Dukhan",
-    nameBangla: "আদ-দুখান",
-    totalAyah: 59,
-    revelationPlace: "Makki",
-    ayahs: []
+    nameAr: "سورة الدخان",
+    nameBn: "সূরা আদ-দুখান",
+    type: "Makki",
+    ayahCount: 59,
+    file: "surah_044.json"
   },
   {
     number: 45,
-    nameArabic: "الجاثية",
-    nameEnglish: "Al-Jathiyah",
-    nameBangla: "আল-জাসিয়াহ",
-    totalAyah: 37,
-    revelationPlace: "Makki",
-    ayahs: []
+    nameAr: "سورة الجاثية",
+    nameBn: "সূরা আল-জাসিয়াহ",
+    type: "Makki",
+    ayahCount: 37,
+    file: "surah_045.json"
   },
   {
     number: 46,
-    nameArabic: "الأحقاف",
-    nameEnglish: "Al-Ahqaf",
-    nameBangla: "আল-আহকাফ",
-    totalAyah: 35,
-    revelationPlace: "Makki",
-    ayahs: []
+    nameAr: "سورة الأحقاف",
+    nameBn: "সূরা আল-আহক্বাফ",
+    type: "Makki",
+    ayahCount: 35,
+    file: "surah_046.json"
   },
   {
     number: 47,
-    nameArabic: "محمد",
-    nameEnglish: "Muhammad",
-    nameBangla: "মুহাম্মদ",
-    totalAyah: 38,
-    revelationPlace: "Madani",
-    ayahs: []
+    nameAr: "سورة محمد",
+    nameBn: "সূরা মুহাম্মদ",
+    type: "Madani",
+    ayahCount: 38,
+    file: "surah_047.json"
   },
   {
     number: 48,
-    nameArabic: "الفتح",
-    nameEnglish: "Al-Fath",
-    nameBangla: "আল-ফাতহ",
-    totalAyah: 29,
-    revelationPlace: "Madani",
-    ayahs: []
+    nameAr: "سورة الفتح",
+    nameBn: "সূরা আল-ফাতহ",
+    type: "Madani",
+    ayahCount: 29,
+    file: "surah_048.json"
   },
   {
     number: 49,
-    nameArabic: "الحجرات",
-    nameEnglish: "Al-Hujurat",
-    nameBangla: "আল-হুজুরাত",
-    totalAyah: 18,
-    revelationPlace: "Madani",
-    ayahs: []
+    nameAr: "سورة الحجرات",
+    nameBn: "সূরা আল-হুজুরাত",
+    type: "Madani",
+    ayahCount: 18,
+    file: "surah_049.json"
   },
   {
     number: 50,
-    nameArabic: "ق",
-    nameEnglish: "Qaf",
-    nameBangla: "কাফ",
-    totalAyah: 45,
-    revelationPlace: "Makki",
-    ayahs: []
+    nameAr: "سورة ق",
+    nameBn: "সূরা ক্বাফ",
+    type: "Makki",
+    ayahCount: 45,
+    file: "surah_050.json"
   },
+
+  // 51–60
   {
     number: 51,
-    nameArabic: "الذاريات",
-    nameEnglish: "Adh-Dhariyat",
-    nameBangla: "আয-যারিয়াত",
-    totalAyah: 60,
-    revelationPlace: "Makki",
-    ayahs: []
+    nameAr: "سورة الذاريات",
+    nameBn: "সূরা আদ-ধারিয়াত",
+    type: "Makki",
+    ayahCount: 60,
+    file: "surah_051.json"
   },
   {
     number: 52,
-    nameArabic: "الطور",
-    nameEnglish: "At-Tur",
-    nameBangla: "আত-তুর",
-    totalAyah: 49,
-    revelationPlace: "Makki",
-    ayahs: []
+    nameAr: "سورة الطور",
+    nameBn: "সূরা আত-তূর",
+    type: "Makki",
+    ayahCount: 49,
+    file: "surah_052.json"
   },
   {
     number: 53,
-    nameArabic: "النجم",
-    nameEnglish: "An-Najm",
-    nameBangla: "আন-নাজম",
-    totalAyah: 62,
-    revelationPlace: "Makki",
-    ayahs: []
+    nameAr: "سورة النجم",
+    nameBn: "সূরা আন-নাজম",
+    type: "Makki",
+    ayahCount: 62,
+    file: "surah_053.json"
   },
   {
     number: 54,
-    nameArabic: "القمر",
-    nameEnglish: "Al-Qamar",
-    nameBangla: "আল-কামার",
-    totalAyah: 55,
-    revelationPlace: "Makki",
-    ayahs: []
+    nameAr: "سورة القمر",
+    nameBn: "সূরা আল-ক্বামার",
+    type: "Makki",
+    ayahCount: 55,
+    file: "surah_054.json"
   },
   {
     number: 55,
-    nameArabic: "الرحمن",
-    nameEnglish: "Ar-Rahman",
-    nameBangla: "আর-রাহমান",
-    totalAyah: 78,
-    revelationPlace: "Madani",
-    ayahs: []
+    nameAr: "سورة الرحمن",
+    nameBn: "সূরা আর-রাহমান",
+    type: "Madani",
+    ayahCount: 78,
+    file: "surah_055.json"
   },
   {
     number: 56,
-    nameArabic: "الواقعة",
-    nameEnglish: "Al-Waqi'ah",
-    nameBangla: "আল-ওয়াকিআহ",
-    totalAyah: 96,
-    revelationPlace: "Makki",
-    ayahs: []
+    nameAr: "سورة الواقعة",
+    nameBn: "সূরা আল-ওয়াক্বি’আহ",
+    type: "Makki",
+    ayahCount: 96,
+    file: "surah_056.json"
   },
   {
     number: 57,
-    nameArabic: "الحديد",
-    nameEnglish: "Al-Hadid",
-    nameBangla: "আল-হাদীদ",
-    totalAyah: 29,
-    revelationPlace: "Madani",
-    ayahs: []
+    nameAr: "سورة الحديد",
+    nameBn: "সূরা আল-হাদীদ",
+    type: "Madani",
+    ayahCount: 29,
+    file: "surah_057.json"
   },
   {
     number: 58,
-    nameArabic: "المجادلة",
-    nameEnglish: "Al-Mujadila",
-    nameBangla: "আল-মুজাদিলা",
-    totalAyah: 22,
-    revelationPlace: "Madani",
-    ayahs: []
+    nameAr: "سورة المجادلة",
+    nameBn: "সূরা আল-মুজাদালাহ",
+    type: "Madani",
+    ayahCount: 22,
+    file: "surah_058.json"
   },
   {
     number: 59,
-    nameArabic: "الحشر",
-    nameEnglish: "Al-Hashr",
-    nameBangla: "আল-হাশর",
-    totalAyah: 24,
-    revelationPlace: "Madani",
-    ayahs: []
+    nameAr: "سورة الحشر",
+    nameBn: "সূরা আল-হাশর",
+    type: "Madani",
+    ayahCount: 24,
+    file: "surah_059.json"
   },
   {
     number: 60,
-    nameArabic: "الممتحنة",
-    nameEnglish: "Al-Mumtahanah",
-    nameBangla: "আল-মুমতাহিনা",
-    totalAyah: 13,
-    revelationPlace: "Madani",
-    ayahs: []
+    nameAr: "سورة الممتحنة",
+    nameBn: "সূরা আল-মুমতাহিনা",
+    type: "Madani",
+    ayahCount: 13,
+    file: "surah_060.json"
   },
+
+  // 61–70
   {
     number: 61,
-    nameArabic: "الصف",
-    nameEnglish: "As-Saff",
-    nameBangla: "আস-সাফ",
-    totalAyah: 14,
-    revelationPlace: "Madani",
-    ayahs: []
+    nameAr: "سورة الصف",
+    nameBn: "সূরা আস-সাফ",
+    type: "Madani",
+    ayahCount: 14,
+    file: "surah_061.json"
   },
   {
     number: 62,
-    nameArabic: "الجمعة",
-    nameEnglish: "Al-Jumu'ah",
-    nameBangla: "আল-জুমুআ",
-    totalAyah: 11,
-    revelationPlace: "Madani",
-    ayahs: []
+    nameAr: "سورة الجمعة",
+    nameBn: "সূরা আল-জুমু’আহ",
+    type: "Madani",
+    ayahCount: 11,
+    file: "surah_062.json"
   },
   {
     number: 63,
-    nameArabic: "المنافقون",
-    nameEnglish: "Al-Munafiqun",
-    nameBangla: "আল-মুনাফিকুন",
-    totalAyah: 11,
-    revelationPlace: "Madani",
-    ayahs: []
+    nameAr: "سورة المنافقون",
+    nameBn: "সূরা আল-মুনাফিকূন",
+    type: "Madani",
+    ayahCount: 11,
+    file: "surah_063.json"
   },
   {
     number: 64,
-    nameArabic: "التغابن",
-    nameEnglish: "At-Taghabun",
-    nameBangla: "আত-তাগাবুন",
-    totalAyah: 18,
-    revelationPlace: "Madani",
-    ayahs: []
+    nameAr: "سورة التغابن",
+    nameBn: "সূরা আত-তাগাবুন",
+    type: "Madani",
+    ayahCount: 18,
+    file: "surah_064.json"
   },
   {
     number: 65,
-    nameArabic: "الطلاق",
-    nameEnglish: "At-Talaq",
-    nameBangla: "আত-তালাক",
-    totalAyah: 12,
-    revelationPlace: "Madani",
-    ayahs: []
+    nameAr: "سورة الطلاق",
+    nameBn: "সূরা আত-ত্বালাক্ব",
+    type: "Madani",
+    ayahCount: 12,
+    file: "surah_065.json"
   },
   {
     number: 66,
-    nameArabic: "التحريم",
-    nameEnglish: "At-Tahrim",
-    nameBangla: "আত-তাহরিম",
-    totalAyah: 12,
-    revelationPlace: "Madani",
-    ayahs: []
+    nameAr: "سورة التحريم",
+    nameBn: "সূরা আত-তাহরীম",
+    type: "Madani",
+    ayahCount: 12,
+    file: "surah_066.json"
   },
   {
     number: 67,
-    nameArabic: "الملك",
-    nameEnglish: "Al-Mulk",
-    nameBangla: "আল-মুলক",
-    totalAyah: 30,
-    revelationPlace: "Makki",
-    ayahs: []
+    nameAr: "سورة الملك",
+    nameBn: "সূরা আল-মুলক",
+    type: "Makki",
+    ayahCount: 30,
+    file: "surah_067.json"
   },
   {
     number: 68,
-    nameArabic: "القلم",
-    nameEnglish: "Al-Qalam",
-    nameBangla: "আল-কলম",
-    totalAyah: 52,
-    revelationPlace: "Makki",
-    ayahs: []
+    nameAr: "سورة القلم",
+    nameBn: "সূরা আল-কলম",
+    type: "Makki",
+    ayahCount: 52,
+    file: "surah_068.json"
   },
   {
     number: 69,
-    nameArabic: "الحاقة",
-    nameEnglish: "Al-Haqqah",
-    nameBangla: "আল-হাক্কাহ",
-    totalAyah: 52,
-    revelationPlace: "Makki",
-    ayahs: []
+    nameAr: "سورة الحاقة",
+    nameBn: "সূরা আল-হাক্কাহ",
+    type: "Makki",
+    ayahCount: 52,
+    file: "surah_069.json"
   },
   {
     number: 70,
-    nameArabic: "المعارج",
-    nameEnglish: "Al-Ma'arij",
-    nameBangla: "আল-মা'আরিজ",
-    totalAyah: 44,
-    revelationPlace: "Makki",
-    ayahs: []
+    nameAr: "سورة المعارج",
+    nameBn: "সূরা আল-মা’আরিজ",
+    type: "Makki",
+    ayahCount: 44,
+    file: "surah_070.json"
   },
+
+  // 71–80
   {
     number: 71,
-    nameArabic: "نوح",
-    nameEnglish: "Nuh",
-    nameBangla: "নূহ",
-    totalAyah: 28,
-    revelationPlace: "Makki",
-    ayahs: []
+    nameAr: "سورة نوح",
+    nameBn: "সূরা নূহ",
+    type: "Makki",
+    ayahCount: 28,
+    file: "surah_071.json"
   },
   {
     number: 72,
-    nameArabic: "الجن",
-    nameEnglish: "Al-Jinn",
-    nameBangla: "আল-জিন",
-    totalAyah: 28,
-    revelationPlace: "Makki",
-    ayahs: []
+    nameAr: "سورة الجن",
+    nameBn: "সূরা আল-জিন",
+    type: "Makki",
+    ayahCount: 28,
+    file: "surah_072.json"
   },
   {
     number: 73,
-    nameArabic: "المزمل",
-    nameEnglish: "Al-Muzzammil",
-    nameBangla: "আল-মুজ্জাম্মিল",
-    totalAyah: 20,
-    revelationPlace: "Makki",
-    ayahs: []
+    nameAr: "سورة المزمل",
+    nameBn: "সূরা আল-মুযযাম্মিল",
+    type: "Makki",
+    ayahCount: 20,
+    file: "surah_073.json"
   },
   {
     number: 74,
-    nameArabic: "المدثر",
-    nameEnglish: "Al-Muddaththir",
-    nameBangla: "আল-মুদ্দাসসির",
-    totalAyah: 56,
-    revelationPlace: "Makki",
-    ayahs: []
+    nameAr: "سورة المدثر",
+    nameBn: "সূরা আল-মুদ্দাছ্ছির",
+    type: "Makki",
+    ayahCount: 56,
+    file: "surah_074.json"
   },
   {
     number: 75,
-    nameArabic: "القيامة",
-    nameEnglish: "Al-Qiyamah",
-    nameBangla: "আল-কিয়ামাহ",
-    totalAyah: 40,
-    revelationPlace: "Makki",
-    ayahs: []
+    nameAr: "سورة القيامة",
+    nameBn: "সূরা আল-কিয়ামাহ",
+    type: "Makki",
+    ayahCount: 40,
+    file: "surah_075.json"
   },
   {
     number: 76,
-    nameArabic: "الانسان",
-    nameEnglish: "Al-Insan",
-    nameBangla: "আল-ইনসান",
-    totalAyah: 31,
-    revelationPlace: "Madani",
-    ayahs: []
+    nameAr: "سورة الإنسان",
+    nameBn: "সূরা আল-ইনসান",
+    type: "Madani",
+    ayahCount: 31,
+    file: "surah_076.json"
   },
   {
     number: 77,
-    nameArabic: "المرسلات",
-    nameEnglish: "Al-Mursalat",
-    nameBangla: "আল-মুরসালাত",
-    totalAyah: 50,
-    revelationPlace: "Makki",
-    ayahs: []
+    nameAr: "سورة المرسلات",
+    nameBn: "সূরা আল-মুরসালাত",
+    type: "Makki",
+    ayahCount: 50,
+    file: "surah_077.json"
   },
   {
     number: 78,
-    nameArabic: "النبإ",
-    nameEnglish: "An-Naba",
-    nameBangla: "আন-নাবা",
-    totalAyah: 40,
-    revelationPlace: "Makki",
-    ayahs: []
+    nameAr: "سورة النبإ",
+    nameBn: "সূরা আন-নাবা",
+    type: "Makki",
+    ayahCount: 40,
+    file: "surah_078.json"
   },
   {
     number: 79,
-    nameArabic: "النازعات",
-    nameEnglish: "An-Nazi'at",
-    nameBangla: "আন-নাজিয়াত",
-    totalAyah: 46,
-    revelationPlace: "Makki",
-    ayahs: []
+    nameAr: "سورة النازعات",
+    nameBn: "সূরা আন-নাযিয়াত",
+    type: "Makki",
+    ayahCount: 46,
+    file: "surah_079.json"
   },
   {
     number: 80,
-    nameArabic: "عبس",
-    nameEnglish: "Abasa",
-    nameBangla: "আবাসা",
-    totalAyah: 42,
-    revelationPlace: "Makki",
-    ayahs: []
+    nameAr: "سورة عبس",
+    nameBn: "সূরা আবাসা",
+    type: "Makki",
+    ayahCount: 42,
+    file: "surah_080.json"
   },
+
+  // 81–90
   {
     number: 81,
-    nameArabic: "التكوير",
-    nameEnglish: "At-Takwir",
-    nameBangla: "আত-তাকভীর",
-    totalAyah: 29,
-    revelationPlace: "Makki",
-    ayahs: []
+    nameAr: "سورة التكوير",
+    nameBn: "সূরা আত-তাকভীর",
+    type: "Makki",
+    ayahCount: 29,
+    file: "surah_081.json"
   },
   {
     number: 82,
-    nameArabic: "الانفطار",
-    nameEnglish: "Al-Infitar",
-    nameBangla: "আল-ইনফিতার",
-    totalAyah: 19,
-    revelationPlace: "Makki",
-    ayahs: []
+    nameAr: "سورة الإنفطار",
+    nameBn: "সূরা আল-ইনফিতার",
+    type: "Makki",
+    ayahCount: 19,
+    file: "surah_082.json"
   },
   {
     number: 83,
-    nameArabic: "المطففين",
-    nameEnglish: "Al-Mutaffifin",
-    nameBangla: "আল-মুতাফফিফিন",
-    totalAyah: 36,
-    revelationPlace: "Makki",
-    ayahs: []
+    nameAr: "سورة المطففين",
+    nameBn: "সূরা আল-মুতাফফিফিন",
+    type: "Makki",
+    ayahCount: 36,
+    file: "surah_083.json"
   },
   {
     number: 84,
-    nameArabic: "الانشقاق",
-    nameEnglish: "Al-Inshiqaq",
-    nameBangla: "আল-ইনশিকাক",
-    totalAyah: 25,
-    revelationPlace: "Makki",
-    ayahs: []
+    nameAr: "سورة الإنشقاق",
+    nameBn: "সূরা আল-ইনশিকাক",
+    type: "Makki",
+    ayahCount: 25,
+    file: "surah_084.json"
   },
   {
     number: 85,
-    nameArabic: "البروج",
-    nameEnglish: "Al-Buruj",
-    nameBangla: "আল-বরূজ",
-    totalAyah: 22,
-    revelationPlace: "Makki",
-    ayahs: []
+    nameAr: "سورة البروج",
+    nameBn: "সূরা আল-বুরুজ",
+    type: "Makki",
+    ayahCount: 22,
+    file: "surah_085.json"
   },
   {
     number: 86,
-    nameArabic: "الطارق",
-    nameEnglish: "At-Tariq",
-    nameBangla: "আত-তারিক",
-    totalAyah: 17,
-    revelationPlace: "Makki",
-    ayahs: []
+    nameAr: "سورة الطارق",
+    nameBn: "সূরা আত-তারিক",
+    type: "Makki",
+    ayahCount: 17,
+    file: "surah_086.json"
   },
   {
     number: 87,
-    nameArabic: "الأعلى",
-    nameEnglish: "Al-A'la",
-    nameBangla: "আল-আ'লা",
-    totalAyah: 19,
-    revelationPlace: "Makki",
-    ayahs: []
+    nameAr: "سورة الأعلى",
+    nameBn: "সূরা আল-আ’লা",
+    type: "Makki",
+    ayahCount: 19,
+    file: "surah_087.json"
   },
   {
     number: 88,
-    nameArabic: "الغاشية",
-    nameEnglish: "Al-Ghashiyah",
-    nameBangla: "আল-গাশিয়াহ",
-    totalAyah: 26,
-    revelationPlace: "Makki",
-    ayahs: []
+    nameAr: "سورة الغاشية",
+    nameBn: "সূরা আল-গাশিয়াহ",
+    type: "Makki",
+    ayahCount: 26,
+    file: "surah_088.json"
   },
   {
     number: 89,
-    nameArabic: "الفجر",
-    nameEnglish: "Al-Fajr",
-    nameBangla: "আল-ফাজর",
-    totalAyah: 30,
-    revelationPlace: "Makki",
-    ayahs: []
+    nameAr: "سورة الفجر",
+    nameBn: "সূরা আল-ফাজর",
+    type: "Makki",
+    ayahCount: 30,
+    file: "surah_089.json"
   },
   {
     number: 90,
-    nameArabic: "البلد",
-    nameEnglish: "Al-Balad",
-    nameBangla: "আল- البلد",
-    totalAyah: 20,
-    revelationPlace: "Makki",
-    ayahs: []
+    nameAr: "سورة البلد",
+    nameBn: "সূরা আল-বালাদ",
+    type: "Makki",
+    ayahCount: 20,
+    file: "surah_090.json"
   },
+
+  // 91–100
   {
     number: 91,
-    nameArabic: "الشمس",
-    nameEnglish: "Ash-Shams",
-    nameBangla: "আশ-শামস",
-    totalAyah: 15,
-    revelationPlace: "Makki",
-    ayahs: []
+    nameAr: "سورة الشمس",
+    nameBn: "সূরা আশ-শামস",
+    type: "Makki",
+    ayahCount: 15,
+    file: "surah_091.json"
   },
   {
     number: 92,
-    nameArabic: "الليل",
-    nameEnglish: "Al-Layl",
-    nameBangla: "আল-লাইল",
-    totalAyah: 21,
-    revelationPlace: "Makki",
-    ayahs: []
+    nameAr: "سورة الليل",
+    nameBn: "সূরা আল-লাইল",
+    type: "Makki",
+    ayahCount: 21,
+    file: "surah_092.json"
   },
   {
     number: 93,
-    nameArabic: "الضحى",
-    nameEnglish: "Ad-Duha",
-    nameBangla: "আদ-দুহা",
-    totalAyah: 11,
-    revelationPlace: "Makki",
-    ayahs: []
+    nameAr: "سورة الضحى",
+    nameBn: "সূরা আদ-দুহা",
+    type: "Makki",
+    ayahCount: 11,
+    file: "surah_093.json"
   },
   {
     number: 94,
-    nameArabic: "الشرح",
-    nameEnglish: "Ash-Sharh",
-    nameBangla: "আশ-শারহ",
-    totalAyah: 8,
-    revelationPlace: "Makki",
-    ayahs: []
+    nameAr: "سورة الشرح",
+    nameBn: "সূরা আশ-শারহ",
+    type: "Makki",
+    ayahCount: 8,
+    file: "surah_094.json"
   },
   {
     number: 95,
-    nameArabic: "التين",
-    nameEnglish: "At-Tin",
-    nameBangla: "আত-তীন",
-    totalAyah: 8,
-    revelationPlace: "Makki",
-    ayahs: []
+    nameAr: "سورة التين",
+    nameBn: "সূরা আত-তীন",
+    type: "Makki",
+    ayahCount: 8,
+    file: "surah_095.json"
   },
   {
     number: 96,
-    nameArabic: "العلق",
-    nameEnglish: "Al-Alaq",
-    nameBangla: "আল-আলাক",
-    totalAyah: 19,
-    revelationPlace: "Makki",
-    ayahs: []
+    nameAr: "سورة العلق",
+    nameBn: "সূরা আল-আলাক",
+    type: "Makki",
+    ayahCount: 19,
+    file: "surah_096.json"
   },
   {
     number: 97,
-    nameArabic: "القدر",
-    nameEnglish: "Al-Qadr",
-    nameBangla: "আল-কদর",
-    totalAyah: 5,
-    revelationPlace: "Makki",
-    ayahs: []
+    nameAr: "سورة القدر",
+    nameBn: "সূরা আল-কদর",
+    type: "Makki",
+    ayahCount: 5,
+    file: "surah_097.json"
   },
   {
     number: 98,
-    nameArabic: "البينة",
-    nameEnglish: "Al-Bayyinah",
-    nameBangla: "আল-বাইয়্যিনাহ",
-    totalAyah: 8,
-    revelationPlace: "Madani",
-    ayahs: []
+    nameAr: "سورة البينة",
+    nameBn: "সূরা আল-বাইয়্যিনাহ",
+    type: "Madani",
+    ayahCount: 8,
+    file: "surah_098.json"
   },
   {
     number: 99,
-    nameArabic: "الزلزلة",
-    nameEnglish: "Az-Zalzalah",
-    nameBangla: "আয-যালযালাহ",
-    totalAyah: 8,
-    revelationPlace: "Madani",
-    ayahs: []
+    nameAr: "سورة الزلزلة",
+    nameBn: "সূরা আল-যিলযাল",
+    type: "Madani",
+    ayahCount: 8,
+    file: "surah_099.json"
   },
   {
     number: 100,
-    nameArabic: "العاديات",
-    nameEnglish: "Al-Adiyat",
-    nameBangla: "আল-আদিয়াত",
-    totalAyah: 11,
-    revelationPlace: "Makki",
-    ayahs: []
+    nameAr: "سورة العاديات",
+    nameBn: "সূরা আল-আদিয়াত",
+    type: "Makki",
+    ayahCount: 11,
+    file: "surah_100.json"
   },
+
+  // 101–114
   {
     number: 101,
-    nameArabic: "القارعة",
-    nameEnglish: "Al-Qari'ah",
-    nameBangla: "আল-কারিয়াহ",
-    totalAyah: 11,
-    revelationPlace: "Makki",
-    ayahs: []
+    nameAr: "سورة القارعة",
+    nameBn: "সূরা আল-ক্বারিআহ",
+    type: "Makki",
+    ayahCount: 11,
+    file: "surah_101.json"
   },
   {
     number: 102,
-    nameArabic: "التكاثر",
-    nameEnglish: "At-Takathur",
-    nameBangla: "আত-তাকাসুর",
-    totalAyah: 8,
-    revelationPlace: "Makki",
-    ayahs: []
+    nameAr: "سورة التكاثر",
+    nameBn: "সূরা আত-তাকাসুর",
+    type: "Makki",
+    ayahCount: 8,
+    file: "surah_102.json"
   },
   {
     number: 103,
-    nameArabic: "العصر",
-    nameEnglish: "Al-Asr",
-    nameBangla: "আল-আসর",
-    totalAyah: 3,
-    revelationPlace: "Makki",
-    ayahs: []
+    nameAr: "سورة العصر",
+    nameBn: "সূরা আল-‘আসর",
+    type: "Makki",
+    ayahCount: 3,
+    file: "surah_103.json"
   },
   {
     number: 104,
-    nameArabic: "الهمزة",
-    nameEnglish: "Al-Humazah",
-    nameBangla: "আল-হুমাযাহ",
-    totalAyah: 9,
-    revelationPlace: "Makki",
-    ayahs: []
+    nameAr: "سورة الهمزة",
+    nameBn: "সূরা আল-হুমাযাহ",
+    type: "Makki",
+    ayahCount: 9,
+    file: "surah_104.json"
   },
   {
     number: 105,
-    nameArabic: "الفيل",
-    nameEnglish: "Al-Fil",
-    nameBangla: "আল-ফীল",
-    totalAyah: 5,
-    revelationPlace: "Makki",
-    ayahs: []
+    nameAr: "سورة الفيل",
+    nameBn: "সূরা আল-ফীল",
+    type: "Makki",
+    ayahCount: 5,
+    file: "surah_105.json"
   },
   {
     number: 106,
-    nameArabic: "قريش",
-    nameEnglish: "Quraysh",
-    nameBangla: "কুরাইশ",
-    totalAyah: 4,
-    revelationPlace: "Makki",
-    ayahs: []
+    nameAr: "سورة قريش",
+    nameBn: "সূরা কুরাইশ",
+    type: "Makki",
+    ayahCount: 4,
+    file: "surah_106.json"
   },
   {
     number: 107,
-    nameArabic: "الماعون",
-    nameEnglish: "Al-Ma'un",
-    nameBangla: "আল-মাউন",
-    totalAyah: 7,
-    revelationPlace: "Makki",
-    ayahs: []
+    nameAr: "سورة الماعون",
+    nameBn: "সূরা আল-মাউন",
+    type: "Makki",
+    ayahCount: 7,
+    file: "surah_107.json"
   },
   {
     number: 108,
-    nameArabic: "الكوثر",
-    nameEnglish: "Al-Kawthar",
-    nameBangla: "আল-কাউসার",
-    totalAyah: 3,
-    revelationPlace: "Makki",
-    ayahs: []
+    nameAr: "سورة الكوثر",
+    nameBn: "সূরা আল-কাওছার",
+    type: "Makki",
+    ayahCount: 3,
+    file: "surah_108.json"
   },
   {
     number: 109,
-    nameArabic: "الكافرون",
-    nameEnglish: "Al-Kafirun",
-    nameBangla: "আল-কাফিরুন",
-    totalAyah: 6,
-    revelationPlace: "Makki",
-    ayahs: []
+    nameAr: "سورة الكافرون",
+    nameBn: "সূরা আল-কাফিরুন",
+    type: "Makki",
+    ayahCount: 6,
+    file: "surah_109.json"
   },
   {
     number: 110,
-    nameArabic: "النصر",
-    nameEnglish: "An-Nasr",
-    nameBangla: "আন-নাসর",
-    totalAyah: 3,
-    revelationPlace: "Madani",
-    ayahs: []
+    nameAr: "سورة النصر",
+    nameBn: "সূরা আন-নাসর",
+    type: "Madani",
+    ayahCount: 3,
+    file: "surah_110.json"
   },
   {
     number: 111,
-    nameArabic: "المسد",
-    nameEnglish: "Al-Masad",
-    nameBangla: "আল-মাসাদ",
-    totalAyah: 5,
-    revelationPlace: "Makki",
-    ayahs: []
+    nameAr: "سورة المسد",
+    nameBn: "সূরা আল-মাসাদ",
+    type: "Makki",
+    ayahCount: 5,
+    file: "surah_111.json"
   },
   {
     number: 112,
-    nameArabic: "الإخلاص",
-    nameEnglish: "Al-Ikhlas",
-    nameBangla: "আল-ইখলাস",
-    totalAyah: 4,
-    revelationPlace: "Makki",
-    ayahs: []
+    nameAr: "سورة الإخلاص",
+    nameBn: "সূরা আল-ইখলাস",
+    type: "Makki",
+    ayahCount: 4,
+    file: "surah_112.json"
   },
   {
     number: 113,
-    nameArabic: "الفلق",
-    nameEnglish: "Al-Falaq",
-    nameBangla: "আল-ফালাক",
-    totalAyah: 5,
-    revelationPlace: "Makki",
-    ayahs: []
+    nameAr: "سورة الفلق",
+    nameBn: "সূরা আল-ফালাক",
+    type: "Makki",
+    ayahCount: 5,
+    file: "surah_113.json"
   },
   {
     number: 114,
-    nameArabic: "الناس",
-    nameEnglish: "An-Nas",
-    nameBangla: "আন-নাস",
-    totalAyah: 6,
-    revelationPlace: "Makki",
-    ayahs: []
+    nameAr: "سورة الناس",
+    nameBn: "সূরা আন-নাস",
+    type: "Makki",
+    ayahCount: 6,
+    file: "surah_114.json"
   }
 ];
