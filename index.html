@@ -6,1234 +6,583 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <style>
     :root{
-      --bg:#05090f;
-      --bg-alt:#0b1220;
-      --bg-panel:#020617;
-      --muted:#a5b4c4;
-      --accent:#22c55e;
-      --accent2:#38bdf8;
-      --text:#e5f0ff;
-      --text-soft:#cbd5f5;
-      --border-soft:rgba(148,163,184,0.35);
-      --danger:#fb7185;
-      --gold:#fbbf24;
-      --radius:14px;
-      --shadow-soft:0 16px 32px rgba(0,0,0,0.6);
+      --bg:#05090f; --panel:#071026; --muted:#98a6b6; --text:#e6eef8;
+      --accent:#22c55e; --gold:#f59e0b; --soft-border:rgba(148,163,184,0.18);
+      --radius:12px; --shadow:0 12px 30px rgba(0,0,0,0.6);
     }
-    body.theme-dark{
-      --bg:#05090f;
-      --bg-alt:#0b1220;
-      --bg-panel:#020617;
-      --text:#e5f0ff;
-      --text-soft:#cbd5f5;
-    }
-    body.theme-green{
-      --bg:#022c22;
-      --bg-alt:#064e3b;
-      --bg-panel:#022c22;
-      --text:#ecfdf5;
-      --text-soft:#d1fae5;
-    }
-    body.theme-sepia{
-      --bg:#f3e8d8;
-      --bg-alt:#fef3c7;
-      --bg-panel:#fef9c3;
-      --text:#1f2933;
-      --text-soft:#4b5563;
-    }
-
     *{box-sizing:border-box}
-    html,body{
-      height:100%;
-      margin:0;
-      font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans Bengali",sans-serif;
-      background:var(--bg);
-      color:var(--text);
-    }
+    body{margin:0;font-family:system-ui,-apple-system,"Noto Sans Bengali",sans-serif;background:var(--bg);color:var(--text)}
     button{font-family:inherit;cursor:pointer}
     a{color:inherit}
-
-    .container{
-      max-width:1140px;
-      margin:8px auto;
-      padding:6px;
-      display:grid;
-      grid-template-columns:280px 1fr;
-      gap:10px;
-      align-items:start;
+    /* layout */
+    .app {
+      max-width:1200px;margin:10px auto;padding:8px;display:grid;grid-template-columns:1fr;gap:10px;
     }
-
-    .sidebar{
-      background:var(--bg-panel);
-      border-radius:12px;
-      padding:8px;
-      border:1px solid var(--border-soft);
-      box-shadow:var(--shadow-soft);
-      height:calc(100vh - 32px);
-      overflow:auto;
+    .topbar{
+      display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px;border-radius:12px;
+      background:linear-gradient(90deg,var(--panel),#041029);border:1px solid var(--soft-border);box-shadow:var(--shadow);
     }
-    .logo{
-      display:flex;
-      gap:8px;
-      align-items:center;
-      margin-bottom:6px;
+    .left-controls{display:flex;align-items:center;gap:8px}
+    .hamburger{font-size:20px;padding:6px;border-radius:10px;border:1px solid var(--soft-border);background:transparent}
+    .title{font-weight:700;font-size:15px}
+    .top-actions{display:flex;gap:6px;align-items:center}
+    .btn{padding:6px 9px;border-radius:999px;border:1px solid var(--soft-border);background:transparent;color:var(--text)}
+    .btn.primary{background:linear-gradient(90deg,var(--accent),#10b981);border:none;color:#042014;font-weight:700}
+    /* container for main content and drawer */
+    .layout{display:grid;grid-template-columns:320px 1fr;gap:12px;margin-top:6px}
+    @media(max-width:980px){.layout{grid-template-columns:1fr}}
+    /* drawer (hidden by default, slides in) */
+    .drawer {
+      position:fixed;left:-340px;top:0;height:100vh;width:320px;padding:12px;background:var(--panel);z-index:120;
+      box-shadow: 8px 0 30px rgba(0,0,0,0.6);transition:left .25s ease;border-right:1px solid var(--soft-border);
     }
-    .logo .dot{
-      width:36px;height:36px;
-      border-radius:12px;
-      background:radial-gradient(circle at 30% 20%,#bbf7d0 0,#22c55e 35%,#16a34a 70%,#0f766e 100%);
-      display:flex;align-items:center;justify-content:center;
-      font-weight:800;color:#022c22;
-      box-shadow:0 5px 14px rgba(22,163,74,0.8);
-    }
-    .logo .title{font-weight:700;font-size:14px}
-    .logo-sub{font-size:11px;color:var(--muted)}
-    .panel-title{
-      font-size:11px;
-      color:var(--muted);
-      margin-bottom:4px;
-      letter-spacing:0.04em;
-      text-transform:uppercase;
-    }
-
-    .search{position:relative;margin-bottom:6px}
-    .search input{
-      width:100%;
-      padding:5px 9px;
-      border-radius:999px;
-      border:1px solid var(--border-soft);
-      background:rgba(15,23,42,0.9);
-      color:var(--text);
-      font-size:11px;
-    }
-    body.theme-sepia .search input{
-      background:#fefce8;
-      color:#111827;
-    }
-    .search input::placeholder{color:#64748b}
-
-    .sura-list{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:5px;
-    }
-    .sura-item{
-      padding:5px 6px;
-      border-radius:9px;
-      display:flex;
-      flex-direction:column;
-      gap:1px;
-      background:linear-gradient(135deg,rgba(15,23,42,0.96),rgba(15,23,42,0.9));
-      border:1px solid var(--border-soft);
-      cursor:pointer;
-      color:var(--text-soft);
-      box-shadow:0 3px 10px rgba(15,23,42,0.7);
-      transition:transform 0.1s,box-shadow 0.1s,border-color 0.1s,background 0.1s;
-    }
-    body.theme-sepia .sura-item{
-      background:#fef3c7;
-      border-color:#fcd34d;
-      color:#1f2933;
-    }
-    .sura-item:hover{
-      transform:translateY(-1px);
-      border-color:var(--accent);
-      box-shadow:0 5px 14px rgba(34,197,94,0.5);
-    }
-    .sura-item.active{
-      background:linear-gradient(135deg,#22c55e,#0f172a);
-      border-color:#bbf7d0;
-      color:#ecfdf5;
-      box-shadow:0 6px 16px rgba(34,197,94,0.6);
-    }
-    .sura-item .bn{font-weight:600;font-size:11px}
-    .sura-item .meta{font-size:10px;color:#cbd5f5}
-    .sura-item .ar{
-      font-family:"Scheherazade New","Amiri",serif;
-      font-size:13px;
-      text-align:right;
-      color:#f9fafb;
-    }
-
-    .last-read-box{
-      margin-top:6px;
-      padding:6px 7px;
-      border-radius:9px;
-      background:linear-gradient(120deg,rgba(34,197,94,0.12),rgba(56,189,248,0.08));
-      border:1px solid var(--border-soft);
-      color:var(--text-soft);
-      font-size:11px;
-    }
-
-    .mini-list{margin-top:6px;display:flex;flex-direction:column;gap:4px}
-    .mini-item{
-      display:flex;justify-content:space-between;align-items:center;
-      padding:4px 6px;
-      border-radius:8px;
-      background:rgba(15,23,42,0.9);
-      border:1px solid var(--border-soft);
-      font-size:10px;
-      color:var(--text-soft);
-    }
-    body.theme-sepia .mini-item{
-      background:#fdf4e3;
-      border-color:#facc15;
-      color:#1f2933;
-    }
-
-    .main{min-height:75vh}
-    .header-card{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:8px;
-      padding:8px 9px;
-      border-radius:12px;
-      background:linear-gradient(135deg,#0f172a,#020617);
-      border:1px solid var(--border-soft);
-      box-shadow:var(--shadow-soft);
-    }
-    body.theme-sepia .header-card{
-      background:linear-gradient(135deg,#fef3c7,#fde68a);
-      border-color:#fbbf24;
-    }
-    .sura-meta{display:flex;flex-direction:column;gap:2px}
-    .sura-name{font-size:15px;font-weight:700}
-    .sura-info{font-size:11px;color:var(--muted)}
-    .writer-badge{font-size:10px;color:var(--text-soft);margin-top:2px}
-    .writer-badge span{
-      padding:2px 6px;
-      border-radius:999px;
-      border:1px solid var(--border-soft);
-      margin-right:3px;
-      font-size:10px;
-    }
-
-    .controls{display:flex;gap:5px;align-items:center;flex-wrap:wrap}
-    .btn{
-      padding:5px 8px;
-      border-radius:999px;
-      border:1px solid var(--border-soft);
-      background:rgba(15,23,42,0.9);
-      color:var(--text);
-      font-size:11px;
-    }
-    body.theme-sepia .btn{
-      background:#fefce8;
-      color:#111827;
-    }
-    .btn.primary{
-      background:linear-gradient(90deg,#22c55e,#14b8a6);
-      border:none;
-      color:#022c22;
-      font-weight:600;
-      box-shadow:0 4px 11px rgba(34,197,94,0.55);
-    }
-    .btn.danger{
-      background:rgba(248,113,113,0.12);
-      border-color:#fecaca;
-      color:#fecaca;
-    }
-
-    .view-toggle{
-      display:inline-flex;
-      border-radius:999px;
-      overflow:hidden;
-      border:1px solid var(--border-soft);
-      background:rgba(15,23,42,0.9);
-    }
-    body.theme-sepia .view-toggle{background:#fefce8;}
-    .view-toggle button{
-      padding:4px 8px;
-      background:transparent;
-      border:none;
-      color:#9ca3af;
-      font-size:10px;
-    }
-    .view-toggle button.active{
-      background:linear-gradient(90deg,#22c55e,#16a34a);
-      color:#022c22;
-      font-weight:600;
-    }
-
-    .aya-card{
-      margin-top:8px;
-      padding:7px;
-      border-radius:12px;
-      background:var(--bg-alt);
-      border:1px solid var(--border-soft);
-      box-shadow:var(--shadow-soft);
-    }
-    body.theme-sepia .aya-card{
-      background:#fef3c7;
-      border-color:#fbbf24;
-    }
-    .aya-card-header{
-      display:flex;justify-content:space-between;align-items:center;font-size:12px;
-    }
-    .aya-list{
-      margin-top:6px;
-      border-radius:9px;
-      overflow:auto;
-      max-height:calc(100vh - 220px);
-      padding-bottom:40px;
-    }
-
-    .aya-row{
-      display:grid;
-      grid-template-columns:32px 1fr 120px;
-      gap:6px;
-      padding:6px 7px;
-      border-bottom:1px dashed rgba(55,65,81,0.7);
-      background:rgba(15,23,42,0.96);
-    }
-    .aya-row:nth-child(even){background:rgba(17,24,39,0.95)}
-    body.theme-sepia .aya-row{
-      background:#fdf4e3;
-      border-color:#fbbf24;
-    }
-    .aya-row:last-child{border-bottom:none}
-
-    .aya-check{
-      display:flex;align-items:flex-start;justify-content:center;padding-top:4px;
-    }
-    .aya-check input{width:14px;height:14px;accent-color:#22c55e}
-
+    .drawer.open{left:6px}
+    .drawer .close-x{float:right}
+    .drawer h3{margin:4px 0 8px;font-size:14px}
+    .drawer .sura-full-list{max-height:calc(100vh - 140px);overflow:auto;padding-right:6px}
+    .sura-full-item{padding:8px;border-radius:8px;margin-bottom:6px;background:rgba(255,255,255,0.02);border:1px solid var(--soft-border);cursor:pointer}
+    .sura-full-item:hover{box-shadow:0 8px 20px rgba(0,0,0,0.6);transform:translateY(-2px)}
+    /* main header */
+    .main-header{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px;border-radius:12px;background:linear-gradient(90deg,#061122,#031026);border:1px solid var(--soft-border)}
+    .sura-title{font-size:18px;font-weight:700}
+    .sura-sub{font-size:12px;color:var(--muted)}
+    /* aya list card */
+    .card{margin-top:8px;padding:10px;border-radius:12px;background:linear-gradient(180deg,#041025,#02101f);border:1px solid var(--soft-border);box-shadow:var(--shadow)}
+    .aya-list{max-height:calc(100vh - 260px);overflow:auto;padding-right:6px}
+    .aya-row{display:grid;grid-template-columns:36px 1fr 52px;gap:8px;padding:8px;border-bottom:1px dashed rgba(255,255,255,0.03);align-items:start}
+    @media(max-width:980px){.aya-row{grid-template-columns:28px 1fr;gap:8px}}
+    .aya-check{display:flex;align-items:flex-start;justify-content:center;padding-top:4px}
+    .aya-check input{width:16px;height:16px;accent-color:var(--accent)}
     .aya-text{overflow:hidden}
-    .aya-text-meta{
-      display:flex;justify-content:space-between;align-items:center;margin-bottom:3px;
-    }
-    .aya-number{
-      font-size:10px;
-      color:#e5e7eb;
-      padding:2px 6px;
-      border-radius:999px;
-      background:rgba(15,23,42,0.97);
-      border:1px solid var(--border-soft);
-    }
-    body.theme-sepia .aya-number{
-      background:#fef9c3;
-      color:#1f2933;
-    }
-    .aya-tags{font-size:10px;color:#facc15;display:flex;gap:4px}
-
-    .aya-ar{
-      font-family:"Scheherazade New","Amiri",serif;
-      direction:rtl;
-      text-align:right;
-      margin-bottom:3px;
-      color:#fefce8;
-    }
-    body.theme-sepia .aya-ar{color:#111827}
-
-    .word-token{
-      display:inline-block;
-      padding:1px 4px;
-      margin:0 1px;
-      border-radius:999px;
-      cursor:pointer;
-      border:1px solid transparent;
-    }
-    .word-token:hover{
-      background:rgba(34,197,94,0.08);
-      border-color:rgba(34,197,94,0.4);
-    }
-
-    .aya-bn-main{margin-bottom:2px;}
-    .aya-bn-block{
-      margin-top:2px;
-      padding:3px 5px;
-      border-radius:6px;
-      background:rgba(15,23,42,0.88);
-      border:1px solid rgba(148,163,184,0.4);
-      font-size:11px;
-    }
-    body.theme-sepia .aya-bn-block{
-      background:#fef9c3;
-      border-color:#fcd34d;
-    }
-    .aya-bn-label{
-      font-size:10px;
-      opacity:0.8;
-      margin-bottom:1px;
-    }
-    .aya-bn-text{
-      line-height:1.6;
-    }
-
-    .aya-actions{
-      display:flex;flex-direction:column;gap:4px;align-items:flex-end;font-size:10px;
-    }
-    .action-row{display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end}
-    .icon-chip{
-      padding:3px 5px;
-      border-radius:999px;
-      border:1px solid var(--border-soft);
-      background:rgba(15,23,42,0.97);
-      color:var(--text-soft);
-      cursor:pointer;
-      display:inline-flex;
-      align-items:center;
-      font-size:10px;
-    }
-    .icon-chip.active{
-      background:radial-gradient(circle at top,#fef9c3,#facc15);
-      color:#422006;
-      border-color:#fbbf24;
-    }
-    .icon-chip.fav{
-      background:radial-gradient(circle at top,#fef2f2,#fecaca);
-      color:#7f1d1d;
-      border-color:#fecaca;
-    }
-    .icon-chip.main{
-      background:radial-gradient(circle at top left,#22c55e,#16a34a);
-      color:#022c22;
-      border-color:#bbf7d0;
-      font-weight:600;
-    }
-
-    .multi-bar{
-      position:fixed;
-      left:50%;transform:translateX(-50%);
-      bottom:8px;
-      padding:6px 9px;
-      border-radius:999px;
-      background:var(--bg-panel);
-      border:1px solid var(--border-soft);
-      display:none;
-      gap:5px;
-      z-index:60;
-      align-items:center;
-      box-shadow:var(--shadow-soft);
-      font-size:10px;
-    }
+    .aya-meta{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px}
+    .ayah-num{font-size:11px;padding:4px 6px;border-radius:999px;background:rgba(255,255,255,0.03);color:var(--muted)}
+    .tags{font-size:11px;color:var(--gold)}
+    .aya-ar{font-family:"Scheherazade New","Amiri",serif;text-align:right;direction:rtl;margin-bottom:6px}
+    .word-token{display:inline-block;padding:2px 6px;margin:0 2px;border-radius:999px;cursor:pointer}
+    .word-token:hover{background:rgba(34,197,94,0.08)}
+    .aya-bn-block{margin-top:6px;padding:6px;border-radius:8px;background:rgba(255,255,255,0.02);border:1px solid var(--soft-border)}
+    .aya-bn-label{font-size:11px;color:var(--muted);margin-bottom:4px}
+    .aya-bn-text{font-size:13px;line-height:1.6}
+    .aya-actions{display:flex;flex-direction:column;gap:6px;align-items:flex-end}
+    /* three-dot menu style */
+    .dots-btn{background:transparent;border:none;color:var(--muted);font-size:18px;padding:4px;border-radius:6px}
+    .mini-menu{position:absolute;right:10px;top:36px;min-width:160px;background:var(--panel);border:1px solid var(--soft-border);border-radius:8px;padding:6px;box-shadow:var(--shadow);display:none;z-index:140}
+    .mini-menu.show{display:block}
+    .mini-menu button{display:block;width:100%;text-align:left;padding:6px;border-radius:6px;background:transparent;border:none;color:var(--text);font-size:13px}
+    .mini-menu button:hover{background:rgba(255,255,255,0.02)}
+    /* word popup */
+    .word-popup{position:fixed;z-index:200;min-width:220px;background:var(--panel);border:1px solid var(--soft-border);border-radius:10px;padding:8px;display:none}
+    .word-popup .arabic{font-family:"Scheherazade New","Amiri",serif;text-align:right}
+    .word-popup .meaning{margin-top:6px}
+    .word-popup .notes{margin-top:6px;font-size:12px;color:var(--muted);max-height:140px;overflow:auto}
+    /* last read compact */
+    .last-read{margin-top:8px;padding:8px;border-radius:10px;background:linear-gradient(90deg,rgba(34,197,94,0.06),rgba(56,189,248,0.04));border:1px solid var(--soft-border);display:flex;align-items:center;justify-content:space-between;gap:8px}
+    .last-read .info{font-size:13px}
+    .last-read .actions{display:flex;gap:6px}
+    /* multi bar */
+    .multi-bar{position:fixed;left:50%;transform:translateX(-50%);bottom:10px;background:linear-gradient(90deg,#021526,#04102a);border:1px solid var(--soft-border);padding:8px;border-radius:999px;display:none;gap:8px;z-index:210}
     .multi-bar.show{display:flex}
-    .multi-bar .count{margin-right:4px;color:var(--text-soft)}
-
-    .modal-backdrop{
-      position:fixed;inset:0;
-      background:rgba(15,23,42,0.82);
-      display:none;
-      align-items:center;justify-content:center;
-      z-index:70;
-      backdrop-filter:blur(8px);
-    }
+    /* modal */
+    .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.6);display:none;align-items:center;justify-content:center;z-index:300}
     .modal-backdrop.show{display:flex}
-    .modal{
-      background:var(--bg-panel);
-      color:var(--text);
-      border-radius:12px;
-      max-width:900px;
-      width:96%;
-      max-height:90vh;
-      overflow:auto;
-      box-shadow:var(--shadow-soft);
-      border:1px solid var(--border-soft);
-    }
-    .modal-header{
-      display:flex;justify-content:space-between;align-items:center;
-      padding:7px 10px;
-      border-bottom:1px solid var(--border-soft);
-    }
-    .modal-title{font-weight:600;font-size:13px}
-    .modal-body{padding:7px 10px;font-size:12px}
-    .modal-footer{
-      padding:7px 10px;
-      border-top:1px solid var(--border-soft);
-      display:flex;justify-content:flex-end;gap:6px;
-      background:var(--bg-panel);
-    }
-
-    .word-popup{
-      position:fixed;
-      z-index:80;
-      min-width:240px;
-      max-width:300px;
-      background:var(--bg-panel);
-      border-radius:10px;
-      padding:7px;
-      border:1px solid var(--border-soft);
-      box-shadow:var(--shadow-soft);
-      display:none;
-      font-size:11px;
-    }
-    .word-popup .arabic{
-      font-family:"Scheherazade New","Amiri",serif;
-      font-size:18px;
-      text-align:right;
-    }
-    .word-popup .meaning{margin-top:3px;font-size:12px}
-    .word-popup .notes{
-      margin-top:4px;
-      max-height:130px;
-      overflow:auto;
-      font-size:11px;
-      color:var(--text-soft);
-    }
-
-    textarea{
-      background:var(--bg);
-      color:var(--text-soft);
-      border-radius:8px;
-      border:1px solid var(--border-soft);
-      font-size:12px;
-    }
-
-    @media (max-width:980px){
-      .container{grid-template-columns:1fr;padding:5px}
-      .sidebar{order:2;height:auto;max-height:45vh}
-      .main{order:1}
-      .aya-list{max-height:none}
-      .aya-row{grid-template-columns:26px 1fr;gap:5px;padding:5px 6px;}
-      .aya-actions{flex-direction:row;justify-content:flex-start;align-items:flex-start;margin-top:3px}
-    }
+    .modal{background:var(--panel);border:1px solid var(--soft-border);border-radius:10px;max-width:900px;width:96%;max-height:90vh;overflow:auto;padding:10px}
   </style>
 </head>
-<body class="theme-dark">
-  <div class="container">
-    <aside class="sidebar">
-      <div class="logo">
-        <div class="dot">ق</div>
-        <div>
-          <div class="title">Qur'an • Word-by-Word</div>
-          <div class="logo-sub">বাংলা অর্থ ও ব্যাকরণ নোট</div>
-        </div>
+<body>
+  <div class="app">
+    <div class="topbar">
+      <div class="left-controls">
+        <button id="hamburger" class="hamburger" title="সূরা তালিকা">≡</button>
+        <div class="title">Qur'an • Word-by-Word</div>
       </div>
-
-      <div class="panel-title">সূরার তালিকা</div>
-      <div class="search">
-        <input id="suraSearch" placeholder="নাম / নম্বর দিয়ে খুঁজুন..." />
+      <div class="top-actions">
+        <button id="openSettings" class="btn">⚙️ সেটিংস</button>
+        <button id="openPins" class="btn">📌 পিন/ফেভারিট</button>
+        <button id="openCopy" class="btn primary">📋 মাল্টি কপি</button>
       </div>
-      <div id="suraList" class="sura-list"></div>
+    </div>
 
-      <div style="margin-top:6px" class="panel-title">সর্বশেষ পড়া</div>
-      <div id="lastReadBox" class="last-read-box">এখনো কোনো আয়াতকে শেষ পড়া হিসেবে সেভ করা হয়নি।</div>
+    <div class="layout">
+      <!-- left column placeholder (kept for wide screens but drawer used) -->
+      <div style="display:none"></div>
 
-      <div style="margin-top:6px" class="panel-title">পিন / প্রিয় শর্টকাট</div>
-      <div id="miniPins" class="mini-list"></div>
-    </aside>
-
-    <main class="main">
-      <div class="header-card">
-        <div class="sura-meta">
-          <div class="sura-name" id="currentSuraName">সূরা নির্বাচন করুন…</div>
-          <div class="sura-info" id="currentSuraInfo">—</div>
-          <div class="writer-badge">
-            <span id="wb-osmani">তাফসীরে ওসমানী ✓</span>
-            <span id="wb-tawzeeh">তাওযীহুল কুরআন ✓</span>
+      <div>
+        <div class="main-header card">
+          <div>
+            <div id="currentSuraTitle" class="sura-title">সূরা নির্বাচন করুন</div>
+            <div id="currentSuraSub" class="sura-sub">সূরা তথ্য এখানে দেখবে</div>
+          </div>
+          <div>
+            <div style="display:flex;gap:8px;align-items:center">
+              <div id="viewButtons" style="display:flex;gap:6px">
+                <button class="btn" data-view="both">আরবি+বাংলা</button>
+                <button class="btn" data-view="ar">আরবি</button>
+                <button class="btn" data-view="bn">বাংলা</button>
+              </div>
+              <button id="settingsQuick" class="btn">⚙️</button>
+            </div>
           </div>
         </div>
-        <div class="controls">
-          <div class="view-toggle" id="viewToggle">
-            <button data-view="both" class="active">আরবি+বাংলা</button>
-            <button data-view="ar">শুধু আরবি</button>
-            <button data-view="bn">শুধু বাংলা</button>
+
+        <div class="card">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div style="font-weight:700">আয়াত তালিকা</div>
+            <div id="ayaCount" style="color:var(--muted)"></div>
           </div>
-          <button id="openSettings" class="btn">⚙️ সেটিংস</button>
-          <button id="openPinsModal" class="btn">📌 পিন / ⭐ প্রিয়</button>
+
+          <div id="ayaList" class="aya-list"></div>
+        </div>
+
+        <div id="multiBar" class="multi-bar">
+          <div id="multiCount" style="font-size:13px;color:var(--muted)">0 টি নির্বাচন</div>
+          <button id="multiCopyBtn" class="btn">📋 কপি</button>
+          <button id="multiShareBtn" class="btn primary">🔗 শেয়ার</button>
+          <button id="multiClearBtn" class="btn">✖ ক্লিয়ার</button>
         </div>
       </div>
-
-      <section class="aya-card">
-        <div class="aya-card-header">
-          <span>আয়াত তালিকা</span>
-          <span id="ayaCount"></span>
-        </div>
-        <div id="ayaList" class="aya-list"></div>
-      </section>
-    </main>
+    </div>
   </div>
 
-  <div id="multiBar" class="multi-bar">
-    <div class="count" id="multiCount">0 টি আয়াত নির্বাচিত</div>
-    <button id="multiCopy" class="btn">📋 কপি</button>
-    <button id="multiShare" class="btn primary">🔗 শেয়ার</button>
-    <button id="multiClear" class="btn">✖ ক্লিয়ার</button>
+  <!-- DRAWER (sura list full single column) -->
+  <div id="drawer" class="drawer" aria-hidden="true">
+    <button id="drawerClose" class="close-x btn">✕</button>
+    <h3>সূরার তালিকা</h3>
+    <input id="drawerSearch" placeholder="সূরা নাম / নং..." style="width:100%;padding:8px;border-radius:8px;border:1px solid var(--soft-border);margin-bottom:8px;background:transparent;color:var(--text)" />
+    <div id="drawerList" class="sura-full-list"></div>
   </div>
 
+  <!-- WORD POPUP -->
   <div id="wordPopup" class="word-popup">
     <div class="arabic" id="wpArabic"></div>
     <div class="meaning" id="wpMeaning"></div>
     <div class="notes" id="wpNotes"></div>
-    <div style="text-align:right;margin-top:4px">
-      <button id="wpClose" class="btn">✕</button>
-    </div>
+    <div style="text-align:right;margin-top:6px"><button id="wpClose" class="btn">Close</button></div>
   </div>
 
+  <!-- MODALS -->
   <div id="modalBackdrop" class="modal-backdrop">
-    <div id="modalWindow" class="modal">
-      <div class="modal-header">
-        <div id="modalTitle" class="modal-title">Title</div>
-        <button id="modalClose" class="btn">✕</button>
-      </div>
-      <div class="modal-body" id="modalBody"></div>
-      <div class="modal-footer" id="modalFooter"></div>
-    </div>
+    <div id="modalWindow" class="modal"></div>
   </div>
 
+  <!-- load suras -->
   <script src="suras.js"></script>
 
   <script>
   (function(){
     if(!window.suras || !Array.isArray(window.suras)){
-      document.getElementById('currentSuraName').textContent='suras.js লোড হচ্ছে না';
+      alert('suras.js লোড হয়নি বা সঠিক নয়।');
       return;
     }
 
-    const storage={
-      get(k,f){try{const v=localStorage.getItem(k);return v?JSON.parse(v):f;}catch(e){return f}},
-      set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
-    };
+    // storage helper
+    const S = { get(k,def){try{const v=localStorage.getItem(k);return v?JSON.parse(v):def}catch(e){return def}}, set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){} } };
 
-    const STATE={
-      currentSuraIndex:0,
-      currentSurahData:null,
-      view:storage.get('q_view','both'),
-      theme:storage.get('q_theme','dark'),
-      showOsmani:storage.get('q_showOsmani',true),
-      showTawzeeh:storage.get('q_showTawzeeh',true),
-      fontArabic:storage.get('q_fontArabic',20),
-      fontBanglaMain:storage.get('q_fontBanglaMain',13),
-      fontOsmani:storage.get('q_fontOsmani',12),
-      fontTawzeeh:storage.get('q_fontTawzeeh',12),
-      fontWordMeaning:storage.get('q_fontWordMeaning',12),
-      fontGrammar:storage.get('q_fontGrammar',11),
-      lineHeight:storage.get('q_lineHeight',1.6),
-      pins:storage.get('q_pins',[]),
-      favs:storage.get('q_favs',[]),
-      lastRead:storage.get('q_lastRead',null),
+    // state
+    const STATE = {
+      curSuraIndex:0,
+      curSurahData:null,
+      view:S.get('q_view','both'),
+      showOsmani:S.get('q_showOsmani',true),
+      showTawjih:S.get('q_showTawjih',true),
+      fontArabic:S.get('q_fontArabic',20),
+      fontBangla:S.get('q_fontBangla',13),
+      fontOsmani:S.get('q_fontOsmani',12),
+      fontTawjih:S.get('q_fontTawjih',12),
+      lineHeight:S.get('q_lineHeight',1.6),
+      pins:S.get('q_pins',[]),
+      favs:S.get('q_favs',[]),
+      lastRead:S.get('q_lastRead',null),
       selected:new Set()
     };
 
-    applyTheme();
+    // elements
+    const drawer=document.getElementById('drawer');
+    const hamburger=document.getElementById('hamburger');
+    const drawerClose=document.getElementById('drawerClose');
+    const drawerList=document.getElementById('drawerList');
+    const drawerSearch=document.getElementById('drawerSearch');
 
-    const suraListEl=document.getElementById('suraList');
-    const suraSearchEl=document.getElementById('suraSearch');
-    const currentSuraNameEl=document.getElementById('currentSuraName');
-    const currentSuraInfoEl=document.getElementById('currentSuraInfo');
+    const currentSuraTitle=document.getElementById('currentSuraTitle');
+    const currentSuraSub=document.getElementById('currentSuraSub');
     const ayaListEl=document.getElementById('ayaList');
     const ayaCountEl=document.getElementById('ayaCount');
-    const miniPinsEl=document.getElementById('miniPins');
-    const lastReadBoxEl=document.getElementById('lastReadBox');
-    const viewToggle=document.getElementById('viewToggle');
-
-    const wbOsmani=document.getElementById('wb-osmani');
-    const wbTawzeeh=document.getElementById('wb-tawzeeh');
-
-    const multiBar=document.getElementById('multiBar');
-    const multiCount=document.getElementById('multiCount');
-
-    const modalBackdrop=document.getElementById('modalBackdrop');
-    const modalTitle=document.getElementById('modalTitle');
-    const modalBody=document.getElementById('modalBody');
-    const modalFooter=document.getElementById('modalFooter');
 
     const wordPopup=document.getElementById('wordPopup');
     const wpArabic=document.getElementById('wpArabic');
     const wpMeaning=document.getElementById('wpMeaning');
     const wpNotes=document.getElementById('wpNotes');
+    const wpClose=document.getElementById('wpClose');
 
-    function applyTheme(){
-      document.body.classList.remove('theme-dark','theme-green','theme-sepia');
-      if(STATE.theme==='green')document.body.classList.add('theme-green');
-      else if(STATE.theme==='sepia')document.body.classList.add('theme-sepia');
-      else document.body.classList.add('theme-dark');
-      storage.set('q_theme',STATE.theme);
-    }
+    const modalBackdrop=document.getElementById('modalBackdrop');
+    const modalWindow=document.getElementById('modalWindow');
 
-    function ayahKey(s,a){return s+':'+a;}
-    function findIdx(list,key){return list.findIndex(i=>i.key===key);}
-    function isPinned(s,a){return findIdx(STATE.pins,ayahKey(s,a))!==-1;}
-    function isFav(s,a){return findIdx(STATE.favs,ayahKey(s,a))!==-1;}
-    const savePins=()=>storage.set('q_pins',STATE.pins);
-    const saveFavs=()=>storage.set('q_favs',STATE.favs);
+    const multiBar=document.getElementById('multiBar');
+    const multiCount=document.getElementById('multiCount');
 
-    function renderSuraList(filter=''){
-      const ft=filter.trim().toLowerCase();
-      suraListEl.innerHTML='';
+    // open/close drawer
+    hamburger.addEventListener('click',()=>{ drawer.classList.add('open'); drawer.setAttribute('aria-hidden','false'); });
+    drawerClose.addEventListener('click',()=>{ drawer.classList.remove('open'); drawer.setAttribute('aria-hidden','true'); });
+    drawerSearch.addEventListener('input',()=>renderDrawerList(drawerSearch.value));
+
+    // populate drawer list single column
+    function renderDrawerList(filter=''){
+      drawerList.innerHTML='';
+      const ft=(filter||'').trim().toLowerCase();
       window.suras.forEach((s,idx)=>{
-        const bn=s.nameBn||s.name_bn||s.name||'';
-        const ar=s.nameAr||s.name_ar||'';
-        const id=String(s.number||idx+1);
-        const count=s.ayahCount||(s.ayahs?s.ayahs.length:'?');
-        if(ft && !(bn.toLowerCase().includes(ft)||ar.toLowerCase().includes(ft)||id===ft))return;
-        const btn=document.createElement('button');
-        btn.className='sura-item'+(idx===STATE.currentSuraIndex?' active':'');
-        btn.dataset.index=idx;
-        btn.innerHTML='<div class="bn">'+id+'. '+bn+'</div><div class="meta">'+count+' আয়াত</div><div class="ar">'+ar+'</div>';
-        btn.addEventListener('click',()=>setCurrentSura(idx));
-        suraListEl.appendChild(btn);
+        const bn = s.nameBn || s.name_bn || s.name || '';
+        const ar = s.nameAr || s.name_ar || '';
+        const id = s.number || (idx+1);
+        if(ft && !(bn.toLowerCase().includes(ft) || ar.toLowerCase().includes(ft) || String(id)===ft)) return;
+        const div=document.createElement('div');
+        div.className='sura-full-item';
+        div.innerHTML = '<div style="font-weight:700">'+id+'. '+bn+'</div><div style="font-size:12px;color:var(--muted)">'+ar+' • '+(s.ayahCount|| (s.ayahs?s.ayahs.length:'?'))+' আয়াত</div>';
+        div.addEventListener('click',()=>{ setCurrentSura(idx); drawer.classList.remove('open'); });
+        drawerList.appendChild(div);
       });
     }
-    suraSearchEl.addEventListener('input',()=>renderSuraList(suraSearchEl.value));
 
+    // initial drawer list
+    renderDrawerList();
+
+    // set current sura (load JSON if file provided)
     async function setCurrentSura(idx){
-      STATE.currentSuraIndex=idx;
-      renderSuraList(suraSearchEl.value||'');
-      const meta=window.suras[idx];
-      currentSuraNameEl.textContent=(meta.number||idx+1)+'. '+(meta.nameBn||meta.name||'')+' ('+(meta.nameAr||'')+')';
-      currentSuraInfoEl.textContent=(meta.revelationPlace||meta.type||'')+' • '+(meta.ayahCount||(meta.ayahs?meta.ayahs.length:'?'))+' আয়াত';
+      STATE.curSuraIndex = idx;
+      const meta = window.suras[idx] || {};
+      currentSuraTitle.textContent = (meta.number||idx+1)+'. '+(meta.nameBn||meta.name||'');
+      currentSuraSub.textContent = (meta.nameAr||'') + ' • ' + (meta.revelationPlace||meta.type||'') + ' • ' + ((meta.ayahCount)||(meta.ayahs?meta.ayahs.length:'?')) + ' আয়াত';
 
+      // load surah JSON if file property exists
+      STATE.curSurahData = null;
       if(meta.file){
         try{
-          const res=await fetch(meta.file);
-          if(!res.ok)throw new Error('not ok');
-          STATE.currentSurahData=await res.json();
+          const res = await fetch(meta.file);
+          if(!res.ok) throw new Error('fetch failed');
+          STATE.curSurahData = await res.json();
         }catch(e){
-          console.error(e);
-          STATE.currentSurahData=null;
+          console.error('Failed loading surah file',e);
+          STATE.curSurahData = meta; // fallback
         }
-      }else{
-        STATE.currentSurahData=meta;
+      } else {
+        STATE.curSurahData = meta;
       }
+
+      // reset selection
+      STATE.selected.clear();
       renderAyaList();
+      renderMultiBar();
     }
 
+    // utility: ayah key
+    function keyOf(s,a){ return `${s}:${a}`; }
+    function findIndexByKey(arr,key){ return arr.findIndex(x=>x.key===key); }
+
+    // detect translations in ayah robustly, returns { osmani: '', tawjih: '', mainBangla: '' }
+    function extractTranslationsFromAyah(ayah){
+      // main bangla text
+      const main = ayah.bangla || ayah.bn || ayah.bangla_main || ayah.main_bn || ayah.translation || ayah.text_bn || ayah.meaning || '';
+      // translations object maybe present
+      let os = '';
+      let tw = '';
+      if(ayah.translations && typeof ayah.translations === 'object'){
+        os = ayah.translations.osmani || ayah.translations.osman || ayah.translations.osmn || '';
+        tw = ayah.translations.tawjih || ayah.translations.tawzeeh || ayah.translations.tawjih || ayah.translations.tawjihul || ayah.translations.tawjih || ayah.translations.tawjih || '';
+      }
+      // also check common alternative keys
+      os = os || ayah.bangla_osmani || ayah.bn_osmani || ayah.osmani || ayah.tafseer_osmani || '';
+      tw = tw || ayah.bangla_tawzeeh || ayah.bn_tawzeeh || ayah.tawzeeh || ayah.taozeeh || '';
+      return { main, os, tw };
+    }
+
+    // render aya list
     function renderAyaList(){
-      ayaListEl.innerHTML='';
-      const sdata=STATE.currentSurahData||{};
-      const ayas=Array.isArray(sdata.ayahs)?sdata.ayahs:(sdata.ayas||[]);
-      ayaCountEl.textContent=ayas.length+' আয়াত';
+      ayaListEl.innerHTML = '';
+      const data = STATE.curSurahData || {};
+      const ayas = Array.isArray(data.ayahs)? data.ayahs : (data.ayas||[]);
+      ayaCountEl.textContent = (ayas.length || 0) + ' আয়াত';
 
-      wbOsmani.style.opacity=STATE.showOsmani?1:0.4;
-      wbTawzeeh.style.opacity=STATE.showTawzeeh?1:0.4;
+      ayas.forEach((ayah, idx) => {
+        const row = document.createElement('div');
+        row.className = 'aya-row';
+        row.id = `aya-${STATE.curSuraIndex}-${idx}`;
 
-      ayas.forEach((aya,idx)=>{
-        const row=document.createElement('div');
-        row.className='aya-row';
-        row.id='aya-'+STATE.currentSuraIndex+'-'+idx;
+        // checkbox
+        const chkCol = document.createElement('div'); chkCol.className='aya-check';
+        const cb = document.createElement('input'); cb.type='checkbox';
+        const k = keyOf(STATE.curSuraIndex, idx);
+        cb.checked = STATE.selected.has(k);
+        cb.addEventListener('change', ()=>{ if(cb.checked) STATE.selected.add(k); else STATE.selected.delete(k); renderMultiBar(); });
+        chkCol.appendChild(cb);
 
-        const checkCol=document.createElement('div');
-        checkCol.className='aya-check';
-        const cb=document.createElement('input');
-        cb.type='checkbox';
-        const key=ayahKey(STATE.currentSuraIndex,idx);
-        cb.checked=STATE.selected.has(key);
-        cb.addEventListener('change',()=>{
-          if(cb.checked)STATE.selected.add(key);else STATE.selected.delete(key);
-          updateMultiBar();
-        });
-        checkCol.appendChild(cb);
+        // text column
+        const textCol = document.createElement('div'); textCol.className='aya-text';
+        const metaRow = document.createElement('div'); metaRow.className='aya-meta';
+        const num = document.createElement('div'); num.className='ayah-num'; num.textContent = (STATE.curSuraIndex+1)+':'+(idx+1);
+        const tags = document.createElement('div'); tags.className='tags';
+        if(findIndexByKey(STATE.pins, k) !== -1) tags.textContent += '📌 ';
+        if(findIndexByKey(STATE.favs, k) !== -1) tags.textContent += '⭐';
+        metaRow.appendChild(num); metaRow.appendChild(tags);
+        textCol.appendChild(metaRow);
 
-        const tcol=document.createElement('div');
-        tcol.className='aya-text';
-
-        const meta=document.createElement('div');
-        meta.className='aya-text-meta';
-        const num=document.createElement('div');
-        num.className='aya-number';
-        num.textContent=(STATE.currentSuraIndex+1)+':'+(idx+1);
-        meta.appendChild(num);
-        const tags=document.createElement('div');tags.className='aya-tags';
-        if(isPinned(STATE.currentSuraIndex,idx)){const t=document.createElement('span');t.textContent='📌';tags.appendChild(t);}
-        if(isFav(STATE.currentSuraIndex,idx)){const t=document.createElement('span');t.textContent='⭐';tags.appendChild(t);}
-        meta.appendChild(tags);
-        tcol.appendChild(meta);
-
-        const ar=document.createElement('div');
-        ar.className='aya-ar';
-        ar.style.fontSize=STATE.fontArabic+'px';
-        ar.style.lineHeight=STATE.lineHeight;
-        if(STATE.view==='bn')ar.style.display='none';
-
-        if(Array.isArray(aya.words)&&aya.words.length){
-          aya.words.forEach(w=>{
-            const span=document.createElement('span');
-            span.className='word-token';
-            span.textContent=w.text||w.word||'';
-            span.dataset.meaning=w.meaningBn||w.meaning||'';
-            span.dataset.notes=w.notes||aya.grammar||aya.grammarNotes||'';
-            span.addEventListener('click',(ev)=>openWordPopup(ev.currentTarget,w,aya));
-            span.style.fontSize=STATE.fontArabic+'px';
-            ar.appendChild(span);
+        // Arabic line (word tokens if present)
+        const arDiv = document.createElement('div'); arDiv.className='aya-ar';
+        arDiv.style.fontSize = STATE.fontArabic + 'px';
+        arDiv.style.lineHeight = STATE.lineHeight;
+        if(Array.isArray(ayah.words) && ayah.words.length){
+          ayah.words.forEach(w=>{
+            const span = document.createElement('span');
+            span.className = 'word-token';
+            span.textContent = w.text || w.word || '';
+            // store meaning/notes on dataset
+            span.dataset.meaning = w.meaningBn || w.meaning || w.meaning_bn || w.meaning_en || '';
+            span.dataset.notes = w.notes || w.note || w.grammar || ayah.grammar || '';
+            span.addEventListener('click', (ev)=> openWordPopup(ev.currentTarget, ayah));
+            span.style.fontSize = STATE.fontArabic + 'px';
+            arDiv.appendChild(span);
           });
-        }else{
-          ar.textContent=aya.arabic||aya.ar||aya.text_ar||'';
+        } else {
+          arDiv.textContent = ayah.arabic || ayah.ar || ayah.text_ar || '';
         }
-        tcol.appendChild(ar);
+        if(STATE.view === 'bn') arDiv.style.display = 'none';
+        textCol.appendChild(arDiv);
 
-        // Bangla sections (with more robust key names)
-        if(STATE.view!=='ar'){
-          const bnWrap=document.createElement('div');
-          bnWrap.style.marginTop='2px';
-
-          const mainBn=aya.bangla||aya.bn||aya.bangla_main||aya.main_bn||'';
-          if(mainBn){
-            const main=document.createElement('div');
-            main.className='aya-bn-main';
-            main.style.fontSize=STATE.fontBanglaMain+'px';
-            main.style.lineHeight=STATE.lineHeight;
-            main.textContent=mainBn;
-            bnWrap.appendChild(main);
+        // Bangla blocks: main, osmani, tawjih, grammar
+        if(STATE.view !== 'ar'){
+          const blocks = extractTranslationsFromAyah(ayah);
+          if(blocks.main){
+            const mainDiv = document.createElement('div');
+            mainDiv.className = 'aya-bn-block';
+            mainDiv.style.fontSize = STATE.fontBangla + 'px';
+            mainDiv.innerHTML = '<div class="aya-bn-text">'+escapeHtml(blocks.main)+'</div>';
+            textCol.appendChild(mainDiv);
           }
-
-          const os=aya.bangla_osmani||aya.bn_osmani||aya.osmani||aya.tafseer_osmani||'';
-          if(os && STATE.showOsmani){
-            const block=document.createElement('div');
-            block.className='aya-bn-block';
-            const label=document.createElement('div');
-            label.className='aya-bn-label';
-            label.textContent='তাফসীরে ওসমানী';
-            const txt=document.createElement('div');
-            txt.className='aya-bn-text';
-            txt.style.fontSize=STATE.fontOsmani+'px';
-            txt.style.lineHeight=STATE.lineHeight;
-            txt.textContent=os;
-            block.appendChild(label);block.appendChild(txt);
-            bnWrap.appendChild(block);
+          if(blocks.os && STATE.showOsmani){
+            const b = document.createElement('div'); b.className='aya-bn-block';
+            b.innerHTML = '<div class="aya-bn-label">তাফসীরে ওসমানী</div><div class="aya-bn-text" style="font-size:'+STATE.fontOsmani+'px">'+escapeHtml(blocks.os)+'</div>';
+            textCol.appendChild(b);
           }
-
-          const tw=aya.bangla_tawzeeh||aya.bn_tawzeeh||aya.tawzeeh||aya.taozeeh||'';
-          if(tw && STATE.showTawzeeh){
-            const block=document.createElement('div');
-            block.className='aya-bn-block';
-            const label=document.createElement('div');
-            label.className='aya-bn-label';
-            label.textContent='তাওযীহুল কুরআন';
-            const txt=document.createElement('div');
-            txt.className='aya-bn-text';
-            txt.style.fontSize=STATE.fontTawzeeh+'px';
-            txt.style.lineHeight=STATE.lineHeight;
-            txt.textContent=tw;
-            block.appendChild(label);block.appendChild(txt);
-            bnWrap.appendChild(block);
+          if(blocks.tw && STATE.showTawjih){
+            const b = document.createElement('div'); b.className='aya-bn-block';
+            b.innerHTML = '<div class="aya-bn-label">তাওযীহুল কুরআন</div><div class="aya-bn-text" style="font-size:'+STATE.fontTawjih+'px">'+escapeHtml(blocks.tw)+'</div>';
+            textCol.appendChild(b);
           }
-
-          const gm=aya.grammar||aya.grammarNotes||'';
-          if(gm){
-            const block=document.createElement('div');
-            block.className='aya-bn-block';
-            const label=document.createElement('div');
-            label.className='aya-bn-label';
-            label.textContent='ব্যাকরণ নোট';
-            const txt=document.createElement('div');
-            txt.className='aya-bn-text';
-            txt.style.fontSize=STATE.fontGrammar+'px';
-            txt.style.lineHeight=STATE.lineHeight;
-            txt.textContent=gm;
-            block.appendChild(label);block.appendChild(txt);
-            bnWrap.appendChild(block);
+          // grammar (if present at ayah level)
+          const g = ayah.grammar || ayah.grammarNotes || ayah.notes || '';
+          if(g){
+            const b = document.createElement('div'); b.className='aya-bn-block';
+            b.innerHTML = '<div class="aya-bn-label">ব্যাকরণ নোট</div><div class="aya-bn-text" style="font-size:'+STATE.fontTawjih+'px">'+escapeHtml(g)+'</div>';
+            textCol.appendChild(b);
           }
-
-          tcol.appendChild(bnWrap);
         }
 
-        const acol=document.createElement('div');
-        acol.className='aya-actions';
-        const top=document.createElement('div');
-        top.className='action-row';
+        // actions column with three-dot menu
+        const actCol = document.createElement('div'); actCol.className='aya-actions';
+        // three-dot button
+        const dotsWrap = document.createElement('div'); dotsWrap.style.position='relative';
+        const dotsBtn = document.createElement('button'); dotsBtn.className='dots-btn'; dotsBtn.innerHTML = '⋯';
+        const miniMenu = document.createElement('div'); miniMenu.className='mini-menu';
+        // menu items: pin, fav, copy, share, set last
+        const miPin = document.createElement('button'); miPin.textContent = (findIndexByKey(STATE.pins,k)!==-1?'Unpin 📍':'Pin 📌');
+        const miFav = document.createElement('button'); miFav.textContent = (findIndexByKey(STATE.favs,k)!==-1?'Unfav ☆':'Favourite ⭐');
+        const miCopy = document.createElement('button'); miCopy.textContent = 'Copy 📋';
+        const miShare = document.createElement('button'); miShare.textContent = 'Share 🔗';
+        const miLast = document.createElement('button'); miLast.textContent = 'Set as Last Read ⏱';
+        miniMenu.appendChild(miPin); miniMenu.appendChild(miFav); miniMenu.appendChild(miCopy); miniMenu.appendChild(miShare); miniMenu.appendChild(miLast);
+        // hook actions
+        miPin.addEventListener('click',()=>{ togglePin(k,STATE.curSuraIndex,idx); miniMenu.classList.remove('show'); renderAyaList(); renderMiniPins(); });
+        miFav.addEventListener('click',()=>{ toggleFav(k,STATE.curSuraIndex,idx); miniMenu.classList.remove('show'); renderAyaList(); renderMiniPins(); });
+        miCopy.addEventListener('click',()=>{ navigator.clipboard.writeText(formatAyaForCopy(STATE.curSuraIndex,idx,'both')).then(()=>alert('Copied')) ; miniMenu.classList.remove('show'); });
+        miShare.addEventListener('click',()=>{ doShare(formatAyaForCopy(STATE.curSuraIndex,idx,'both')); miniMenu.classList.remove('show'); });
+        miLast.addEventListener('click',()=>{ STATE.lastRead={surahIndex:STATE.curSuraIndex,ayaIndex:idx,time:Date.now()}; S.set('q_lastRead',STATE.lastRead); renderLastRead(); miniMenu.classList.remove('show'); alert('Last read set'); });
 
-        const pinBtn=document.createElement('button');
-        pinBtn.className='icon-chip';
-        pinBtn.textContent='📌';
-        if(isPinned(STATE.currentSuraIndex,idx))pinBtn.classList.add('active');
-        pinBtn.addEventListener('click',()=>{
-          togglePin(STATE.currentSuraIndex,idx);
-          renderAyaList();renderMiniPins();
-        });
-        top.appendChild(pinBtn);
+        dotsBtn.addEventListener('click',(e)=>{ e.stopPropagation(); document.querySelectorAll('.mini-menu').forEach(m=>m.classList.remove('show')); miniMenu.classList.toggle('show'); });
 
-        const favBtn=document.createElement('button');
-        favBtn.className='icon-chip';
-        favBtn.textContent='⭐';
-        if(isFav(STATE.currentSuraIndex,idx))favBtn.classList.add('fav');
-        favBtn.addEventListener('click',()=>{
-          toggleFav(STATE.currentSuraIndex,idx);
-          renderAyaList();renderMiniPins();
-        });
-        top.appendChild(favBtn);
+        // close mini-menus on outside click
+        document.addEventListener('click',()=>{ document.querySelectorAll('.mini-menu').forEach(m=>m.classList.remove('show')); });
 
-        const copyBtn=document.createElement('button');
-        copyBtn.className='icon-chip';
-        copyBtn.textContent='📋';
-        copyBtn.addEventListener('click',()=>{
-          const text=formatAyaForCopy(STATE.currentSuraIndex,idx,'both');
-          navigator.clipboard.writeText(text).then(()=>alert('কপি হয়েছে'));
-        });
-        top.appendChild(copyBtn);
+        dotsWrap.appendChild(dotsBtn); dotsWrap.appendChild(miniMenu);
+        actCol.appendChild(dotsWrap);
 
-        const shareBtn=document.createElement('button');
-        shareBtn.className='icon-chip';
-        shareBtn.textContent='🔗';
-        shareBtn.addEventListener('click',()=>{
-          const text=formatAyaForCopy(STATE.currentSuraIndex,idx,'both');
-          doShare(text);
-        });
-        top.appendChild(shareBtn);
-
-        acol.appendChild(top);
-
-        const lastBtn=document.createElement('button');
-        lastBtn.className='icon-chip main';
-        lastBtn.textContent='⏱ শেষ পড়া';
-        lastBtn.addEventListener('click',()=>{
-          STATE.lastRead={surahIndex:STATE.currentSuraIndex,ayaIndex:idx,time:Date.now()};
-          storage.set('q_lastRead',STATE.lastRead);
-          renderLastRead();
-          alert('শেষ পড়া হিসেবে সেভ হলো');
-        });
-        acol.appendChild(lastBtn);
-
-        row.appendChild(checkCol);
-        row.appendChild(tcol);
-        row.appendChild(acol);
+        // append columns to row
+        row.appendChild(chkCol); row.appendChild(textCol); row.appendChild(actCol);
         ayaListEl.appendChild(row);
       });
 
-      updateMultiBar();
+      renderLastRead();
       renderMiniPins();
+      renderMultiBar();
     }
 
-    function openWordPopup(target,w,aya){
-      const rect=target.getBoundingClientRect();
-      wpArabic.textContent=w.text||target.textContent||'';
-      wpMeaning.textContent=w.meaningBn||w.meaning||'—';
-      wpNotes.textContent=w.notes||aya.grammar||aya.grammarNotes||'—';
-      let top=rect.bottom+window.scrollY+5;
-      let left=rect.left+window.scrollX-40;
-      if(left+300>window.innerWidth)left=window.innerWidth-310;
-      if(left<5)left=5;
-      wordPopup.style.top=top+'px';
-      wordPopup.style.left=left+'px';
-      wordPopup.style.display='block';
-    }
-    document.getElementById('wpClose').onclick=()=>{wordPopup.style.display='none';};
-    document.addEventListener('click',ev=>{
-      if(wordPopup.style.display==='block' && !wordPopup.contains(ev.target) && !ev.target.classList.contains('word-token')){
-        wordPopup.style.display='none';
-      }
-    });
-
-    function togglePin(s,a){
-      const key=ayahKey(s,a);
-      const i=findIdx(STATE.pins,key);
-      if(i>=0)STATE.pins.splice(i,1);
-      else{
-        const m=window.suras[s]||{};
-        STATE.pins.unshift({key,surahIndex:s,ayahIndex:a,note:'',name:m.nameBn||m.name||'',createdAt:Date.now()});
-      }
-      savePins();
-    }
-    function toggleFav(s,a){
-      const key=ayahKey(s,a);
-      const i=findIdx(STATE.favs,key);
-      if(i>=0)STATE.favs.splice(i,1);
-      else{
-        const m=window.suras[s]||{};
-        STATE.favs.unshift({key,surahIndex:s,ayahIndex:a,note:'',name:m.nameBn||m.name||'',createdAt:Date.now()});
-      }
-      saveFavs();
-    }
-
-    function renderMiniPins(){
-      miniPinsEl.innerHTML='';
-      const combined=[...STATE.pins.map(p=>({...p,kind:'pin'})),...STATE.favs.map(f=>({...f,kind:'fav'}))].slice(0,10);
-      if(!combined.length){
-        miniPinsEl.innerHTML='<div style="font-size:11px;color:#9ca3af">এখনো কোনো পিন বা প্রিয় নেই।</div>';
-        return;
-      }
-      combined.forEach(it=>{
-        const s=window.suras[it.surahIndex]||{};
-        const div=document.createElement('div');
-        div.className='mini-item';
-        div.innerHTML='<div><strong>'+(it.kind==='pin'?'📌 ':'⭐ ')+(s.nameBn||s.name||'')+' '+(it.surahIndex+1)+':'+(it.ayahIndex+1)+'</strong><div style="font-size:10px;max-width:140px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+(it.note||'')+'</div></div>';
-        const right=document.createElement('div');
-        const go=document.createElement('button');go.className='btn';go.textContent='যান';
-        go.onclick=()=>{
-          setCurrentSura(it.surahIndex);
-          setTimeout(()=>{
-            const el=document.getElementById('aya-'+it.surahIndex+'-'+it.ayahIndex);
-            if(el)el.scrollIntoView({behavior:'smooth',block:'center'});
-          },150);
-        };
-        const del=document.createElement('button');del.className='btn';del.textContent='🗑';
-        del.onclick=()=>{
-          if(it.kind==='pin'){STATE.pins=STATE.pins.filter(x=>x.key!==it.key);savePins();}
-          else{STATE.favs=STATE.favs.filter(x=>x.key!==it.key);saveFavs();}
-          renderMiniPins();renderAyaList();
-        };
-        right.appendChild(go);right.appendChild(del);
-        div.appendChild(right);
-        miniPinsEl.appendChild(div);
-      });
-    }
-
-    function renderLastRead(){
-      if(!STATE.lastRead){
-        lastReadBoxEl.textContent='এখনো কোনো আয়াতকে শেষ পড়া হিসেবে সেভ করা হয়নি।';
-        return;
-      }
-      const s=window.suras[STATE.lastRead.surahIndex]||{};
-      lastReadBoxEl.innerHTML='<div style="font-weight:600">'+(s.nameBn||s.name||'')+' — '+(STATE.lastRead.surahIndex+1)+':'+(STATE.lastRead.ayaIndex+1)+'</div><div style="margin-top:4px;display:flex;gap:4px;flex-wrap:wrap"><button id="goLast" class="btn primary">⏱ এখান থেকে চালু</button><button id="clrLast" class="btn">রিসেট</button></div>';
-      document.getElementById('goLast').onclick=()=>{
-        setCurrentSura(STATE.lastRead.surahIndex);
-        setTimeout(()=>{
-          const el=document.getElementById('aya-'+STATE.lastRead.surahIndex+'-'+STATE.lastRead.ayaIndex);
-          if(el)el.scrollIntoView({behavior:'smooth',block:'center'});
-        },150);
-      };
-      document.getElementById('clrLast').onclick=()=>{
-        STATE.lastRead=null;storage.set('q_lastRead',null);renderLastRead();
-      };
-    }
-
-    function updateMultiBar(){
-      const c=STATE.selected.size;
-      if(c>0){
-        multiCount.textContent=c+' টি আয়াত নির্বাচিত';
-        multiBar.classList.add('show');
-      }else{
-        multiBar.classList.remove('show');
-      }
-    }
-    document.getElementById('multiCopy').onclick=()=>{
-      if(!STATE.selected.size)return alert('কোনো আয়াত নির্বাচন হয়নি');
-      const txt=formatMultipleForCopy(Array.from(STATE.selected),'both');
-      openCopyModal(txt);
-    };
-    document.getElementById('multiShare').onclick=()=>{
-      if(!STATE.selected.size)return alert('কোনো আয়াত নির্বাচন হয়নি');
-      const txt=formatMultipleForCopy(Array.from(STATE.selected),'both');
-      doShare(txt);
-    };
-    document.getElementById('multiClear').onclick=()=>{
-      STATE.selected.clear();renderAyaList();updateMultiBar();
-    };
-
+    // format functions
     function formatAyaForCopy(sIdx,aIdx,mode){
-      const sdata=window.suras[sIdx]||{};
-      let ayaData=null;
-      if(STATE.currentSurahData && STATE.currentSuraIndex===sIdx){
-        const arr=(STATE.currentSurahData.ayahs||STATE.currentSurahData.ayas||[]);
-        ayaData=arr[aIdx]||{};
-      }else{
-        const entry=window.suras[sIdx]||{};
-        const arr=entry.ayahs||entry.ayas||[];
-        ayaData=arr[aIdx]||{};
-      }
-      const ar=ayaData.arabic||ayaData.ar||ayaData.text_ar||'';
-      const bn=ayaData.bangla||ayaData.bn||ayaData.bangla_main||ayaData.main_bn||'';
-      const head='['+(sdata.nameBn||sdata.name||'')+' '+(sIdx+1)+':'+(aIdx+1)+']';
-      if(mode==='ar')return ar+'\n'+head;
-      if(mode==='bn')return bn+'\n'+head;
-      return ar+'\n'+bn+'\n'+head;
+      const sura = window.suras[sIdx] || {};
+      const data = (STATE.curSurahData && (STATE.curSuraIndex===sIdx)) ? (STATE.curSurahData.ayahs||STATE.curSurahData.ayas||[]) : (sura.ayahs||sura.ayas||[]);
+      const aya = (data[aIdx]||{});
+      const ar = aya.arabic || aya.ar || aya.text_ar || '';
+      const blocks = extractTranslationsFromAyah(aya);
+      const bn = blocks.main || '';
+      const head = '['+(sura.nameBn||sura.name||'')+' '+(sIdx+1)+':'+(aIdx+1)+']';
+      if(mode==='ar') return ar + '\n' + head;
+      if(mode==='bn') return bn + '\n' + head;
+      return (ar ? ar + '\n' : '') + (bn ? bn + '\n' : '') + head;
     }
-    function formatMultipleForCopy(keys,mode){
-      return keys.map(k=>{
-        const [s,a]=k.split(':').map(Number);
+    function formatMultipleSelection(mode){
+      return Array.from(STATE.selected).map(k=>{
+        const [s,a] = k.split(':').map(Number);
         return formatAyaForCopy(s,a,mode);
       }).join('\n\n');
     }
+
+    // sharing/copy
     function doShare(text){
-      if(navigator.share){
-        navigator.share({text}).catch(()=>{
-          navigator.clipboard.writeText(text).then(()=>alert('কপি হয়েছে'));
-        });
-      }else{
-        navigator.clipboard.writeText(text).then(()=>alert('কপি হয়েছে'));
-      }
+      if(navigator.share) navigator.share({text}).catch(()=>{ navigator.clipboard.writeText(text).then(()=>alert('Copied to clipboard')); });
+      else navigator.clipboard.writeText(text).then(()=>alert('Copied to clipboard'));
     }
 
-    function openModal(title,bodyHtml,footerHtml){
-      modalTitle.innerHTML=title;
-      modalBody.innerHTML=bodyHtml||'';
-      modalFooter.innerHTML=footerHtml||'';
-      modalBackdrop.classList.add('show');
+    // pin/fav toggles
+    function togglePin(key,sIdx,aIdx){
+      const i = findIndexByKey(STATE.pins,key);
+      if(i>=0) STATE.pins.splice(i,1);
+      else STATE.pins.unshift({key,surahIndex:sIdx,ayahIndex:aIdx,note:'',time:Date.now()});
+      S.set('q_pins',STATE.pins);
     }
-    function closeModal(){modalBackdrop.classList.remove('show');}
-    document.getElementById('modalClose').onclick=closeModal;
-    modalBackdrop.addEventListener('click',ev=>{if(ev.target===modalBackdrop)closeModal();});
-
-    function openCopyModal(prefill){
-      const body='<div style="margin-bottom:6px"><label style="font-weight:600;font-size:12px">ফরম্যাট নির্বাচন</label><div style="display:flex;gap:6px;margin-top:4px;flex-wrap:wrap"><label><input type="radio" name="copyFormat" value="both" checked> আরবি+বাংলা</label><label><input type="radio" name="copyFormat" value="ar"> শুধু আরবি</label><label><input type="radio" name="copyFormat" value="bn"> শুধু বাংলা</label></div></div><textarea id="copyPreview" style="width:100%;min-height:110px;padding:6px;font-size:12px">'+(prefill||'')+'</textarea>';
-      const footer='<button id="copyDo" class="btn primary">📋 কপি</button><button id="shareDo" class="btn">🔗 শেয়ার</button><button id="copyClose" class="btn">বন্ধ</button>';
-      openModal('কপি / শেয়ার',body,footer);
-      setTimeout(()=>{
-        document.getElementById('copyDo').onclick=()=>{
-          const t=document.getElementById('copyPreview').value;
-          navigator.clipboard.writeText(t).then(()=>alert('কপি হয়েছে'));
-        };
-        document.getElementById('shareDo').onclick=()=>{
-          const t=document.getElementById('copyPreview').value;
-          doShare(t);
-        };
-        document.getElementById('copyClose').onclick=closeModal;
-      },20);
+    function toggleFav(key,sIdx,aIdx){
+      const i = findIndexByKey(STATE.favs,key);
+      if(i>=0) STATE.favs.splice(i,1);
+      else STATE.favs.unshift({key,surahIndex:sIdx,ayahIndex:aIdx,note:'',time:Date.now()});
+      S.set('q_favs',STATE.favs);
     }
 
-    document.getElementById('openPinsModal').onclick=()=>{
-      const body='<div style="display:flex;gap:6px;margin-bottom:6px;flex-wrap:wrap"><button id="pinsTab" class="btn primary">📌 পিন</button><button id="favsTab" class="btn">⭐ প্রিয়</button><input id="pinsFilter" placeholder="নাম / নোট দিয়ে খোঁজুন..." style="flex:1;min-width:120px;padding:5px 7px;border-radius:999px;border:1px solid rgba(148,163,184,0.4);background:transparent;color:inherit;font-size:11px" /></div><div id="pinsListFull"></div>';
-      const footer='<button id="clearAllPins" class="btn danger">সব মুছুন</button><button id="closePins" class="btn">বন্ধ</button>';
-      openModal('পিন ও প্রিয় ম্যানেজার',body,footer);
-      setTimeout(()=>{
-        let tab='pins';
-        const filterInput=document.getElementById('pinsFilter');
-        const listDiv=document.getElementById('pinsListFull');
-        document.getElementById('pinsTab').onclick=()=>{tab='pins';renderList();};
-        document.getElementById('favsTab').onclick=()=>{tab='favs';renderList();};
-        document.getElementById('closePins').onclick=closeModal;
-        document.getElementById('clearAllPins').onclick=()=>{
-          if(!confirm('সব পিন ও প্রিয় মুছতে চান?'))return;
-          STATE.pins=[];STATE.favs=[];savePins();saveFavs();renderList();renderAyaList();renderMiniPins();
-        };
-        filterInput.oninput=renderList;
-        function renderList(){
-          listDiv.innerHTML='';
-          const arr=(tab==='pins'?STATE.pins:STATE.favs);
-          const ft=(filterInput.value||'').trim().toLowerCase();
-          const filtered=arr.filter(item=>{
-            const s=window.suras[item.surahIndex]||{};
-            const name=(s.nameBn||s.name||'').toLowerCase();
-            return !ft||name.includes(ft)||(item.note||'').toLowerCase().includes(ft);
-          });
-          if(!filtered.length){
-            listDiv.innerHTML='<div style="font-size:12px;color:#9ca3af">কোনো ডাটা নেই।</div>';
-            return;
-          }
-          filtered.forEach(item=>{
-            const s=window.suras[item.surahIndex]||{};
-            const wrap=document.createElement('div');
-            wrap.style.padding='5px 0';
-            wrap.style.borderBottom='1px solid rgba(148,163,184,0.4)';
-            wrap.innerHTML='<div style="display:flex;justify-content:space-between;align-items:center;gap:6px"><div><strong>'+(s.nameBn||s.name||'')+' '+(item.surahIndex+1)+':'+(item.ayahIndex+1)+'</strong><div style="font-size:10px;color:#9ca3af">'+(item.note||'')+'</div></div><div style="display:flex;gap:4px;flex-wrap:wrap"><button class="btn" data-go>যান</button><button class="btn" data-copy>📋</button><button class="btn" data-edit>✏</button><button class="btn danger" data-del>🗑</button></div></div>';
-            listDiv.appendChild(wrap);
-            wrap.querySelector('[data-go]').onclick=()=>{
-              setCurrentSura(item.surahIndex);closeModal();
-              setTimeout(()=>{
-                const el=document.getElementById('aya-'+item.surahIndex+'-'+item.ayahIndex);
-                if(el)el.scrollIntoView({behavior:'smooth',block:'center'});
-              },150);
-            };
-            wrap.querySelector('[data-copy]').onclick=()=>{
-              const text=formatAyaForCopy(item.surahIndex,item.ayahIndex,'both');
-              navigator.clipboard.writeText(text).then(()=>alert('কপি হয়েছে'));
-            };
-            wrap.querySelector('[data-del]').onclick=()=>{
-              if(!confirm('এই আইটেম মুছবেন?'))return;
-              if(tab==='pins'){STATE.pins=STATE.pins.filter(x=>x.key!==item.key);savePins();}
-              else{STATE.favs=STATE.favs.filter(x=>x.key!==item.key);saveFavs();}
-              renderList();renderMiniPins();renderAyaList();
-            };
-            wrap.querySelector('[data-edit]').onclick=()=>{
-              const n=prompt('নোট/নাম লিখুন:',item.note||'');
-              if(n!==null){item.note=n;if(tab==='pins')savePins();else saveFavs();renderList();renderMiniPins();}
-            };
-          });
-        }
-        renderList();
-      },20);
-    };
-
-    // SETTINGS MODAL
-    document.getElementById('openSettings').onclick=()=>{
-      const body=
-        '<div style="display:flex;flex-direction:column;gap:8px">' +
-        '<div><div style="font-weight:600;font-size:12px;margin-bottom:3px">লেখক নির্বাচন</div>' +
-        '<label style="font-size:12px;display:block;margin-bottom:2px"><input type="checkbox" id="stOsmani"> তাফসীরে ওসমানীর ভাবানুবাদ</label>' +
-        '<label style="font-size:12px;display:block"><input type="checkbox" id="stTawzeeh"> তাওযীহুল কুরআন অনুবাদ</label></div>' +
-
-        '<div><div style="font-weight:600;font-size:12px;margin-bottom:3px">থিম</div>' +
-        '<label style="font-size:12px;margin-right:6px"><input type="radio" name="themeSel" value="dark"> ডার্ক</label>' +
-        '<label style="font-size:12px;margin-right:6px"><input type="radio" name="themeSel" value="green"> গ্রীন</label>' +
-        '<label style="font-size:12px"><input type="radio" name="themeSel" value="sepia"> সেপিয়া</label></div>' +
-
-        '<hr style="border-color:rgba(148,163,184,0.4)">' +
-        '<div><div style="font-weight:600;font-size:12px;margin-bottom:3px">ফন্ট সাইজ</div>' +
-        sliderBlock("Arabic word","stFontArabic",STATE.fontArabic,16,30) +
-        sliderBlock("বাংলা মূল অর্থ","stFontBanglaMain",STATE.fontBanglaMain,11,18) +
-        sliderBlock("তাফসীরে ওসমানী","stFontOsmani",STATE.fontOsmani,11,18) +
-        sliderBlock("তাওযীহুল কুরআন","stFontTawzeeh",STATE.fontTawzeeh,11,18) +
-        sliderBlock("শব্দার্থ","stFontWordMeaning",STATE.fontWordMeaning,11,18) +
-        sliderBlock("Grammar notes","stFontGrammar",STATE.fontGrammar,10,16) +
-        sliderBlock("লাইন হাইট","stLineHeight",Math.round(STATE.lineHeight*10),14,20,true) +
-        '</div></div>';
-
-      const footer='<button id="stSave" class="btn primary">সেভ</button><button id="stCancel" class="btn">বন্ধ</button>';
-      openModal('ডিসপ্লে ও অনুবাদ সেটিংস',body,footer);
-
-      setTimeout(()=>{
-        document.getElementById('stOsmani').checked=STATE.showOsmani;
-        document.getElementById('stTawzeeh').checked=STATE.showTawzeeh;
-        document.querySelectorAll('input[name="themeSel"]').forEach(r=>{
-          if(r.value===STATE.theme)r.checked=true;
-        });
-
-        // live preview for sliders
-        bindSlider('stFontArabic',STATE.fontArabic,false);
-        bindSlider('stFontBanglaMain',STATE.fontBanglaMain,false);
-        bindSlider('stFontOsmani',STATE.fontOsmani,false);
-        bindSlider('stFontTawzeeh',STATE.fontTawzeeh,false);
-        bindSlider('stFontWordMeaning',STATE.fontWordMeaning,false);
-        bindSlider('stFontGrammar',STATE.fontGrammar,false);
-        bindSlider('stLineHeight',Math.round(STATE.lineHeight*10),true);
-
-        document.getElementById('stSave').onclick=()=>{
-          STATE.showOsmani=document.getElementById('stOsmani').checked;
-          STATE.showTawzeeh=document.getElementById('stTawzeeh').checked;
-          storage.set('q_showOsmani',STATE.showOsmani);
-          storage.set('q_showTawzeeh',STATE.showTawzeeh);
-
-          const thSel=document.querySelector('input[name="themeSel"]:checked');
-          if(thSel)STATE.theme=thSel.value;
-          applyTheme();
-
-          STATE.fontArabic=+document.getElementById('stFontArabic').value;
-          STATE.fontBanglaMain=+document.getElementById('stFontBanglaMain').value;
-          STATE.fontOsmani=+document.getElementById('stFontOsmani').value;
-          STATE.fontTawzeeh=+document.getElementById('stFontTawzeeh').value;
-          STATE.fontWordMeaning=+document.getElementById('stFontWordMeaning').value;
-          STATE.fontGrammar=+document.getElementById('stFontGrammar').value;
-          STATE.lineHeight=(+document.getElementById('stLineHeight').value)/10;
-
-          storage.set('q_fontArabic',STATE.fontArabic);
-          storage.set('q_fontBanglaMain',STATE.fontBanglaMain);
-          storage.set('q_fontOsmani',STATE.fontOsmani);
-          storage.set('q_fontTawzeeh',STATE.fontTawzeeh);
-          storage.set('q_fontWordMeaning',STATE.fontWordMeaning);
-          storage.set('q_fontGrammar',STATE.fontGrammar);
-          storage.set('q_lineHeight',STATE.lineHeight);
-
-          renderAyaList();
-          closeModal();
-        };
-        document.getElementById('stCancel').onclick=closeModal;
-      },20);
-    };
-
-    function sliderBlock(label,id,val,min,max,isLH){
-      return '<div style="margin-top:4px"><div style="font-size:11px;margin-bottom:2px">'+label+
-        ' <span id="'+id+'Val" style="opacity:0.7">'+(isLH?(val/10).toFixed(1):val)+'px</span></div>'+
-        '<input type="range" id="'+id+'" min="'+min+'" max="'+max+'" value="'+val+'" style="width:100%"></div>';
+    // render mini pins list (top-right small list or side)
+    function renderMiniPins(){
+      // simple quick list in console or could add to UI — for now update drawer header count
+      // (we will show in pins modal)
     }
-    function bindSlider(id,initial,isLH){
-      const input=document.getElementById(id);
-      const label=document.getElementById(id+'Val');
-      input.addEventListener('input',()=>{
-        const v=+input.value;
-        label.textContent=isLH?(v/10).toFixed(1):v+'px';
+
+    // Last read render (compact)
+    function renderLastRead(){
+      // find or update a compact element above aya list — implementing minimal in-page small banner
+      // We'll put a small banner at top of aya list if lastRead exists
+      const existing = document.querySelector('.last-read');
+      if(existing) existing.remove();
+      if(!STATE.lastRead) return;
+      const lr = STATE.lastRead;
+      const sura = window.suras[lr.surahIndex] || {};
+      const el = document.createElement('div'); el.className='last-read';
+      el.innerHTML = '<div class="info"><strong>শেষ পড়া:</strong> '+ (sura.nameBn||sura.name||'') +' — '+ (lr.surahIndex+1)+':'+(lr.ayaIndex+1) +'</div><div class="actions"><button id="goLastBtn" class="btn primary">⏱ Continue</button><button id="clearLastBtn" class="btn">Reset</button></div>';
+      const parentCard = document.querySelector('.card');
+      if(parentCard) parentCard.parentNode.insertBefore(el, parentCard);
+      document.getElementById('goLastBtn').addEventListener('click', ()=>{
+        setCurrentSura(lr.surahIndex);
+        setTimeout(()=>{ const node = document.getElementById('aya-'+lr.surahIndex+'-'+lr.ayaIndex); if(node) node.scrollIntoView({behavior:'smooth',block:'center'}); },150);
+      });
+      document.getElementById('clearLastBtn').addEventListener('click', ()=>{
+        STATE.lastRead = null; S.set('q_lastRead',null); el.remove();
       });
     }
 
-    viewToggle.querySelectorAll('button').forEach(btn=>{
-      if(btn.dataset.view===STATE.view)btn.classList.add('active');
-      btn.onclick=()=>{
-        viewToggle.querySelectorAll('button').forEach(b=>b.classList.remove('active'));
-        btn.classList.add('active');
-        STATE.view=btn.dataset.view;
-        storage.set('q_view',STATE.view);
-        renderAyaList();
+    // multiBar handling
+    function renderMultiBar(){
+      const c = STATE.selected.size;
+      if(c>0){ multiCount.textContent = c + ' টি নির্বাচন'; multiBar.classList.add('show'); }
+      else multiBar.classList.remove('show');
+    }
+    document.getElementById('multiCopyBtn').addEventListener('click', ()=> {
+      if(STATE.selected.size===0) return alert('কোনো আয়াত নির্বাচন করা হয়নি');
+      const txt = formatMultipleSelection('both');
+      openCopyModal(txt);
+    });
+    document.getElementById('multiShareBtn').addEventListener('click', ()=> {
+      if(STATE.selected.size===0) return alert('কোনো আয়াত নির্বাচন করা হয়নি');
+      const txt = formatMultipleSelection('both'); doShare(txt);
+    });
+    document.getElementById('multiClearBtn').addEventListener('click', ()=> { STATE.selected.clear(); renderAyaList(); renderMultiBar(); });
+
+    // open copy modal
+    function openCopyModal(prefill){
+      modalWindow.innerHTML = '<h3>কপি / শেয়ার</h3><div style="margin-top:8px"><label><input type="radio" name="fmt" value="both" checked> আরবি+বাংলা</label> &nbsp; <label><input type="radio" name="fmt" value="ar"> শুধু আরবি</label> &nbsp; <label><input type="radio" name="fmt" value="bn"> শুধু বাংলা</label></div><textarea id="copyPreview" style="width:100%;height:160px;margin-top:8px;padding:8px">'+(prefill||'')+'</textarea><div style="margin-top:8px;display:flex;gap:8px;justify-content:flex-end"><button id="copyDo" class="btn primary">Copy</button><button id="shareDo" class="btn">Share</button><button id="copyClose" class="btn">Close</button></div>';
+      modalBackdrop.classList.add('show');
+      document.getElementById('copyDo').onclick = ()=>{ navigator.clipboard.writeText(document.getElementById('copyPreview').value||'').then(()=>alert('Copied')); };
+      document.getElementById('shareDo').onclick = ()=>{ doShare(document.getElementById('copyPreview').value||''); };
+      document.getElementById('copyClose').onclick = ()=>{ modalBackdrop.classList.remove('show'); };
+    }
+
+    // settings modal (quick)
+    document.getElementById('openSettings').addEventListener('click', openSettingsModal);
+    function openSettingsModal(){
+      modalWindow.innerHTML = '<h3>Settings</h3><div style="margin-top:8px"><label><input type="checkbox" id="cOsmani"> Show তাফসীরে ওসমানী</label><br><label><input type="checkbox" id="cTawjih"> Show তাওযীহুল কুরআন</label></div><div style="margin-top:8px"><label>Arabic font <input id="fArabic" type="range" min="14" max="34" value="'+STATE.fontArabic+'"></label><div style="font-size:12px;color:var(--muted)">Bangla font <input id="fBangla" type="range" min="11" max="20" value="'+STATE.fontBangla+'"></div></div><div style="margin-top:8px;display:flex;justify-content:flex-end;gap:8px"><button id="saveSt" class="btn primary">Save</button><button id="closeSt" class="btn">Close</button></div>';
+      modalBackdrop.classList.add('show');
+      document.getElementById('cOsmani').checked = STATE.showOsmani;
+      document.getElementById('cTawjih').checked = STATE.showTawjih;
+      document.getElementById('closeSt').onclick = ()=> modalBackdrop.classList.remove('show');
+      document.getElementById('saveSt').onclick = ()=>{
+        STATE.showOsmani = document.getElementById('cOsmani').checked;
+        STATE.showTawjih = document.getElementById('cTawjih').checked;
+        STATE.fontArabic = +document.getElementById('fArabic').value;
+        STATE.fontBangla = +document.getElementById('fBangla').value;
+        S.set('q_showOsmani',STATE.showOsmani); S.set('q_showTawjih',STATE.showTawjih);
+        S.set('q_fontArabic',STATE.fontArabic); S.set('q_fontBangla',STATE.fontBangla);
+        modalBackdrop.classList.remove('show'); renderAyaList();
       };
+    }
+
+    // pins modal
+    document.getElementById('openPins').addEventListener('click', ()=> {
+      // build simple list of pins and favs with go/copy/delete
+      let body = '<h3>Pins & Favourites</h3><div style="margin-top:8px">';
+      const combo = [...STATE.pins.map(p=>({kind:'pin',...p})), ...STATE.favs.map(f=>({kind:'fav',...f}))];
+      if(combo.length===0) body += '<div style="color:var(--muted)">No pins or favourites</div>';
+      combo.forEach(it=>{
+        const s = window.suras[it.surahIndex]||{};
+        const label = (it.kind==='pin'?'📌 ':'⭐ ')+ (s.nameBn||s.name||'') + ' ' + (it.surahIndex+1)+':'+(it.ayahIndex+1);
+        body += '<div style="display:flex;justify-content:space-between;align-items:center;padding:6px;border-bottom:1px solid var(--soft-border)"><div><strong>'+label+'</strong><div style="font-size:12px;color:var(--muted)">'+(it.note||'')+'</div></div><div style="display:flex;gap:6px"><button data-go class="btn">Go</button><button data-copy class="btn">📋</button><button data-del class="btn">🗑</button></div></div>';
+      });
+      body += '</div><div style="margin-top:8px;display:flex;justify-content:flex-end"><button id="closePinsModal" class="btn">Close</button></div>';
+      modalWindow.innerHTML = body;
+      modalBackdrop.classList.add('show');
+      modalWindow.querySelectorAll('[data-go]').forEach((b,i)=>b.addEventListener('click',()=>{ const it = combo[i]; modalBackdrop.classList.remove('show'); setCurrentSura(it.surahIndex); setTimeout(()=>{ const el=document.getElementById('aya-'+it.surahIndex+'-'+it.ayahIndex); if(el) el.scrollIntoView({behavior:'smooth',block:'center'}); },150); }));
+      modalWindow.querySelectorAll('[data-copy]').forEach((b,i)=>b.addEventListener('click',()=>{ const it = combo[i]; navigator.clipboard.writeText(formatAyaForCopy(it.surahIndex,it.ayahIndex,'both')).then(()=>alert('Copied')); }));
+      modalWindow.querySelectorAll('[data-del]').forEach((b,i)=>b.addEventListener('click',()=>{ const it = combo[i]; if(confirm('Delete?')){ if(it.kind==='pin'){ STATE.pins = STATE.pins.filter(x=>x.key!==it.key); S.set('q_pins',STATE.pins);} else { STATE.favs = STATE.favs.filter(x=>x.key!==it.key); S.set('q_favs',STATE.favs);} renderAyaList(); modalBackdrop.classList.remove('show'); } }));
+      document.getElementById('closePinsModal').onclick = ()=> modalBackdrop.classList.remove('show');
     });
 
-    renderSuraList();
+    // word popup
+    function openWordPopup(target, ayah){
+      const meaning = target.dataset.meaning || target.textContent || '';
+      const notes = target.dataset.notes || ayah.grammar || ayah.notes || '';
+      wpArabic.textContent = target.textContent || '';
+      wpMeaning.textContent = meaning;
+      wpNotes.textContent = notes;
+      // position
+      const rect = target.getBoundingClientRect();
+      let top = rect.bottom + window.scrollY + 6;
+      let left = rect.left + window.scrollX - 20;
+      if(left + 300 > window.innerWidth) left = window.innerWidth - 320;
+      if(left < 6) left = 6;
+      wordPopup.style.top = top + 'px'; wordPopup.style.left = left + 'px';
+      wordPopup.style.display = 'block';
+    }
+    wpClose.addEventListener('click', ()=> wordPopup.style.display='none');
+
+    // close modal on backdrop click
+    modalBackdrop.addEventListener('click',(ev)=>{ if(ev.target===modalBackdrop) modalBackdrop.classList.remove('show'); });
+
+    // helper escape
+    function escapeHtml(s){ if(!s) return ''; return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+    // init: set first sura
     setCurrentSura(0);
-    STATE.lastRead=storage.get('q_lastRead',null);
-    renderLastRead();
-    renderMiniPins();
 
-    window.QURAN_APP={STATE,setCurrentSura,renderAyaList};
+    // helper: when page loads render full drawer list for quick nav
+    renderDrawerList();
 
+    // small improvements: view toggle
+    document.querySelectorAll('#viewButtons button').forEach(b=>{
+      if(b.dataset.view === STATE.view) b.classList.add('primary');
+      b.addEventListener('click', ()=>{ document.querySelectorAll('#viewButtons button').forEach(x=>x.classList.remove('primary')); b.classList.add('primary'); STATE.view = b.dataset.view; S.set('q_view',STATE.view); renderAyaList(); });
+    });
+
+    // expose for debugging
+    window.QAPP = { STATE, setCurrentSura };
   })();
   </script>
 </body>
