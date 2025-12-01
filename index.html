@@ -209,12 +209,12 @@
     .word-popup{
       position:fixed;
       z-index:200;
-      min-width:230px;
-      max-width:320px;
+      min-width:260px;
+      max-width:360px;
       background:var(--panel-soft);
-      border-radius:12px;
+      border-radius:14px;
       border:1px solid var(--soft-border);
-      padding:8px 8px 6px 8px;
+      padding:10px 10px 8px 10px;
       display:none;
       box-shadow:var(--shadow);
     }
@@ -891,6 +891,7 @@
       wpMeaning.textContent=meaning;
       wpNotes.textContent=notes;
       wpArabic.style.fontSize=STATE.fontPopupArabic+'px';
+      wpNotes.style.fontSize=STATE.fontGrammar+'px';
 
       const rect=target.getBoundingClientRect();
       let top=rect.bottom+window.scrollY+6;
@@ -900,7 +901,7 @@
       wordPopup.style.top=top+'px';
       wordPopup.style.left=left+'px';
       wordPopup.style.display='block';
-    }
+}
     wpClose.onclick=()=>{wordPopup.style.display='none';};
 
     modalBackdrop.addEventListener('click',(e)=>{if(e.target===modalBackdrop) modalBackdrop.classList.remove('show');});
